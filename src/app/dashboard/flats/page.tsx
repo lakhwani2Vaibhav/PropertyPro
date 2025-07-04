@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -67,6 +67,7 @@ const headerMapping: { [key: string]: keyof FlatListing } = {
 
 const API_KEY = 'AIzaSyDuGgoYJPAnMT1licNrIcN_pdmTeoDhqfw';
 const SPREADSHEET_ID = '1qeKFSgvI5wVD9bYLjOs58C7EbT-EEGe4xQrx32VkxIo';
+const ROWS_PER_PAGE = 50;
 
 export default function FlatsPage() {
   const [listings, setListings] = useState<FlatListing[]>([]);
@@ -74,61 +75,96 @@ export default function FlatsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   
   const [selectedPostContent, setSelectedPostContent] = useState<string | null>(null);
   const [isPostContentOpen, setIsPostContentOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchListings = async () => {
-      setLoading(true);
-      setError(null);
-      
-      const range = `Sheet1!A1:N20`; // Fetch first 20 data rows + 1 header row
-      const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`;
-      
-      try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        const values: string[][] = data.values;
-
-        if (!values || values.length < 2) { // Need at least header and one data row
-          setListings([]);
-          setHeaders(values ? values[0] : Object.keys(headerMapping));
-          if (!values) setError("No data returned from API.");
-          return;
-        }
-
-        const fetchedHeaders = values[0];
-        const fetchedRows = values.slice(1);
-        
-        setHeaders(fetchedHeaders);
-
-        const parsedListings = fetchedRows.map((row, index) => {
-          const listing: any = { id: index };
-          fetchedHeaders.forEach((header, i) => {
-            const key = headerMapping[header];
-            if (key) {
-              listing[key] = row[i] || '';
-            }
-          });
-          return listing as FlatListing;
-        });
-        
-        setListings(parsedListings);
-        
-      } catch (e: any) {
-        setError(e.message);
-        console.error("Failed to fetch flat listings:", e);
-      } finally {
-        setLoading(false);
+  const observer = useRef<IntersectionObserver>();
+  const lastListingElementRef = useCallback((node: HTMLTableRowElement) => {
+    if (loading) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPage(prevPage => prevPage + 1);
       }
-    };
+    });
+    if (node) observer.current.observe(node);
+  }, [loading, hasMore]);
 
-    fetchListings();
-  }, []);
+  const fetchListings = useCallback(async (pageNum: number) => {
+    setLoading(true);
+    setError(null);
+    
+    const startRow = (pageNum - 1) * ROWS_PER_PAGE + 1;
+    // Header is row 1, so data starts at row 2.
+    const dataStartRow = startRow === 1 ? 2 : startRow; 
+    const endRow = dataStartRow + ROWS_PER_PAGE -1;
+
+    // A1:N is the range for columns
+    const range = `Sheet1!A${startRow}:${'N'}${endRow}`;
+    const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`;
+    
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const values: string[][] = data.values;
+
+      if (!values) {
+        setHasMore(false);
+        if (pageNum === 1) {
+            setListings([]);
+            setError("No data returned from API.");
+        }
+        return;
+      }
+      
+      const fetchedHeaders = pageNum === 1 ? values[0] : headers;
+      const fetchedRows = pageNum === 1 ? values.slice(1) : values;
+
+      if (pageNum === 1) {
+        setHeaders(fetchedHeaders);
+      }
+
+      const parsedListings = fetchedRows.map((row, index) => {
+        const listing: any = { id: (pageNum - 1) * ROWS_PER_PAGE + index };
+        fetchedHeaders.forEach((header, i) => {
+          const key = headerMapping[header];
+          if (key) {
+            listing[key] = row[i] || '';
+          }
+        });
+        return listing as FlatListing;
+      });
+      
+      setListings(prev => [...prev, ...parsedListings]);
+      setHasMore(parsedListings.length === ROWS_PER_PAGE);
+      
+    } catch (e: any) {
+      setError(e.message);
+      console.error("Failed to fetch flat listings:", e);
+    } finally {
+      setLoading(false);
+    }
+  }, [headers]);
+
+  useEffect(() => {
+    // We only want to fetch page 1 on initial load
+    if (page === 1) {
+        fetchListings(1);
+    }
+  }, [fetchListings]);
+
+  useEffect(() => {
+    if (page > 1) {
+        fetchListings(page);
+    }
+  }, [page, fetchListings]);
+
 
   const filteredListings = useMemo(() => {
     if (!searchTerm) return listings;
@@ -143,8 +179,8 @@ export default function FlatsPage() {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <Card className="flex-1 flex flex-col">
+    <div className="space-y-6">
+      <Card>
          <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -162,73 +198,113 @@ export default function FlatsPage() {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="flex-1 p-0 relative">
-          <ScrollArea className="absolute inset-0">
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
             <Table>
-                <TableHeader className="sticky top-0 bg-card z-10">
+                <TableHeader>
                 <TableRow>
-                    {headers.map(header => <TableHead key={header} className="whitespace-nowrap">{header}</TableHead>)}
+                    {headers.map(header => <TableHead key={header}>{header}</TableHead>)}
                 </TableRow>
                 </TableHeader>
                 <TableBody>
-                {loading ? (
-                    <TableRow>
-                      <TableCell colSpan={14} className="h-48 text-center">
-                          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
-                          <p className="mt-2 text-muted-foreground">Loading listings...</p>
-                      </TableCell>
-                    </TableRow>
-                ) : error ? (
-                    <TableRow>
-                      <TableCell colSpan={14} className="h-24 text-center text-red-500">
-                          Failed to load listings: {error}
-                      </TableCell>
-                    </TableRow>
-                ) : filteredListings.length > 0 ? (
-                    filteredListings.map((listing) => (
-                      <TableRow key={listing.id}>
-                          <TableCell>{listing.userType}</TableCell>
-                          <TableCell>{listing.gender}</TableCell>
-                          <TableCell className="max-w-[150px] truncate">{listing.area}</TableCell>
-                          <TableCell className="font-medium whitespace-nowrap max-w-[200px] truncate">{listing.address}</TableCell>
-                          <TableCell>{listing.flatType}</TableCell>
-                          <TableCell>{listing.rentBudget}</TableCell>
-                          <TableCell>{listing.deposit}</TableCell>
-                          <TableCell className="whitespace-nowrap">{listing.availability}</TableCell>
-                          <TableCell className="whitespace-nowrap">{listing.phoneNumber}</TableCell>
-                          <TableCell className="whitespace-nowrap">{listing.datePosted}</TableCell>
-                          <TableCell>{listing.source}</TableCell>
-                          <TableCell className="max-w-[150px] truncate">
-                              {listing.emailOrMessenger && (
-                                  <a href={listing.emailOrMessenger} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                      Link
-                                  </a>
-                              )}
-                          </TableCell>
-                          <TableCell className="max-w-[150px] truncate">
-                             {listing.pictures && (
-                              <a href={listing.pictures} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                      Link
-                                  </a>
-                             )}
-                          </TableCell>
-                          <TableCell>
-                              <Button variant="link" className="p-0 h-auto" onClick={() => handleViewPostContent(listing.postContent)}>
-                                  View
-                              </Button>
-                          </TableCell>
-                      </TableRow>
-                    ))
-                ) : (
+                {filteredListings.length > 0 ? (
+                    filteredListings.map((listing, index) => {
+                      if (filteredListings.length === index + 1) {
+                        return (
+                          <TableRow ref={lastListingElementRef} key={listing.id}>
+                            <TableCell>{listing.userType}</TableCell>
+                            <TableCell>{listing.gender}</TableCell>
+                            <TableCell>{listing.area}</TableCell>
+                            <TableCell>{listing.address}</TableCell>
+                            <TableCell>{listing.flatType}</TableCell>
+                            <TableCell>{listing.rentBudget}</TableCell>
+                            <TableCell>{listing.deposit}</TableCell>
+                            <TableCell>{listing.availability}</TableCell>
+                            <TableCell>{listing.phoneNumber}</TableCell>
+                            <TableCell>{listing.datePosted}</TableCell>
+                            <TableCell>{listing.source}</TableCell>
+                            <TableCell>
+                                {listing.emailOrMessenger && (
+                                    <a href={listing.emailOrMessenger} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                        Link
+                                    </a>
+                                )}
+                            </TableCell>
+                            <TableCell>
+                               {listing.pictures && (
+                                <a href={listing.pictures} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                        Link
+                                    </a>
+                               )}
+                            </TableCell>
+                            <TableCell>
+                                <Button variant="link" onClick={() => handleViewPostContent(listing.postContent)}>
+                                    View
+                                </Button>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      } else {
+                        return (
+                          <TableRow key={listing.id}>
+                             <TableCell>{listing.userType}</TableCell>
+                            <TableCell>{listing.gender}</TableCell>
+                            <TableCell>{listing.area}</TableCell>
+                            <TableCell>{listing.address}</TableCell>
+                            <TableCell>{listing.flatType}</TableCell>
+                            <TableCell>{listing.rentBudget}</TableCell>
+                            <TableCell>{listing.deposit}</TableCell>
+                            <TableCell>{listing.availability}</TableCell>
+                            <TableCell>{listing.phoneNumber}</TableCell>
+                            <TableCell>{listing.datePosted}</TableCell>
+                            <TableCell>{listing.source}</TableCell>
+                            <TableCell>
+                                {listing.emailOrMessenger && (
+                                    <a href={listing.emailOrMessenger} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                        Link
+                                    </a>
+                                )}
+                            </TableCell>
+                            <TableCell>
+                               {listing.pictures && (
+                                <a href={listing.pictures} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                        Link
+                                    </a>
+                               )}
+                            </TableCell>
+                            <TableCell>
+                                <Button variant="link" onClick={() => handleViewPostContent(listing.postContent)}>
+                                    View
+                                </Button>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      }
+                    })
+                ) : !loading && (
                     <TableRow>
                         <TableCell colSpan={14} className="h-24 text-center">
                             {searchTerm ? `No listings found for "${searchTerm}".` : "No listings found."}
                         </TableCell>
                     </TableRow>
                 )}
+                 {loading && (
+                    <TableRow>
+                      <TableCell colSpan={14} className="h-24 text-center">
+                          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+                      </TableCell>
+                    </TableRow>
+                )}
+                {error && !loading && (
+                    <TableRow>
+                      <TableCell colSpan={14} className="h-24 text-center text-red-500">
+                          Failed to load listings: {error}
+                      </TableCell>
+                    </TableRow>
+                )}
                 </TableBody>
             </Table>
-          </ScrollArea>
+          </div>
         </CardContent>
       </Card>
 
