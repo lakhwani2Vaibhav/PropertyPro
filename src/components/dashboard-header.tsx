@@ -27,7 +27,6 @@ const navLinks = [
 const aiLinks = [
     { href: '/dashboard/reports', label: 'Reports', icon: <PieChart className="h-4 w-4" /> },
     { href: '/dashboard/rent-suggestion', label: 'Rent Suggestion', icon: <Wand2 className="h-4 w-4" /> },
-    { href: '/dashboard/assistant', label: 'AI Assistant', icon: <Bot className="h-4 w-4" /> },
 ]
 
 export default function DashboardHeader() {

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import DashboardHeader from '@/components/dashboard-header';
 import { Toaster } from "@/components/ui/toaster";
+import { AiAssistantWidget } from '@/components/ai-assistant-widget';
 
 export const metadata: Metadata = {
   title: 'PropertyPro Dashboard',
@@ -19,6 +20,7 @@ export default function DashboardLayout({
         {children}
       </main>
       <Toaster />
+      <AiAssistantWidget />
     </div>
   );
 }
