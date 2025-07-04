@@ -68,13 +68,13 @@ export default function TenantsPage() {
   return (
     <>
       <div className="space-y-4">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
               <h1 className="text-3xl font-bold">Tenants</h1>
               <p className="text-muted-foreground">Manage your tenants and their information.</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="relative w-full max-w-xs">
+            <div className="relative w-full sm:max-w-xs">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                     placeholder="Search tenants..."
@@ -93,7 +93,7 @@ export default function TenantsPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
-                  <TableHead>Property</TableHead>
+                  <TableHead className="hidden sm:table-cell">Property</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="w-[50px]"><span className="sr-only">Actions</span></TableHead>
                 </TableRow>
@@ -102,8 +102,13 @@ export default function TenantsPage() {
                 {filteredTenants.length > 0 ? (
                     filteredTenants.map((tenant) => (
                       <TableRow key={tenant.id}>
-                        <TableCell className="font-medium">{tenant.name}</TableCell>
-                        <TableCell>{tenant.property}</TableCell>
+                        <TableCell className="font-medium">
+                          {tenant.name}
+                           <div className="sm:hidden text-muted-foreground text-xs mt-1">
+                            {tenant.property}
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">{tenant.property}</TableCell>
                         <TableCell>
                           <Badge variant={tenant.status === 'Active' ? 'default' : tenant.status === 'Past' ? 'secondary' : 'destructive'}>
                             {tenant.status}

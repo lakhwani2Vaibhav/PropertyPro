@@ -7,11 +7,12 @@ import { CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { Search, Send, Bot, Loader2, MessageSquare } from 'lucide-react';
+import { Search, Send, Bot, Loader2, MessageSquare, ArrowLeft } from 'lucide-react';
 import Balancer from 'react-wrap-balancer';
 import { summarizeConversation } from './actions';
 import { toast } from '@/hooks/use-toast';
 import { conversations as initialConversations } from '@/lib/mock-data';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type Conversation = typeof initialConversations[0];
 type Message = Conversation['messages'][0] & { isSummary?: boolean };
@@ -23,6 +24,7 @@ export default function MessagingPage() {
     const [newMessage, setNewMessage] = useState('');
     const [isSummarizing, setIsSummarizing] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const isMobile = useIsMobile();
 
     const filteredConversations = useMemo(() => {
         if (!searchTerm) return conversations;
@@ -96,11 +98,18 @@ export default function MessagingPage() {
             });
         }
     };
+    
+    const handleConversationSelect = (convo: Conversation) => {
+        setSelectedConversation(convo);
+    }
 
   return (
     <div className="h-[calc(100vh-8.5rem)] border rounded-lg overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-full">
-            <div className="col-span-1 md:col-span-1 lg:col-span-1 border-r bg-muted/50 flex flex-col">
+            <div className={cn(
+                "col-span-1 md:col-span-1 lg:col-span-1 border-r bg-muted/50 flex flex-col",
+                isMobile && selectedConversation && "hidden"
+            )}>
                 <div className="p-4 border-b">
                     <h2 className="text-xl font-bold">Messages</h2>
                     <div className="relative mt-2">
@@ -121,7 +130,7 @@ export default function MessagingPage() {
                                 "flex items-start gap-3 p-4 cursor-pointer hover:bg-accent/50",
                                 selectedConversation?.id === convo.id && "bg-accent/80"
                             )}
-                            onClick={() => setSelectedConversation(convo)}
+                            onClick={() => handleConversationSelect(convo)}
                         >
                             <Avatar>
                                 <AvatarImage src={convo.avatar} data-ai-hint={convo.avatarHint} />
@@ -138,13 +147,23 @@ export default function MessagingPage() {
                     ))}
                 </ScrollArea>
             </div>
-            <div className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col h-full bg-background">
+            <div className={cn(
+                "col-span-1 md:col-span-2 lg:col-span-3 flex flex-col h-full bg-background",
+                isMobile && !selectedConversation && "hidden"
+            )}>
                 {selectedConversation ? (
                     <>
                         <CardHeader className="flex flex-row items-center justify-between border-b">
-                            <div>
-                                <h3 className="text-lg font-bold">{selectedConversation.name}</h3>
-                                <p className="text-sm text-muted-foreground">{selectedConversation.property}</p>
+                             <div className="flex items-center gap-2">
+                                {isMobile && (
+                                    <Button variant="ghost" size="icon" className="-ml-2" onClick={() => setSelectedConversation(null)}>
+                                        <ArrowLeft className="h-5 w-5" />
+                                    </Button>
+                                )}
+                                <div>
+                                    <h3 className="text-lg font-bold">{selectedConversation.name}</h3>
+                                    <p className="text-sm text-muted-foreground">{selectedConversation.property}</p>
+                                </div>
                             </div>
                             <Button variant="outline" size="sm" onClick={handleSummarize} disabled={isSummarizing}>
                                 {isSummarizing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Bot className="mr-2 h-4 w-4" />}
@@ -171,7 +190,7 @@ export default function MessagingPage() {
                                         )}
                                         <div
                                             className={cn(
-                                                'max-w-md rounded-lg p-3',
+                                                'max-w-xs md:max-w-md rounded-lg p-3',
                                                 msg.sender === 'You'
                                                     ? 'bg-primary text-primary-foreground'
                                                     : 'bg-muted',
@@ -206,7 +225,7 @@ export default function MessagingPage() {
                         </div>
                     </>
                 ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+                    <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4 text-center">
                         <MessageSquare className="h-16 w-16 mb-4" />
                         <h3 className="text-lg font-medium">Select a conversation</h3>
                         <p className="text-sm">Choose a tenant from the list to see your message history.</p>

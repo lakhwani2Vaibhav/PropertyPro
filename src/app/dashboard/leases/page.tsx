@@ -38,7 +38,7 @@ export default function LeasesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-bold">Lease Management</h1>
         <div className="flex items-center gap-2">
             <div className="relative w-full max-w-sm">
@@ -55,33 +55,44 @@ export default function LeasesPage() {
       </div>
 
       <Card>
-        <CardHeader className="p-0">
+        <CardHeader className="p-0 hidden md:block">
           <div className="grid grid-cols-10 gap-4 px-6 py-4 border-b font-semibold text-muted-foreground">
             <div className="col-span-3">Property Address</div>
             <div className="col-span-2">Tenant Name</div>
             <div className="col-span-2">Lease Start Date</div>
             <div className="col-span-2">Lease End Date</div>
-            <div className="col-span-1">Status</div>
+            <div className="col-span-1 text-center">Status</div>
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-border md:divide-y-0">
             {filteredLeases.length > 0 ? (
                 filteredLeases.map((lease) => (
-                  <div key={lease.id} className="grid grid-cols-10 gap-4 px-6 py-4 items-center">
-                    <div className="col-span-3 font-medium">
-                      {lease.property.split(',').map((line, index) => (
-                          <div key={index}>{line.trim()}</div>
-                      ))}
+                  <div key={lease.id} className="p-4 md:grid md:grid-cols-10 md:gap-4 md:px-6 md:py-4 md:items-center">
+                    <div className="md:col-span-3">
+                        <div className="font-semibold text-sm md:hidden mb-2">Property</div>
+                        <div className="font-medium">
+                            {lease.property.split(',').map((line, index) => (
+                                <div key={index}>{line.trim()}</div>
+                            ))}
+                        </div>
                     </div>
-                    <div className="col-span-2">
-                      <Link href="#" className="text-primary hover:underline">
-                        {lease.tenant}
-                      </Link>
+                     <div className="md:col-span-2 mt-4 md:mt-0">
+                        <div className="font-semibold text-sm md:hidden mb-2">Tenant</div>
+                         <Link href="#" className="text-primary hover:underline">
+                            {lease.tenant}
+                        </Link>
                     </div>
-                    <div className="col-span-2">{format(lease.startDate, "MM/dd/yyyy")}</div>
-                    <div className="col-span-2">{format(lease.endDate, "MM/dd/yyyy")}</div>
-                    <div className="col-span-1">
+                    <div className="md:col-span-2 mt-4 md:mt-0">
+                        <div className="font-semibold text-sm md:hidden mb-2">Start Date</div>
+                        {format(lease.startDate, "MM/dd/yyyy")}
+                    </div>
+                     <div className="md:col-span-2 mt-4 md:mt-0">
+                        <div className="font-semibold text-sm md:hidden mb-2">End Date</div>
+                         {format(lease.endDate, "MM/dd/yyyy")}
+                    </div>
+                    <div className="md:col-span-1 mt-4 md:mt-0 text-left md:text-center">
+                        <div className="font-semibold text-sm md:hidden mb-2">Status</div>
                        <Badge
                         className={cn(
                           "px-3 py-1 rounded-full font-medium border-transparent text-xs",

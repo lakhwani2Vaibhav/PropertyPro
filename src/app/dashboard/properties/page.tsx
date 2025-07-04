@@ -119,13 +119,13 @@ export default function PropertiesPage() {
   return (
     <>
       <div className="space-y-4">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
               <h1 className="text-3xl font-bold">Properties</h1>
               <p className="text-muted-foreground">Manage your property portfolio.</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="relative w-full max-w-xs">
+            <div className="relative w-full sm:max-w-xs">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                     placeholder="Search properties..."
@@ -144,8 +144,8 @@ export default function PropertiesPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Address</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Tenant</TableHead>
+                  <TableHead className="hidden sm:table-cell">Status</TableHead>
+                  <TableHead className="hidden md:table-cell">Tenant</TableHead>
                   <TableHead className="text-right">Rent</TableHead>
                   <TableHead className="w-[50px]"><span className="sr-only">Actions</span></TableHead>
                 </TableRow>
@@ -158,13 +158,16 @@ export default function PropertiesPage() {
                           <Link href={`/dashboard/properties/${prop.id}`} className="hover:underline">
                             {prop.address}
                           </Link>
+                          <div className="sm:hidden text-muted-foreground text-xs mt-1">
+                            {prop.status}
+                          </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="hidden sm:table-cell">
                           <Badge variant={prop.status === 'Occupied' ? 'default' : 'secondary'}>
                             {prop.status}
                           </Badge>
                         </TableCell>
-                        <TableCell className={prop.status === 'Vacant' || prop.status === 'Pending' ? 'text-muted-foreground' : ''}>
+                        <TableCell className={prop.status === 'Vacant' || prop.status === 'Pending' ? 'text-muted-foreground hidden md:table-cell' : 'hidden md:table-cell'}>
                           {prop.tenant}
                         </TableCell>
                         <TableCell className="text-right">₹{prop.rent.toLocaleString()}</TableCell>

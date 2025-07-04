@@ -130,13 +130,13 @@ export default function MaintenancePage() {
   return (
     <>
       <div className="space-y-4">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-3xl font-bold">Maintenance Requests</h1>
             <p className="text-muted-foreground">Track and manage maintenance tasks.</p>
           </div>
            <div className="flex items-center gap-2">
-             <div className="relative w-full max-w-xs">
+             <div className="relative w-full sm:max-w-xs">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                     placeholder="Search requests..."
@@ -155,8 +155,8 @@ export default function MaintenancePage() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[25%]">Property</TableHead>
-                  <TableHead className="w-[35%]">Issue</TableHead>
-                  <TableHead>Reported</TableHead>
+                  <TableHead className="w-[35%] hidden sm:table-cell">Issue</TableHead>
+                  <TableHead className="hidden md:table-cell">Reported</TableHead>
                   <TableHead>Priority</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="w-[50px]">
@@ -168,9 +168,12 @@ export default function MaintenancePage() {
                 {filteredRequests.length > 0 ? (
                     filteredRequests.map((req) => (
                       <TableRow key={req.id}>
-                        <TableCell className="font-medium">{req.property}</TableCell>
-                        <TableCell>{req.issue}</TableCell>
-                        <TableCell>{req.dateReported}</TableCell>
+                        <TableCell className="font-medium">
+                          <div>{req.property}</div>
+                          <div className="text-muted-foreground sm:hidden text-xs mt-1">{req.issue}</div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">{req.issue}</TableCell>
+                        <TableCell className="hidden md:table-cell">{req.dateReported}</TableCell>
                         <TableCell>
                           <Badge variant="outline" className={cn('border', getPriorityClass(req.priority))}>
                             {req.priority}
