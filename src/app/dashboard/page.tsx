@@ -1,30 +1,37 @@
-import { ArrowLeft, Home, LayoutDashboard, Lightbulb, TrendingUp, Users, Wallet } from "lucide-react";
+import { Home, LayoutDashboard, Lightbulb, TrendingUp, Users, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import RevenueProfitChart from "@/components/revenue-profit-chart";
 import PropertyOccupancyChart from "@/components/property-occupancy-chart";
 import PortfolioOverviewChart from "@/components/portfolio-overview-chart";
 import Balancer from "react-wrap-balancer";
+import Image from "next/image";
+
+const portfolioProperties = [
+    { id: 1, address: "Whitefield Complex", type: "Apartment", status: "Occupied", rent: 95000, occupancy: "12/12 Units", imageUrl: "https://placehold.co/600x400.png", imageHint: "modern apartment" },
+    { id: 2, address: "JP Nagar Units", type: "House", status: "Occupied", rent: 75000, occupancy: "1/1 Unit", imageUrl: "https://placehold.co/600x400.png", imageHint: "suburban house" },
+    { id: 3, address: "Koramangala Towers", type: "Apartment", status: "Vacant", rent: 82000, occupancy: "8/9 Units", imageUrl: "https://placehold.co/600x400.png", imageHint: "apartment building" },
+    { id: 4, address: "Indiranagar Homes", type: "House", status: "Occupied", rent: 120000, occupancy: "1/1 Unit", imageUrl: "https://placehold.co/600x400.png", imageHint: "luxury home" },
+    { id: 5, address: "HSR Layout Loft", type: "Apartment", status: "Occupied", rent: 65000, occupancy: "4/4 Units", imageUrl: "https://placehold.co/600x400.png", imageHint: "urban loft" },
+    { id: 6, address: "Marathahalli Place", type: "Condo", status: "Vacant", rent: 58000, occupancy: "0/1 Unit", imageUrl: "https://placehold.co/600x400.png", imageHint: "condo exterior" },
+  ];
 
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
-      <header className="flex items-center justify-between">
+      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <Button variant="ghost" className="mb-2">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Landlords
-            </Button>
             <h1 className="text-3xl font-bold">
-                <Balancer>Landlord Analytics Demo</Balancer>
+                <Balancer>Landlord Analytics</Balancer>
             </h1>
+            <p className="text-muted-foreground">Welcome back, analyze your portfolio performance.</p>
         </div>
       </header>
 
       <Tabs defaultValue="analytics">
-        <TabsList className="grid w-full grid-cols-2 md:w-96">
+        <TabsList className="grid w-full grid-cols-2 md:max-w-md">
           <TabsTrigger value="analytics">
             <LayoutDashboard className="mr-2 h-4 w-4" />
             Analytics Dashboard
@@ -40,7 +47,7 @@ export default function DashboardPage() {
               title="Total Revenue"
               value="₹2.65L"
               change="+12% from last month"
-              icon={<span className="text-lg font-bold text-muted-foreground/80">$</span>}
+              icon={<TrendingUp className="text-muted-foreground" />}
             />
             <StatCard
               title="Total Properties"
@@ -107,9 +114,9 @@ export default function DashboardPage() {
                         <p className="text-3xl font-bold text-primary">₹95,000</p>
                         <p className="text-sm text-muted-foreground">Monthly revenue</p>
                     </div>
-                    <div className="flex gap-2">
-                        <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">High Yield</Badge>
-                        <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">Premium Location</Badge>
+                    <div className="flex flex-wrap gap-2">
+                        <Badge variant="secondary">High Yield</Badge>
+                        <Badge variant="secondary">Premium Location</Badge>
                     </div>
                 </CardContent>
             </Card>
@@ -122,21 +129,47 @@ export default function DashboardPage() {
                     <InsightItem
                         title="Rent Optimization"
                         description="Consider 6% increase in JP Nagar"
-                        color="blue"
                     />
                     <InsightItem
                         title="High Demand Alert"
                         description="Indiranagar area showing 15% growth"
-                        color="green"
                     />
                      <InsightItem
                         title="Maintenance Due"
                         description="3 properties need attention"
-                        color="orange"
                     />
                 </CardContent>
             </Card>
           </div>
+        </TabsContent>
+        <TabsContent value="portfolio" className="space-y-6">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {portfolioProperties.map((prop) => (
+                <Card key={prop.id} className="overflow-hidden flex flex-col group">
+                    <div className="relative">
+                        <Image src={prop.imageUrl} alt={prop.address} width={600} height={400} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" data-ai-hint={prop.imageHint} />
+                        <Badge className="absolute top-3 right-3" variant={prop.status === 'Occupied' ? 'default' : 'secondary'}>{prop.status}</Badge>
+                    </div>
+                    <CardHeader>
+                        <CardTitle className="text-lg">{prop.address}</CardTitle>
+                        <p className="text-sm text-muted-foreground">{prop.type}</p>
+                    </CardHeader>
+                    <CardContent className="flex-grow space-y-3">
+                        <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground text-sm">Rent</span>
+                            <span className="font-semibold">₹{prop.rent.toLocaleString()}/mo</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground text-sm">Occupancy</span>
+                            <span className="font-semibold">{prop.occupancy}</span>
+                        </div>
+                    </CardContent>
+                    <CardFooter className="p-4 pt-2">
+                        <Button variant="outline" size="sm" className="w-full">View Details</Button>
+                    </CardFooter>
+                </Card>
+                ))}
+            </div>
         </TabsContent>
       </Tabs>
     </div>
@@ -158,20 +191,17 @@ function StatCard({ title, value, change, icon }: { title: string, value: string
   );
 }
 
-function InsightItem({title, description, color}: {title: string, description: string, color: 'blue' | 'green' | 'orange'}) {
-    const colorClasses = {
-        blue: 'bg-blue-50 border-blue-200 text-blue-800',
-        green: 'bg-green-50 border-green-200 text-green-800',
-        orange: 'bg-orange-50 border-orange-200 text-orange-800',
-    }
+function InsightItem({title, description}: {title: string, description: string}) {
     return (
-        <div className={`p-3 rounded-lg border ${colorClasses[color]}`}>
-            <div className="flex items-start gap-3">
-                <div className={`mt-1 h-2 w-2 rounded-full ${color === 'blue' ? 'bg-blue-500' : color === 'green' ? 'bg-green-500' : 'bg-orange-500'}`} />
-                <div>
-                    <p className="text-sm font-semibold">{title}</p>
-                    <p className="text-sm">{description}</p>
+        <div className="flex items-start gap-3">
+            <div className="mt-1 flex-shrink-0">
+                <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center">
+                    <Lightbulb className="h-3 w-3 text-primary"/>
                 </div>
+            </div>
+            <div>
+                <p className="text-sm font-semibold">{title}</p>
+                <p className="text-sm text-muted-foreground">{description}</p>
             </div>
         </div>
     )
