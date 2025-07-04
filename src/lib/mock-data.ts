@@ -96,10 +96,27 @@ export const dialogTenants = [
     { id: '3', name: "Emily Chen" },
 ];
 
-export const maintenanceRequests = [
+export type MaintenanceRequest = {
+  id: number;
+  property: string;
+  tenant: string;
+  issue: string;
+  dateReported: string;
+  priority: 'High' | 'Medium' | 'Low';
+  status: 'Open' | 'In Progress' | 'Completed';
+};
+
+export const maintenanceRequests: MaintenanceRequest[] = [
     { id: 1, property: '123 Oak Street, Anytown', tenant: 'Sarah Miller', issue: 'Leaky faucet in kitchen', dateReported: '2024-07-15', priority: 'High', status: 'Open' },
     { id: 2, property: '456 Pine Avenue, Anytown', tenant: 'David Lee', issue: 'Broken window in living room', dateReported: '2024-07-12', priority: 'High', status: 'In Progress' },
     { id: 3, property: '222 Cedar Lane, Anytown', tenant: 'Emily Chen', issue: 'HVAC unit not cooling', dateReported: '2024-07-10', priority: 'Medium', status: 'Completed' },
     { id: 4, property: '101 Elm Court, Anytown', tenant: 'Pending', issue: 'Paint touch-up needed in hallway', dateReported: '2024-07-05', priority: 'Low', status: 'Open' },
     { id: 5, property: '789 Maple Drive, Anytown', tenant: 'Vacant', issue: 'General cleaning before new tenant', dateReported: '2024-07-18', priority: 'Low', status: 'Open' },
+];
+
+export const vendors = [
+  { id: '1', name: 'PlumbPerfect Inc.' },
+  { id: '2', name: 'ElecTrific Solutions' },
+  { id: '3', name: 'The Handy Man' },
+  { id: '4', name: 'Clean Sweep Services' },
 ];
