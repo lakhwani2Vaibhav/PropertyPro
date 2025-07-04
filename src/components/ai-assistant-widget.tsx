@@ -67,13 +67,17 @@ export function AiAssistantWidget() {
     setIsLoading(false);
   }
   
-  const isTopPositioned = pathname === '/dashboard/messaging' || pathname === '/dashboard/flats';
+  const shouldHide = pathname === '/dashboard/messaging' || pathname === '/dashboard/flats';
+
+  if (shouldHide) {
+    return null;
+  }
 
   return (
     <div
       className={cn(
         'fixed z-50 flex flex-col items-end gap-2',
-        isTopPositioned ? 'top-20 right-4' : 'bottom-4 right-4'
+        'bottom-4 right-4'
       )}
     >
       <div 
