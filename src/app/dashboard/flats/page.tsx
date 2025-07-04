@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
@@ -69,7 +68,7 @@ const headerMapping: { [key: string]: keyof FlatListing } = {
 
 const API_KEY = 'AIzaSyDuGgoYJPAnMT1licNrIcN_pdmTeoDhqfw';
 const SPREADSHEET_ID = '1qeKFSgvI5wVD9bYLjOs58C7EbT-EEGe4xQrx32VkxIo';
-const ROWS_PER_FETCH = 50;
+const ROWS_PER_FETCH = 5;
 
 export default function FlatsPage() {
   const [listings, setListings] = useState<FlatListing[]>([]);
@@ -137,7 +136,7 @@ export default function FlatsPage() {
         const values: string[][] = data.values;
 
         if (!values || values.length === 0) {
-          setHasMore(false);
+          setHasMore(true);
           setLoading(false);
           return;
         }
@@ -190,7 +189,7 @@ export default function FlatsPage() {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex-1 flex flex-col">
       <Card className="flex-1 flex flex-col">
          <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
