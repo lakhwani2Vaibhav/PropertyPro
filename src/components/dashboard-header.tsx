@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Building2, Bell } from 'lucide-react';
+import { Building2, Bell, Bot } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -13,13 +13,14 @@ const navLinks = [
   { href: '/dashboard/tenants', label: 'Tenants' },
   { href: '/dashboard/leases', label: 'Leases' },
   { href: '/dashboard/reports', label: 'Reports' },
+  { href: '/dashboard/rent-suggestion', label: 'Rent Suggestion' },
 ];
 
 export default function DashboardHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="bg-background">
+    <header className="bg-background sticky top-0 z-50 border-b">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center gap-8">
@@ -43,7 +44,16 @@ export default function DashboardHeader() {
             </nav>
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" className="rounded-full bg-white">
+             <Link href="/dashboard/assistant" passHref>
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg h-auto py-2 px-4 shadow-sm">
+                    <Bot className="h-5 w-5 mr-2" />
+                    <div>
+                    <span className="font-semibold text-sm">AI Rental Assistant</span>
+                    <p className="text-xs text-primary-foreground/80">Online now</p>
+                    </div>
+                </Button>
+            </Link>
+            <Button variant="ghost" size="icon" className="rounded-full">
               <Bell className="h-5 w-5" />
               <span className="sr-only">Notifications</span>
             </Button>
