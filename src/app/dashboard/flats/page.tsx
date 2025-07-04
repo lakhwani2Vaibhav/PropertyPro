@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -17,7 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Loader2, Search } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -27,8 +28,9 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Input } from '@/components/ui/input';
 
-// Define the type for the flat listing based on API response
+// Define the type for the flat listing
 interface FlatListing {
   id: number;
   userType: string;
@@ -47,40 +49,78 @@ interface FlatListing {
   postContent: string;
 }
 
-// Map headers to the FlatListing interface keys
+// This mapping needs to be kept in sync with the sheet headers.
 const headerMapping: { [key: string]: keyof FlatListing } = {
   'User Type': 'userType',
-  Gender: 'gender',
-  Area: 'area',
-  Address: 'address',
+  'Gender': 'gender',
+  'Area': 'area',
+  'Address': 'address',
   'Flat Type': 'flatType',
   'Rent/ Budget': 'rentBudget',
-  Deposit: 'deposit',
-  Availability: 'availability',
+  'Deposit': 'deposit',
+  'Availability': 'availability',
   'Phone Number': 'phoneNumber',
   'Date Posted': 'datePosted',
-  Source: 'source',
+  'Source': 'source',
   'Email/ Messenger': 'emailOrMessenger',
-  Pictures: 'pictures',
+  'Pictures': 'pictures',
   'Post Content': 'postContent',
 };
 
-const API_URL = 'https://sheets.googleapis.com/v4/spreadsheets/1qeKFSgvI5wVD9bYLjOs58C7EbT-EEGe4xQrx32VkxIo/values/Sheet1!A1:N50?key=AIzaSyDuGgoYJPAnMT1licNrIcN_pdmTeoDhqfw';
+const API_KEY = 'AIzaSyDuGgoYJPAnMT1licNrIcN_pdmTeoDhqfw';
+const SPREADSHEET_ID = '1qeKFSgvI5wVD9bYLjOs58C7EbT-EEGe4xQrx32VkxIo';
+const ROWS_PER_FETCH = 50;
 
 export default function FlatsPage() {
   const [listings, setListings] = useState<FlatListing[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [headers, setHeaders] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [startRow, setStartRow] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const [selectedPostContent, setSelectedPostContent] = useState<string | null>(null);
   const [isPostContentOpen, setIsPostContentOpen] = useState(false);
+  
+  const observer = useRef<IntersectionObserver>();
+  const loaderRef = useCallback((node: HTMLTableRowElement | null) => {
+    if (loading) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore && !searchTerm) {
+         setStartRow(prev => prev + ROWS_PER_FETCH);
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [loading, hasMore, searchTerm]);
+
+
+  const parseListings = useCallback((rows: string[][], currentHeaders: string[], baseId: number) => {
+    return rows.map((row, index) => {
+      const listing: any = { id: baseId + index };
+      currentHeaders.forEach((header, i) => {
+          const key = headerMapping[header];
+          if (key) {
+              listing[key] = row[i] || '';
+          }
+      });
+      return listing as FlatListing;
+    });
+  }, []);
 
   useEffect(() => {
+    if (!hasMore) return;
+    
     const fetchListings = async () => {
+      setLoading(true);
+      setError(null);
+      const isFirstFetch = startRow === 1;
+      const endRow = startRow + ROWS_PER_FETCH - 1;
+      const range = `Sheet1!A${startRow}:N${endRow}`;
+      const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`;
+      
       try {
-        setLoading(true);
         const response = await fetch(API_URL);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -88,28 +128,37 @@ export default function FlatsPage() {
         const data = await response.json();
         const values: string[][] = data.values;
 
-        if (!values || values.length < 2) {
-          setListings([]);
+        if (!values || values.length === 0) {
+          setHasMore(false);
+          setLoading(false);
           return;
         }
-        
-        const headers = values[0];
-        const rows = values.slice(1);
 
-        const parsedListings: FlatListing[] = rows.map((row, index) => {
-            const listing: any = { id: index };
-            headers.forEach((header, i) => {
-                const key = headerMapping[header];
-                if (key) {
-                    listing[key] = row[i] || '';
-                }
-            });
-            return listing as FlatListing;
-        });
+        let newRows: string[][];
+        let currentHeaders: string[];
+
+        if (isFirstFetch) {
+            currentHeaders = values[0];
+            setHeaders(currentHeaders);
+            newRows = values.slice(1);
+        } else {
+            currentHeaders = headers;
+            newRows = values;
+        }
         
-        setListings(parsedListings);
+        const baseId = listings.length;
+        const parsedListings = parseListings(newRows, currentHeaders, baseId);
+        
+        setListings(prev => [...prev, ...parsedListings]);
+        
+        const expectedRows = isFirstFetch ? ROWS_PER_FETCH - 1 : ROWS_PER_FETCH;
+        if (newRows.length < expectedRows) {
+            setHasMore(false);
+        }
+        
       } catch (e: any) {
         setError(e.message);
+        setHasMore(false);
         console.error("Failed to fetch flat listings:", e);
       } finally {
         setLoading(false);
@@ -117,138 +166,114 @@ export default function FlatsPage() {
     };
 
     fetchListings();
-  }, []);
+  }, [startRow, hasMore, headers, listings.length, parseListings]);
 
-  // Pagination logic
-  const totalPages = Math.ceil(listings.length / itemsPerPage);
-  const paginatedListings = useMemo(() => {
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      return listings.slice(startIndex, endIndex);
-  }, [listings, currentPage, itemsPerPage]);
 
-  const handleNextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  };
-
-  const handlePrevPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 1));
-  };
+  const filteredListings = useMemo(() => {
+    if (!searchTerm) return listings;
+    return listings.filter(listing =>
+      listing.area.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [listings, searchTerm]);
   
   const handleViewPostContent = (content: string) => {
     setSelectedPostContent(content);
     setIsPostContentOpen(true);
   };
 
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-center text-red-500 bg-red-50 p-4 rounded-md">
-        <h3 className="font-bold">Error</h3>
-        <p>Failed to load listings: {error}</p>
-      </div>
-    );
-  }
-
   return (
     <>
       <div className="space-y-4">
         <Card>
            <CardHeader>
-            <CardTitle>Flat Listings</CardTitle>
-            <p className="text-muted-foreground">Browse and manage flat listings for tenants and landlords.</p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <CardTitle>Flat Listings</CardTitle>
+                <p className="text-muted-foreground mt-1">Browse and manage flat listings for tenants and landlords.</p>
+              </div>
+              <div className="relative w-full sm:max-w-xs">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                    placeholder="Search by area..."
+                    className="pl-9"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <Table>
                   <TableHeader>
                   <TableRow>
-                      <TableHead className="whitespace-nowrap">User Type</TableHead>
-                      <TableHead>Gender</TableHead>
-                      <TableHead>Area</TableHead>
-                      <TableHead>Address</TableHead>
-                      <TableHead className="whitespace-nowrap">Flat Type</TableHead>
-                      <TableHead className="whitespace-nowrap">Rent/Budget</TableHead>
-                      <TableHead>Deposit</TableHead>
-                      <TableHead>Availability</TableHead>
-                      <TableHead className="whitespace-nowrap">Phone Number</TableHead>
-                      <TableHead className="whitespace-nowrap">Date Posted</TableHead>
-                      <TableHead>Source</TableHead>
-                      <TableHead className="whitespace-nowrap">Email/Messenger</TableHead>
-                      <TableHead>Pictures</TableHead>
-                      <TableHead className="whitespace-nowrap">Post Content</TableHead>
+                      {headers.length > 0 
+                        ? headers.map(header => <TableHead key={header} className="whitespace-nowrap">{header}</TableHead>)
+                        : Array.from({ length: 14 }).map((_, i) => <TableHead key={i}><div className="h-4"></div></TableHead>)
+                      }
                   </TableRow>
                   </TableHeader>
                   <TableBody>
-                  {paginatedListings.length > 0 ? paginatedListings.map((listing: FlatListing) => (
-                      <TableRow key={listing.id}>
-                        <TableCell>{listing.userType}</TableCell>
-                        <TableCell>{listing.gender}</TableCell>
-                        <TableCell className="max-w-[150px] truncate">{listing.area}</TableCell>
-                        <TableCell className="font-medium whitespace-nowrap max-w-[200px] truncate">{listing.address}</TableCell>
-                        <TableCell>{listing.flatType}</TableCell>
-                        <TableCell>{listing.rentBudget}</TableCell>
-                        <TableCell>{listing.deposit}</TableCell>
-                        <TableCell className="whitespace-nowrap">{listing.availability}</TableCell>
-                        <TableCell className="whitespace-nowrap">{listing.phoneNumber}</TableCell>
-                        <TableCell className="whitespace-nowrap">{listing.datePosted}</TableCell>
-                        <TableCell>{listing.source}</TableCell>
-                        <TableCell className="max-w-[150px] truncate">
-                            {listing.emailOrMessenger && (
-                                <a href={listing.emailOrMessenger} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                    Link
-                                </a>
-                            )}
-                        </TableCell>
-                        <TableCell className="max-w-[150px] truncate">
-                           {listing.pictures && (
-                            <a href={listing.pictures} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                    Link
-                                </a>
-                           )}
-                        </TableCell>
-                        <TableCell>
-                            <Button variant="link" className="p-0 h-auto" onClick={() => handleViewPostContent(listing.postContent)}>
-                                View
-                            </Button>
+                  {filteredListings.map((listing, index) => {
+                      const isLastElement = index === filteredListings.length - 1;
+                      return (
+                        <TableRow key={listing.id} ref={isLastElement ? loaderRef : null}>
+                            <TableCell>{listing.userType}</TableCell>
+                            <TableCell>{listing.gender}</TableCell>
+                            <TableCell className="max-w-[150px] truncate">{listing.area}</TableCell>
+                            <TableCell className="font-medium whitespace-nowrap max-w-[200px] truncate">{listing.address}</TableCell>
+                            <TableCell>{listing.flatType}</TableCell>
+                            <TableCell>{listing.rentBudget}</TableCell>
+                            <TableCell>{listing.deposit}</TableCell>
+                            <TableCell className="whitespace-nowrap">{listing.availability}</TableCell>
+                            <TableCell className="whitespace-nowrap">{listing.phoneNumber}</TableCell>
+                            <TableCell className="whitespace-nowrap">{listing.datePosted}</TableCell>
+                            <TableCell>{listing.source}</TableCell>
+                            <TableCell className="max-w-[150px] truncate">
+                                {listing.emailOrMessenger && (
+                                    <a href={listing.emailOrMessenger} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                        Link
+                                    </a>
+                                )}
+                            </TableCell>
+                            <TableCell className="max-w-[150px] truncate">
+                               {listing.pictures && (
+                                <a href={listing.pictures} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                        Link
+                                    </a>
+                               )}
+                            </TableCell>
+                            <TableCell>
+                                <Button variant="link" className="p-0 h-auto" onClick={() => handleViewPostContent(listing.postContent)}>
+                                    View
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                      );
+                  })}
+                  {listings.length === 0 && loading && (
+                      <TableRow>
+                        <TableCell colSpan={14} className="h-48 text-center">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
                         </TableCell>
                       </TableRow>
-                  )) : (
-                    <TableRow>
-                      <TableCell colSpan={14} className="h-24 text-center">
-                        No listings found.
-                      </TableCell>
-                    </TableRow>
+                  )}
+                  {filteredListings.length === 0 && !loading && (
+                      <TableRow>
+                          <TableCell colSpan={14} className="h-24 text-center">
+                              {searchTerm ? `No listings found for "${searchTerm}".` : "No listings found."}
+                          </TableCell>
+                      </TableRow>
                   )}
                   </TableBody>
               </Table>
             </div>
           </CardContent>
-          {totalPages > 1 && (
-            <CardFooter className="flex items-center justify-between py-4">
-                <div className="text-sm text-muted-foreground">
-                    Page {currentPage} of {totalPages}
-                </div>
-                <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={handlePrevPage} disabled={currentPage === 1}>
-                        <ChevronLeft className="h-4 w-4" />
-                        <span className="sr-only">Previous</span>
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={handleNextPage} disabled={currentPage === totalPages}>
-                        <span className="sr-only">Next</span>
-                        <ChevronRight className="h-4 w-4" />
-                    </Button>
-                </div>
-            </CardFooter>
-          )}
+           <CardFooter className="flex items-center justify-center py-4 min-h-[4rem]">
+              {loading && listings.length > 0 && <Loader2 className="h-6 w-6 animate-spin text-primary" />}
+              {!loading && !hasMore && listings.length > 0 && searchTerm === '' && <p className="text-muted-foreground">You've reached the end.</p>}
+              {error && <div className="text-red-500">Failed to load more listings: {error}</div>}
+          </CardFooter>
         </Card>
       </div>
 
