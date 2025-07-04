@@ -70,7 +70,7 @@ export const conversations = [
     avatarHint: 'woman face',
     messages: [
       { id: 1, sender: 'Sarah Miller', text: 'Hi, the sink in my kitchen is leaking. Can you send someone to check it?', timestamp: '10:30 AM' },
-      { id: 2, sender: 'You', text: 'Hi Sarah, I am sorry to hear that. I will arrange for a plumber to visit tomorrow. Is morning okay?', timestamp: '10:32 AM' },
+      { id: 2, sender: 'Landlord', text: 'Hi Sarah, I am sorry to hear that. I will arrange for a plumber to visit tomorrow. Is morning okay?', timestamp: '10:32 AM' },
       { id: 3, sender: 'Sarah Miller', text: 'Yes, morning works. Thanks!', timestamp: '10:35 AM' },
     ],
   },
@@ -82,7 +82,7 @@ export const conversations = [
     avatarHint: 'man face',
     messages: [
         { id: 1, sender: 'David Lee', text: 'Just confirming I\'ve paid this month\'s rent.', timestamp: 'Yesterday' },
-        { id: 2, sender: 'You', text: 'Got it, David. Thanks for the confirmation!', timestamp: 'Yesterday' },
+        { id: 2, sender: 'Landlord', text: 'Got it, David. Thanks for the confirmation!', timestamp: 'Yesterday' },
     ],
   },
   {

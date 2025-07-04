@@ -1,28 +1,22 @@
-
-'use client'
+'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { Search, Send, Bot, Loader2, MessageSquare, ArrowLeft } from 'lucide-react';
-import { summarizeConversation } from './actions';
-import { toast } from '@/hooks/use-toast';
+import { Search, Send, ArrowLeft } from 'lucide-react';
 import { conversations as initialConversations } from '@/lib/mock-data';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 type Conversation = typeof initialConversations[0];
-type Message = Conversation['messages'][0] & { isSummary?: boolean };
-
+type Message = Conversation['messages'][0];
 
 export default function MessagingPage() {
     const [conversations, setConversations] = useState(initialConversations);
     const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(initialConversations[0]);
     const [newMessage, setNewMessage] = useState('');
-    const [isSummarizing, setIsSummarizing] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const isMobile = useIsMobile();
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -56,7 +50,7 @@ export default function MessagingPage() {
         e.preventDefault();
         if (!newMessage.trim() || !selectedConversation) return;
 
-        const updatedMessage = { id: Date.now(), sender: 'You', text: newMessage, timestamp: 'Now' };
+        const updatedMessage = { id: Date.now(), sender: 'Landlord', text: newMessage, timestamp: 'Now' };
 
         const updatedConversation: Conversation = {
             ...selectedConversation,
@@ -75,65 +69,26 @@ export default function MessagingPage() {
 
         setNewMessage('');
     };
-
-    const handleSummarize = async () => {
-        if (!selectedConversation || selectedConversation.messages.length === 0) {
-            toast({
-                title: "Cannot summarize",
-                description: "There are no messages in this conversation to summarize.",
-                variant: "destructive",
-            });
-            return;
-        }
-        setIsSummarizing(true);
-        const conversationText = selectedConversation.messages.map(m => `${m.sender}: ${m.text}`).join('\n');
-        const result = await summarizeConversation({ conversation: conversationText });
-        setIsSummarizing(false);
-        if (result.success && result.data) {
-             const summaryMessage: Message = {
-                id: Date.now(),
-                sender: 'AI Assistant',
-                text: result.data.summary,
-                timestamp: 'Just now',
-                isSummary: true,
-            };
-            const updatedConversation = {
-                ...selectedConversation,
-                messages: [...selectedConversation.messages, summaryMessage],
-            };
-            setSelectedConversation(updatedConversation);
-            
-            const updatedConversations = conversations.map(c => 
-                c.id === updatedConversation.id ? updatedConversation : c
-            );
-            setConversations(updatedConversations);
-        } else {
-            toast({
-                title: "Summarization Failed",
-                description: result.error || "Could not generate summary.",
-                variant: "destructive",
-            });
-        }
-    };
     
     const handleConversationSelect = (convo: Conversation) => {
         setSelectedConversation(convo);
     }
 
-  return (
-    <div className="h-[calc(100vh-8.5rem)] border rounded-lg overflow-hidden">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-full">
+    const landlordAvatar = "https://placehold.co/100x100.png";
+    const landlordAvatarHint = "man face";
+
+    return (
+        <div className="h-[calc(100vh-8.5rem)] flex border bg-card rounded-lg overflow-hidden">
             <div className={cn(
-                "col-span-1 md:col-span-1 lg:col-span-1 border-r bg-muted/50 flex flex-col",
-                isClient && isMobile && selectedConversation && "hidden"
+                "w-1/3 xl:w-1/4 border-r bg-muted/20 flex-col",
+                isClient && isMobile ? (selectedConversation ? "hidden" : "flex w-full") : "flex"
             )}>
                 <div className="p-4 border-b">
-                    <h2 className="text-xl font-bold">Messages</h2>
-                    <div className="relative mt-2">
-                        <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                            placeholder="Search messages..."
-                            className="pl-8"
+                            placeholder="Search"
+                            className="pl-9 bg-background rounded-full"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -144,83 +99,81 @@ export default function MessagingPage() {
                         <div
                             key={convo.id}
                             className={cn(
-                                "flex items-start gap-3 p-4 cursor-pointer hover:bg-accent/50 border-b",
-                                selectedConversation?.id === convo.id && "bg-accent/80"
+                                "flex items-center gap-4 p-4 cursor-pointer hover:bg-accent/50",
+                                selectedConversation?.id === convo.id && "bg-primary/10"
                             )}
                             onClick={() => handleConversationSelect(convo)}
                         >
-                            <Avatar>
+                            <Avatar className="h-12 w-12">
                                 <AvatarImage src={convo.avatar} data-ai-hint={convo.avatarHint} />
                                 <AvatarFallback>{convo.name.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div className="flex-grow truncate">
                                 <p className="font-semibold">{convo.name}</p>
                                 <p className="text-sm text-muted-foreground truncate">{convo.property}</p>
-                                <p className="text-sm text-muted-foreground truncate">
-                                    {convo.messages.length > 0 ? convo.messages[convo.messages.length - 1].text : "No messages yet"}
-                                </p>
                             </div>
                         </div>
                     ))}
                 </ScrollArea>
             </div>
+            
             <div className={cn(
-                "col-span-1 md:col-span-2 lg:col-span-3 flex flex-col h-full bg-background",
+                "flex-1 flex flex-col h-full bg-background",
                 isClient && isMobile && !selectedConversation && "hidden"
             )}>
                 {selectedConversation ? (
                     <>
-                        <CardHeader className="flex flex-row items-center justify-between border-b">
-                             <div className="flex items-center gap-2">
-                                {isClient && isMobile && (
-                                    <Button variant="ghost" size="icon" className="-ml-2" onClick={() => setSelectedConversation(null)}>
-                                        <ArrowLeft className="h-5 w-5" />
-                                    </Button>
-                                )}
-                                <div>
-                                    <h3 className="text-lg font-bold">{selectedConversation.name}</h3>
-                                    <p className="text-sm text-muted-foreground">{selectedConversation.property}</p>
-                                </div>
+                        <div className="flex items-center gap-4 p-4 border-b">
+                            {isClient && isMobile && (
+                                <Button variant="ghost" size="icon" className="-ml-2" onClick={() => setSelectedConversation(null)}>
+                                    <ArrowLeft className="h-5 w-5" />
+                                </Button>
+                            )}
+                            <div>
+                                <h2 className="text-2xl font-bold">{selectedConversation.name}</h2>
+                                <p className="text-muted-foreground">{selectedConversation.property}</p>
                             </div>
-                            <Button variant="outline" size="sm" onClick={handleSummarize} disabled={isSummarizing}>
-                                {isSummarizing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Bot className="mr-2 h-4 w-4" />}
-                                Summarize
-                            </Button>
-                        </CardHeader>
+                        </div>
+
                         <ScrollArea className="flex-grow p-6">
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                                 {selectedConversation.messages.map((msg: Message) => (
                                     <div
                                         key={msg.id}
                                         className={cn(
                                             'flex w-full items-end gap-3',
-                                            msg.sender === 'You' ? 'justify-end' : 'justify-start'
+                                            msg.sender === 'Landlord' ? 'justify-end' : 'justify-start'
                                         )}
                                     >
-                                        {msg.sender !== 'You' && (
+                                        {msg.sender !== 'Landlord' && (
                                             <Avatar className="h-8 w-8 shrink-0">
-                                                <AvatarImage src={msg.sender === 'AI Assistant' ? undefined : selectedConversation.avatar} data-ai-hint={selectedConversation.avatarHint}/>
+                                                <AvatarImage src={selectedConversation.avatar} data-ai-hint={selectedConversation.avatarHint}/>
                                                 <AvatarFallback>
-                                                    {msg.sender === 'AI Assistant' ? <Bot className="h-5 w-5"/> : msg.sender.charAt(0)}
+                                                    {msg.sender.charAt(0)}
                                                 </AvatarFallback>
                                             </Avatar>
                                         )}
-                                        <div
-                                            className={cn(
-                                                'flex flex-col max-w-[75%] rounded-lg p-3',
-                                                msg.sender === 'You'
-                                                    ? 'bg-primary text-primary-foreground'
-                                                    : 'bg-muted',
-                                                msg.isSummary && 'border border-primary/50 bg-primary/10'
-                                            )}
-                                        >
-                                            <p className="font-bold text-sm">{msg.sender}</p>
-                                            <p className="mt-1 text-sm whitespace-pre-wrap break-words">{msg.text}</p>
-                                            <p className="mt-2 self-end text-xs opacity-70">{msg.timestamp}</p>
+                                        
+                                        <div className={cn('flex flex-col max-w-[75%]', msg.sender === 'Landlord' && 'items-end')}>
+                                           <p className="text-xs text-muted-foreground mb-1 px-1">
+                                                {msg.sender === 'Landlord' ? 'Landlord' : msg.sender}
+                                            </p>
+                                            <div
+                                                className={cn(
+                                                    'rounded-2xl p-3 shadow-sm',
+                                                    msg.sender === 'Landlord'
+                                                        ? 'bg-primary text-primary-foreground rounded-br-none'
+                                                        : 'bg-muted rounded-bl-none'
+                                                )}
+                                            >
+                                                <p className="text-sm whitespace-pre-wrap break-words">{msg.text}</p>
+                                            </div>
                                         </div>
-                                        {msg.sender === 'You' && (
+
+                                        {msg.sender === 'Landlord' && (
                                             <Avatar className="h-8 w-8 shrink-0">
-                                                <AvatarFallback>Y</AvatarFallback>
+                                                <AvatarImage src={landlordAvatar} data-ai-hint={landlordAvatarHint}/>
+                                                <AvatarFallback>L</AvatarFallback>
                                             </Avatar>
                                         )}
                                     </div>
@@ -228,31 +181,35 @@ export default function MessagingPage() {
                                 <div ref={messagesEndRef} />
                             </div>
                         </ScrollArea>
+                        
                         <div className="p-4 border-t bg-background">
-                            <form onSubmit={handleSendMessage} className="flex w-full items-center space-x-2">
+                            <form onSubmit={handleSendMessage} className="flex w-full items-center space-x-4">
+                               <Avatar className="h-10 w-10 shrink-0">
+                                    <AvatarImage src={landlordAvatar} data-ai-hint={landlordAvatarHint}/>
+                                    <AvatarFallback>L</AvatarFallback>
+                                </Avatar>
                                 <Input
-                                    placeholder={`Message ${selectedConversation.name}...`}
+                                    placeholder="Type a message..."
                                     value={newMessage}
                                     onChange={(e) => setNewMessage(e.target.value)}
                                     autoComplete="off"
+                                    className="flex-1 bg-muted rounded-full"
                                 />
                                 <Button type="submit">
-                                    <Send className="h-4 w-4" />
+                                    Send
                                 </Button>
                             </form>
                         </div>
                     </>
                 ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4 text-center">
-                        <MessageSquare className="h-16 w-16 mb-4" />
-                        <h3 className="text-lg font-medium">Select a conversation</h3>
-                        <p className="text-sm">Choose a tenant from the list to see your message history.</p>
-                    </div>
+                    !isMobile && (
+                        <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4 text-center">
+                            <h3 className="text-lg font-medium">Select a conversation</h3>
+                            <p className="text-sm">Choose a tenant from the list to see your message history.</p>
+                        </div>
+                    )
                 )}
             </div>
         </div>
-    </div>
-  )
-
-    
+    );
 }
