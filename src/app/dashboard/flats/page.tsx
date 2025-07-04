@@ -161,9 +161,9 @@ export default function FlatsPage() {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <Card className="flex flex-col flex-grow overflow-hidden">
-         <CardHeader>
+    <>
+      <Card>
+        <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <CardTitle>Flat Listings</CardTitle>
@@ -180,75 +180,75 @@ export default function FlatsPage() {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-0 flex-grow">
-          <ScrollArea className="h-full w-full">
-            <Table>
-                <TableHeader className="sticky top-0 bg-background z-10">
-                <TableRow>
-                    {headers.map(header => <TableHead key={header}>{header}</TableHead>)}
-                </TableRow>
-                </TableHeader>
-                <TableBody>
-                {loading ? (
+        <CardContent className="p-0">
+            <div className="overflow-x-auto">
+                <Table>
+                    <TableHeader>
                     <TableRow>
-                      <TableCell colSpan={headers.length || 14} className="h-24 text-center">
-                          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
-                      </TableCell>
+                        {headers.map(header => <TableHead key={header}>{header}</TableHead>)}
                     </TableRow>
-                ) : error ? (
-                    <TableRow>
-                      <TableCell colSpan={headers.length || 14} className="h-24 text-center text-red-500">
-                          Failed to load listings: {error}
-                      </TableCell>
-                    </TableRow>
-                ) : paginatedListings.length > 0 ? (
-                    paginatedListings.map((listing) => (
-                      <TableRow key={listing.id}>
-                        <TableCell>{listing.userType}</TableCell>
-                        <TableCell>{listing.gender}</TableCell>
-                        <TableCell>{listing.area}</TableCell>
-                        <TableCell>{listing.address}</TableCell>
-                        <TableCell>{listing.flatType}</TableCell>
-                        <TableCell>{listing.rentBudget}</TableCell>
-                        <TableCell>{listing.deposit}</TableCell>
-                        <TableCell>{listing.availability}</TableCell>
-                        <TableCell>{listing.phoneNumber}</TableCell>
-                        <TableCell>{listing.datePosted}</TableCell>
-                        <TableCell>{listing.source}</TableCell>
-                        <TableCell>
-                            {listing.emailOrMessenger && (
-                                <a href={listing.emailOrMessenger} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                    Link
-                                </a>
-                            )}
-                        </TableCell>
-                        <TableCell>
-                           {listing.pictures && (
-                            <a href={listing.pictures} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                    Link
-                                </a>
-                           )}
-                        </TableCell>
-                        <TableCell>
-                            <Button variant="link" onClick={() => handleViewPostContent(listing.postContent)}>
-                                View
-                            </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                ) : (
-                    <TableRow>
-                        <TableCell colSpan={headers.length || 14} className="h-24 text-center">
-                            {searchTerm ? `No listings found for "${searchTerm}".` : "No listings found."}
-                        </TableCell>
-                    </TableRow>
-                )}
-                </TableBody>
-            </Table>
-          </ScrollArea>
+                    </TableHeader>
+                    <TableBody>
+                    {loading ? (
+                        <TableRow>
+                          <TableCell colSpan={headers.length || 14} className="h-24 text-center">
+                              <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+                          </TableCell>
+                        </TableRow>
+                    ) : error ? (
+                        <TableRow>
+                          <TableCell colSpan={headers.length || 14} className="h-24 text-center text-red-500">
+                              Failed to load listings: {error}
+                          </TableCell>
+                        </TableRow>
+                    ) : paginatedListings.length > 0 ? (
+                        paginatedListings.map((listing) => (
+                          <TableRow key={listing.id}>
+                            <TableCell>{listing.userType}</TableCell>
+                            <TableCell>{listing.gender}</TableCell>
+                            <TableCell>{listing.area}</TableCell>
+                            <TableCell>{listing.address}</TableCell>
+                            <TableCell>{listing.flatType}</TableCell>
+                            <TableCell>{listing.rentBudget}</TableCell>
+                            <TableCell>{listing.deposit}</TableCell>
+                            <TableCell>{listing.availability}</TableCell>
+                            <TableCell>{listing.phoneNumber}</TableCell>
+                            <TableCell>{listing.datePosted}</TableCell>
+                            <TableCell>{listing.source}</TableCell>
+                            <TableCell>
+                                {listing.emailOrMessenger && (
+                                    <a href={listing.emailOrMessenger} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                        Link
+                                    </a>
+                                )}
+                            </TableCell>
+                            <TableCell>
+                               {listing.pictures && (
+                                <a href={listing.pictures} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                        Link
+                                    </a>
+                               )}
+                            </TableCell>
+                            <TableCell>
+                                <Button variant="link" onClick={() => handleViewPostContent(listing.postContent)}>
+                                    View
+                                </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={headers.length || 14} className="h-24 text-center">
+                                {searchTerm ? `No listings found for "${searchTerm}".` : "No listings found."}
+                            </TableCell>
+                        </TableRow>
+                    )}
+                    </TableBody>
+                </Table>
+            </div>
         </CardContent>
         {!loading && totalPages > 1 && (
-          <CardFooter className="flex items-center justify-between border-t p-4 shrink-0">
+          <CardFooter className="flex items-center justify-between border-t p-4">
               <div className="text-sm text-muted-foreground">
                   Page {currentPage} of {totalPages}
               </div>
@@ -291,6 +291,6 @@ export default function FlatsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }
