@@ -20,12 +20,17 @@ type Message = Conversation['messages'][0] & { isSummary?: boolean };
 
 export default function MessagingPage() {
     const [conversations, setConversations] = useState(initialConversations);
-    const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(conversations[0]);
+    const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(initialConversations[0]);
     const [newMessage, setNewMessage] = useState('');
     const [isSummarizing, setIsSummarizing] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const isMobile = useIsMobile();
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -120,7 +125,7 @@ export default function MessagingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-full">
             <div className={cn(
                 "col-span-1 md:col-span-1 lg:col-span-1 border-r bg-muted/50 flex flex-col",
-                isMobile && selectedConversation && "hidden"
+                isClient && isMobile && selectedConversation && "hidden"
             )}>
                 <div className="p-4 border-b">
                     <h2 className="text-xl font-bold">Messages</h2>
@@ -161,13 +166,13 @@ export default function MessagingPage() {
             </div>
             <div className={cn(
                 "col-span-1 md:col-span-2 lg:col-span-3 flex flex-col h-full bg-background",
-                isMobile && !selectedConversation && "hidden"
+                isClient && isMobile && !selectedConversation && "hidden"
             )}>
                 {selectedConversation ? (
                     <>
                         <CardHeader className="flex flex-row items-center justify-between border-b">
                              <div className="flex items-center gap-2">
-                                {isMobile && (
+                                {isClient && isMobile && (
                                     <Button variant="ghost" size="icon" className="-ml-2" onClick={() => setSelectedConversation(null)}>
                                         <ArrowLeft className="h-5 w-5" />
                                     </Button>
