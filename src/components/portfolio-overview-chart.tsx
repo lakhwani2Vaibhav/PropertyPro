@@ -1,7 +1,6 @@
 'use client';
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
-import { Card, CardContent } from './ui/card';
 
 const data = [
   { name: 'Occupied', value: 186 },

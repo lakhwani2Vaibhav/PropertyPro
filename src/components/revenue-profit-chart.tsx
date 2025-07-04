@@ -13,6 +13,25 @@ const data = [
 
 const formatCurrency = (value: number) => `₹${(value / 1000).toFixed(0)}K`;
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-background border rounded-lg shadow-lg p-3">
+        <p className="font-bold text-foreground mb-2">{label}</p>
+        {payload.map((pld: any) => (
+          <div key={pld.dataKey} className="flex items-center gap-2 text-sm">
+            <div className="w-2.5 h-2.5 rounded-full" style={{backgroundColor: pld.stroke}}></div>
+            <span className="capitalize text-muted-foreground">{pld.dataKey}:</span>
+            <span className="font-semibold text-foreground">{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(pld.value)}</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
+
 export default function RevenueProfitChart() {
   return (
     <div style={{ width: '100%', height: 250 }}>
@@ -36,18 +55,31 @@ export default function RevenueProfitChart() {
               <stop offset="95%" stopColor="hsl(var(--chart-2))" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} />
-          <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+          <XAxis 
+            dataKey="name" 
+            fontSize={12} 
+            tickLine={false} 
+            axisLine={false}
+            tick={{ fill: 'hsl(var(--muted-foreground))' }}
+           />
           <YAxis
             tickFormatter={formatCurrency}
             fontSize={12}
             tickLine={false}
             axisLine={false}
+            tick={{ fill: 'hsl(var(--muted-foreground))' }}
           />
           <Tooltip
-            formatter={(value: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(value)}
+            cursor={{ fill: 'hsl(var(--accent))' }}
+            content={<CustomTooltip />}
           />
-          <Legend iconType="circle" />
+          <Legend 
+            iconType="circle"
+            formatter={(value) => (
+              <span className="capitalize text-muted-foreground">{value}</span>
+            )}
+          />
           <Area type="monotone" dataKey="revenue" stroke="hsl(var(--chart-1))" fill="url(#colorRevenue)" strokeWidth={2} />
           <Area type="monotone" dataKey="profit" stroke="hsl(var(--chart-2))" fill="url(#colorProfit)" strokeWidth={2} />
         </AreaChart>

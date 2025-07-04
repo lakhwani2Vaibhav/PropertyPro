@@ -1,6 +1,6 @@
 'use client';
 
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Rectangle } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const data = [
   { name: 'Whitefield Complex', uv: 95 },
@@ -34,9 +34,9 @@ export default function PropertyOccupancyChart() {
             bottom: 5,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" vertical={false} />
-          <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
-          <YAxis unit="%" fontSize={12} tickLine={false} axisLine={false} />
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+          <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} tick={{ fill: 'hsl(var(--muted-foreground))' }} />
+          <YAxis unit="%" fontSize={12} tickLine={false} axisLine={false} tick={{ fill: 'hsl(var(--muted-foreground))' }} />
           <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--accent))' }} />
           <Bar dataKey="uv" fill="hsl(var(--chart-1))" radius={[4, 4, 0, 0]} barSize={30}/>
         </BarChart>
