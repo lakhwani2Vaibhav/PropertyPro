@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Building2, Bell, Bot } from 'lucide-react';
+import { Building2, Bell, Bot, MessageSquare } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -12,6 +12,7 @@ const navLinks = [
   { href: '/dashboard/properties', label: 'Properties' },
   { href: '/dashboard/tenants', label: 'Tenants' },
   { href: '/dashboard/leases', label: 'Leases' },
+  { href: '/dashboard/messaging', label: 'Messaging' },
   { href: '/dashboard/reports', label: 'Reports' },
   { href: '/dashboard/rent-suggestion', label: 'Rent Suggestion' },
 ];
@@ -35,7 +36,9 @@ export default function DashboardHeader() {
                   href={link.href}
                   className={cn(
                     'text-muted-foreground transition-colors hover:text-foreground',
-                    pathname === link.href && 'text-foreground font-semibold'
+                     pathname === link.href || (pathname.startsWith(link.href) && link.href !== '/dashboard')
+                      ? 'text-foreground font-semibold'
+                      : ''
                   )}
                 >
                   {link.label}
@@ -43,7 +46,7 @@ export default function DashboardHeader() {
               ))}
             </nav>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
              <Link href="/dashboard/assistant" passHref>
                 <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg h-auto py-2 px-4 shadow-sm">
                     <Bot className="h-5 w-5 mr-2" />
@@ -51,6 +54,12 @@ export default function DashboardHeader() {
                     <span className="font-semibold text-sm">AI Rental Assistant</span>
                     <p className="text-xs text-primary-foreground/80">Online now</p>
                     </div>
+                </Button>
+            </Link>
+            <Link href="/dashboard/messaging" passHref>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                    <MessageSquare className="h-5 w-5" />
+                    <span className="sr-only">Messages</span>
                 </Button>
             </Link>
             <Button variant="ghost" size="icon" className="rounded-full">

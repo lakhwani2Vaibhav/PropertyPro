@@ -77,10 +77,11 @@ export default function AssistantPage() {
           <ScrollArea className="h-full pr-4" ref={scrollAreaRef}>
             <div className="space-y-6">
               {messages.length === 0 && (
-                 <div className="text-center text-muted-foreground pt-16">
+                 <div className="text-center text-muted-foreground pt-16 flex flex-col items-center">
                     <Bot className="mx-auto h-12 w-12 mb-4"/>
                     <h3 className="text-lg font-medium">Welcome to your AI Assistant</h3>
-                    <p className="text-sm">Ask me anything about property management, market trends, or tenant issues.</p>
+                    <p className="text-sm max-w-md">Ask me anything about property management, market trends, or tenant issues.</p>
+                     <p className="text-sm max-w-md mt-2">For example, try asking: <em className="text-primary not-italic">“What are the best ways to screen tenants?”</em></p>
                 </div>
               )}
               {messages.map((message) => (
