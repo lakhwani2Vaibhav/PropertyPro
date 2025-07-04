@@ -79,7 +79,7 @@ export default function LeasesPage() {
                     </div>
                      <div className="md:col-span-2 mt-4 md:mt-0">
                         <div className="font-semibold text-sm md:hidden mb-2">Tenant</div>
-                         <Link href="#" className="text-primary hover:underline">
+                         <Link href="#" className="text-primary hover:underline break-all">
                             {lease.tenant}
                         </Link>
                     </div>

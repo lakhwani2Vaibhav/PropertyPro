@@ -32,8 +32,10 @@ export default function MessagingPage() {
     };
 
     useEffect(() => {
-        scrollToBottom();
-    }, [selectedConversation?.messages]);
+        if (selectedConversation) {
+            scrollToBottom();
+        }
+    }, [selectedConversation, selectedConversation?.messages]);
 
 
     const filteredConversations = useMemo(() => {
@@ -186,7 +188,7 @@ export default function MessagingPage() {
                                     <div
                                         key={msg.id}
                                         className={cn(
-                                            'flex items-end gap-3',
+                                            'flex w-full items-end gap-3',
                                             msg.sender === 'You' ? 'justify-end' : 'justify-start'
                                         )}
                                     >
@@ -200,7 +202,7 @@ export default function MessagingPage() {
                                         )}
                                         <div
                                             className={cn(
-                                                'max-w-[75%] rounded-lg p-3',
+                                                'max-w-[75%] rounded-lg p-3 break-words',
                                                 msg.sender === 'You'
                                                     ? 'bg-primary text-primary-foreground'
                                                     : 'bg-muted',
