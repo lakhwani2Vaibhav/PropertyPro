@@ -1,73 +1,71 @@
 import { AddLeaseDialog } from "@/components/add-lease-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { MoreHorizontal } from "lucide-react";
-import { format } from "date-fns";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { leases } from "@/lib/mock-data";
+import { format } from "date-fns";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function LeasesPage() {
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case 'Active':
+        return 'bg-blue-100 text-blue-700 hover:bg-blue-200';
+      case 'Expired':
+        return 'bg-gray-200 text-gray-800 hover:bg-gray-300';
+      case 'Pending Signature':
+        return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
+      default:
+        return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+    }
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-            <h1 className="text-3xl font-bold">Leases</h1>
-            <p className="text-muted-foreground">Manage all lease agreements.</p>
-        </div>
+        <h1 className="text-3xl font-bold">Lease Management</h1>
         <AddLeaseDialog />
       </div>
 
       <Card>
+        <CardHeader className="p-0">
+          <div className="grid grid-cols-10 gap-4 px-6 py-4 border-b font-semibold text-muted-foreground">
+            <div className="col-span-3">Property Address</div>
+            <div className="col-span-2">Tenant Name</div>
+            <div className="col-span-2">Lease Start Date</div>
+            <div className="col-span-2">Lease End Date</div>
+            <div className="col-span-1">Status</div>
+          </div>
+        </CardHeader>
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Property</TableHead>
-                <TableHead>Tenant</TableHead>
-                <TableHead>Term</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Rent</TableHead>
-                <TableHead className="w-[50px]"><span className="sr-only">Actions</span></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {leases.map((lease) => (
-                <TableRow key={lease.id}>
-                  <TableCell className="font-medium">{lease.property}</TableCell>
-                  <TableCell>{lease.tenant}</TableCell>
-                  <TableCell>
-                    {format(lease.startDate, "MMM d, yyyy")} - {format(lease.endDate, "MMM d, yyyy")}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={lease.status === 'Active' ? 'default' : lease.status === 'Expired' ? 'secondary' : 'outline'}>
-                      {lease.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">${lease.rent.toLocaleString()}</TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Open menu</span>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit Lease</DropdownMenuItem>
-                        <DropdownMenuItem>Renew Lease</DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
-                          Terminate Lease
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <div className="divide-y divide-border">
+            {leases.map((lease) => (
+              <div key={lease.id} className="grid grid-cols-10 gap-4 px-6 py-4 items-center">
+                <div className="col-span-3 font-medium">
+                  {lease.property.split(',').map((line, index) => (
+                      <div key={index}>{line.trim()}</div>
+                  ))}
+                </div>
+                <div className="col-span-2">
+                  <Link href="#" className="text-primary hover:underline">
+                    {lease.tenant}
+                  </Link>
+                </div>
+                <div className="col-span-2">{format(lease.startDate, "MM/dd/yyyy")}</div>
+                <div className="col-span-2">{format(lease.endDate, "MM/dd/yyyy")}</div>
+                <div className="col-span-1">
+                   <Badge
+                    className={cn(
+                      "px-3 py-1 rounded-full font-medium border-transparent text-xs",
+                       getStatusClass(lease.status)
+                    )}
+                  >
+                    {lease.status}
+                  </Badge>
+                </div>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
     </div>

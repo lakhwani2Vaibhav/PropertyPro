@@ -17,12 +17,13 @@ export const properties = [
 ];
 
 export const leases = [
-  { id: 1, property: "123 Oak Street, Anytown", tenant: "Sarah Miller", startDate: new Date("2023-08-01"), endDate: new Date("2024-07-31"), rent: 1500, status: "Active" },
-  { id: 2, property: "456 Pine Avenue, Anytown", tenant: "David Lee", startDate: new Date("2023-06-15"), endDate: new Date("2024-06-14"), rent: 1200, status: "Active" },
-  { id: 3, property: "222 Cedar Lane, Anytown", tenant: "Emily Chen", startDate: new Date("2024-01-01"), endDate: new Date("2024-12-31"), rent: 1600, status: "Active" },
-  { id: 4, property: "333 Birch Place, Anytown", tenant: "Michael Rodriguez", startDate: new Date("2022-11-01"), endDate: new Date("2023-10-31"), rent: 2100, status: "Expired" },
-  { id: 5, property: "101 Elm Court, Anytown", tenant: "Jessica Williams", startDate: new Date("2024-03-01"), endDate: new Date("2025-02-28"), rent: 1300, status: "Upcoming" },
+  { id: 1, property: "123 Oak Street, Anytown", tenant: "Emily Carter", startDate: new Date("2023-01-01"), endDate: new Date("2023-12-31"), rent: 1500, status: "Active" },
+  { id: 2, property: "456 Maple Avenue, Anytown", tenant: "David Lee", startDate: new Date("2023-02-15"), endDate: new Date("2024-02-14"), rent: 1200, status: "Active" },
+  { id: 3, property: "789 Pine Lane, Anytown", tenant: "Sarah Jones", startDate: new Date("2023-03-01"), endDate: new Date("2024-02-28"), rent: 1800, status: "Expired" },
+  { id: 4, property: "101 Elm Road, Anytown", tenant: "Michael Brown", startDate: new Date("2023-04-01"), endDate: new Date("2024-03-31"), rent: 1300, status: "Pending Signature" },
+  { id: 5, property: "222 Cedar Drive, Anytown", tenant: "Jessica Wilson", startDate: new Date("2023-05-15"), endDate: new Date("2024-05-14"), rent: 1600, status: "Active" },
 ];
+
 
 export const tenants = [
   { id: "1", name: "Sarah Miller", property: "123 Oak Street, Anytown", status: "Active" },

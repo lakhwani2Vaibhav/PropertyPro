@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Building2, Bell, Bot, MessageSquare } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -10,24 +10,23 @@ import { Button } from './ui/button';
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/dashboard/properties', label: 'Properties' },
-  { href: '/dashboard/tenants', label: 'Tenants' },
   { href: '/dashboard/leases', label: 'Leases' },
-  { href: '/dashboard/messaging', label: 'Messaging' },
-  { href: '/dashboard/reports', label: 'Reports' },
-  { href: '/dashboard/rent-suggestion', label: 'Rent Suggestion' },
+  { href: '/dashboard/tenants', label: 'Tenants' },
+  { href: '/dashboard/payments', label: 'Payments' },
+  { href: '/dashboard/maintenance', label: 'Maintenance' },
 ];
 
 export default function DashboardHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="bg-card top-0 z-50 border-b">
+    <header className="bg-background top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center gap-8">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <Building2 className="h-6 w-6 text-primary" />
-              <span className="font-bold text-xl text-foreground">KirayaEase Lite</span>
+               <div className="h-5 w-5 bg-foreground rounded-sm" />
+              <span className="font-bold text-xl text-foreground">PropertyPro</span>
             </Link>
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
               {navLinks.map((link) => (
@@ -36,9 +35,7 @@ export default function DashboardHeader() {
                   href={link.href}
                   className={cn(
                     'text-muted-foreground transition-colors hover:text-foreground',
-                     pathname === link.href || (pathname.startsWith(link.href) && link.href !== '/dashboard')
-                      ? 'text-foreground font-semibold'
-                      : ''
+                     pathname === link.href ? 'text-foreground font-semibold' : ''
                   )}
                 >
                   {link.label}
@@ -46,23 +43,8 @@ export default function DashboardHeader() {
               ))}
             </nav>
           </div>
-          <div className="flex items-center gap-2">
-             <Link href="/dashboard/assistant" passHref>
-                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg h-auto py-2 px-4 shadow-sm">
-                    <Bot className="h-5 w-5 mr-2" />
-                    <div>
-                    <span className="font-semibold text-sm">AI Rental Assistant</span>
-                    <p className="text-xs text-primary-foreground/80">Online now</p>
-                    </div>
-                </Button>
-            </Link>
-            <Link href="/dashboard/messaging" passHref>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                    <MessageSquare className="h-5 w-5" />
-                    <span className="sr-only">Messages</span>
-                </Button>
-            </Link>
-            <Button variant="ghost" size="icon" className="rounded-full">
+          <div className="flex items-center gap-4">
+            <Button variant="secondary" size="icon" className="rounded-full bg-card hover:bg-accent">
               <Bell className="h-5 w-5" />
               <span className="sr-only">Notifications</span>
             </Button>

@@ -2,8 +2,8 @@ import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'KirayaEase Lite - Smart Property Management',
-  description: 'AI-powered property management platform for landlords and tenants.',
+  title: 'PropertyPro - Simplified Property Management',
+  description: 'The easiest way to manage your properties.',
 };
 
 export default function RootLayout({

@@ -30,7 +30,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
-import { CalendarIcon, Loader2, PlusCircle } from 'lucide-react';
+import { CalendarIcon, Loader2 } from 'lucide-react';
 import { dialogProperties as properties, dialogTenants as tenants } from '@/lib/mock-data';
 
 const leaseSchema = z.object({
@@ -73,9 +73,8 @@ export function AddLeaseDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Add Lease
+        <Button variant="secondary">
+          New Lease
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[520px]">
