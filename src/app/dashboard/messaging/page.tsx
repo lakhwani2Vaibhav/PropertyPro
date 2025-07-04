@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CardHeader } from "@/components/ui/card";
@@ -11,31 +11,49 @@ import { Search, Send, Bot, Loader2, MessageSquare } from 'lucide-react';
 import Balancer from 'react-wrap-balancer';
 import { summarizeConversation } from './actions';
 import { toast } from '@/hooks/use-toast';
-import { conversations } from '@/lib/mock-data';
+import { conversations as initialConversations } from '@/lib/mock-data';
 
-type Conversation = typeof conversations[0];
+type Conversation = typeof initialConversations[0];
 type Message = Conversation['messages'][0] & { isSummary?: boolean };
 
 
 export default function MessagingPage() {
+    const [conversations, setConversations] = useState(initialConversations);
     const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(conversations[0]);
     const [newMessage, setNewMessage] = useState('');
     const [isSummarizing, setIsSummarizing] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const filteredConversations = useMemo(() => {
+        if (!searchTerm) return conversations;
+        const lowercasedTerm = searchTerm.toLowerCase();
+        return conversations.filter(convo =>
+            convo.name.toLowerCase().includes(lowercasedTerm) ||
+            convo.property.toLowerCase().includes(lowercasedTerm)
+        );
+    }, [conversations, searchTerm]);
 
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault();
         if (!newMessage.trim() || !selectedConversation) return;
 
+        const updatedMessage = { id: Date.now(), sender: 'You', text: newMessage, timestamp: 'Now' };
+
         const updatedConversation: Conversation = {
             ...selectedConversation,
             messages: [
                 ...selectedConversation.messages,
-                { id: Date.now(), sender: 'You', text: newMessage, timestamp: 'Now' },
+                updatedMessage,
             ],
         };
         
         setSelectedConversation(updatedConversation);
-        // In a real app, you would also update the main conversations array state
+        
+        const updatedConversations = conversations.map(c => 
+            c.id === updatedConversation.id ? updatedConversation : c
+        );
+        setConversations(updatedConversations);
+
         setNewMessage('');
     };
 
@@ -65,6 +83,11 @@ export default function MessagingPage() {
                 messages: [...selectedConversation.messages, summaryMessage],
             };
             setSelectedConversation(updatedConversation);
+            
+            const updatedConversations = conversations.map(c => 
+                c.id === updatedConversation.id ? updatedConversation : c
+            );
+            setConversations(updatedConversations);
         } else {
             toast({
                 title: "Summarization Failed",
@@ -82,11 +105,16 @@ export default function MessagingPage() {
                     <h2 className="text-xl font-bold">Messages</h2>
                     <div className="relative mt-2">
                         <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input placeholder="Search messages..." className="pl-8" />
+                        <Input
+                            placeholder="Search messages..."
+                            className="pl-8"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                     </div>
                 </div>
                 <ScrollArea className="flex-grow">
-                    {conversations.map((convo) => (
+                    {filteredConversations.map((convo) => (
                         <div
                             key={convo.id}
                             className={cn(

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { AddMaintenanceDialog } from '@/components/add-maintenance-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -36,12 +36,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { maintenanceRequests as initialMaintenanceRequests, type MaintenanceRequest, vendors } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
-import { MoreHorizontal, Loader2 } from 'lucide-react';
+import { MoreHorizontal, Loader2, Search } from 'lucide-react';
 
 export default function MaintenancePage() {
   const [requests, setRequests] = useState<MaintenanceRequest[]>(initialMaintenanceRequests);
@@ -53,8 +54,19 @@ export default function MaintenancePage() {
 
   const [isSubmitting, setSubmitting] = useState(false);
   const [updatedStatus, setUpdatedStatus] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   
   const { toast } = useToast();
+
+  const filteredRequests = useMemo(() => {
+    if (!searchTerm) return requests;
+    const lowercasedTerm = searchTerm.toLowerCase();
+    return requests.filter(req =>
+      req.property.toLowerCase().includes(lowercasedTerm) ||
+      req.issue.toLowerCase().includes(lowercasedTerm) ||
+      req.tenant.toLowerCase().includes(lowercasedTerm)
+    );
+  }, [requests, searchTerm]);
 
   const getPriorityClass = (priority?: string) => {
     switch (priority) {
@@ -118,12 +130,23 @@ export default function MaintenancePage() {
   return (
     <>
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold">Maintenance Requests</h1>
             <p className="text-muted-foreground">Track and manage maintenance tasks.</p>
           </div>
-          <AddMaintenanceDialog />
+           <div className="flex items-center gap-2">
+             <div className="relative w-full max-w-xs">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                    placeholder="Search requests..."
+                    className="pl-9"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+            <AddMaintenanceDialog />
+          </div>
         </div>
 
         <Card>
@@ -142,45 +165,53 @@ export default function MaintenancePage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {requests.map((req) => (
-                  <TableRow key={req.id}>
-                    <TableCell className="font-medium">{req.property}</TableCell>
-                    <TableCell>{req.issue}</TableCell>
-                    <TableCell>{req.dateReported}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className={cn('border', getPriorityClass(req.priority))}>
-                        {req.priority}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className={cn('border', getStatusClass(req.status))}>
-                        {req.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem onSelect={() => { setSelectedRequest(req); setViewOpen(true); }}>
-                            View Details
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onSelect={() => { setSelectedRequest(req); setUpdatedStatus(req.status); setStatusOpen(true); }}>
-                            Update Status
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onSelect={() => { setSelectedRequest(req); setAssignOpen(true); }}>
-                            Assign Vendor
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {filteredRequests.length > 0 ? (
+                    filteredRequests.map((req) => (
+                      <TableRow key={req.id}>
+                        <TableCell className="font-medium">{req.property}</TableCell>
+                        <TableCell>{req.issue}</TableCell>
+                        <TableCell>{req.dateReported}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className={cn('border', getPriorityClass(req.priority))}>
+                            {req.priority}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className={cn('border', getStatusClass(req.status))}>
+                            {req.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <DropdownMenuItem onSelect={() => { setSelectedRequest(req); setViewOpen(true); }}>
+                                View Details
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onSelect={() => { setSelectedRequest(req); setUpdatedStatus(req.status); setStatusOpen(true); }}>
+                                Update Status
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onSelect={() => { setSelectedRequest(req); setAssignOpen(true); }}>
+                                Assign Vendor
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                ) : (
+                    <TableRow>
+                        <TableCell colSpan={6} className="h-24 text-center">
+                            No results found for "{searchTerm}".
+                        </TableCell>
+                    </TableRow>
+                )}
               </TableBody>
             </Table>
           </CardContent>
