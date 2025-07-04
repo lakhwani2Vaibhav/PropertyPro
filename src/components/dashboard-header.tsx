@@ -44,7 +44,7 @@ export default function DashboardHeader() {
           </div>
 
           <div className="flex items-center justify-center flex-1">
-             <nav className="hidden md:flex items-center gap-2 text-sm font-medium bg-muted p-1 rounded-lg">
+             <nav className="hidden lg:flex items-center gap-2 text-sm font-medium bg-muted p-1 rounded-lg">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -103,7 +103,7 @@ export default function DashboardHeader() {
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
 
-            <div className="md:hidden">
+            <div className="lg:hidden">
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon">
