@@ -145,23 +145,30 @@ export const notifications = [
 
 export type FlatListing = {
   id: number;
-  listingType: 'Tenant' | 'Landlord';
+  userType: 'Tenant' | 'Landlord';
   gender: 'Male' | 'Female';
   area: string;
   address: string;
   flatType: 'Apartment' | 'House' | 'Condo';
   rent: number;
   deposit: number;
+  availability: string;
+  phoneNumber: string;
+  datePosted: string;
+  source: string;
+  emailOrMessenger: string;
+  pictures: number;
+  postContent: string;
 };
 
 export const flatListings: FlatListing[] = [
-  { id: 1, listingType: 'Tenant', gender: 'Female', area: 'Downtown', address: '123 Main St', flatType: 'Apartment', rent: 15000, deposit: 30000 },
-  { id: 2, listingType: 'Landlord', gender: 'Male', area: 'Uptown', address: '456 Oak Ave', flatType: 'House', rent: 20000, deposit: 40000 },
-  { id: 3, listingType: 'Tenant', gender: 'Female', area: 'Midtown', address: '789 Pine Ln', flatType: 'Condo', rent: 18000, deposit: 36000 },
-  { id: 4, listingType: 'Landlord', gender: 'Male', area: 'Downtown', address: '101 Elm St', flatType: 'Apartment', rent: 16000, deposit: 32000 },
-  { id: 5, listingType: 'Tenant', gender: 'Male', area: 'Uptown', address: '222 Maple Ave', flatType: 'House', rent: 22000, deposit: 44000 },
-  { id: 6, listingType: 'Landlord', gender: 'Female', area: 'Midtown', address: '333 Cedar Ln', flatType: 'Condo', rent: 20000, deposit: 40000 },
-  { id: 7, listingType: 'Tenant', gender: 'Female', area: 'Downtown', address: '444 Oak St', flatType: 'Apartment', rent: 17000, deposit: 34000 },
-  { id: 8, listingType: 'Landlord', gender: 'Male', area: 'Uptown', address: '555 Pine Ave', flatType: 'House', rent: 23000, deposit: 46000 },
-  { id: 9, listingType: 'Tenant', gender: 'Male', area: 'Midtown', address: '666 Elm Ln', flatType: 'Condo', rent: 19000, deposit: 38000 },
+  { id: 1, userType: 'Tenant', gender: 'Female', area: 'Downtown', address: '123 Main St', flatType: 'Apartment', rent: 15000, deposit: 30000, availability: 'Immediate', phoneNumber: '987-654-3210', datePosted: '2024-07-20', source: 'Facebook', emailOrMessenger: 'user1@email.com', pictures: 3, postContent: 'Young professional looking for a 1BHK in a quiet neighborhood. Preferably furnished.' },
+  { id: 2, userType: 'Landlord', gender: 'Male', area: 'Uptown', address: '456 Oak Ave', flatType: 'House', rent: 20000, deposit: 40000, availability: '2024-08-01', phoneNumber: '987-654-3211', datePosted: '2024-07-19', source: 'Website', emailOrMessenger: 'landlord2@email.com', pictures: 5, postContent: 'Spacious 3BHK house with a garden, perfect for families. Pets allowed.' },
+  { id: 3, userType: 'Tenant', gender: 'Female', area: 'Midtown', address: '789 Pine Ln', flatType: 'Condo', rent: 18000, deposit: 36000, availability: 'Immediate', phoneNumber: '987-654-3212', datePosted: '2024-07-18', source: 'Zillow', emailOrMessenger: 'user3@email.com', pictures: 0, postContent: 'Student seeking a room in a shared condo. Budget is 18k.' },
+  { id: 4, userType: 'Landlord', gender: 'Male', area: 'Downtown', address: '101 Elm St', flatType: 'Apartment', rent: 16000, deposit: 32000, availability: 'Immediate', phoneNumber: '987-654-3213', datePosted: '2024-07-18', source: 'Facebook', emailOrMessenger: 'landlord4@email.com', pictures: 4, postContent: 'Modern 2BHK apartment with city views and pool access.' },
+  { id: 5, userType: 'Tenant', gender: 'Male', area: 'Uptown', address: '222 Maple Ave', flatType: 'House', rent: 22000, deposit: 44000, availability: '2024-09-01', phoneNumber: '987-654-3214', datePosted: '2024-07-17', source: 'Broker', emailOrMessenger: 'user5@email.com', pictures: 1, postContent: 'Family of 4 looking for a house with at least 2 bathrooms.' },
+  { id: 6, userType: 'Landlord', gender: 'Female', area: 'Midtown', address: '333 Cedar Ln', flatType: 'Condo', rent: 20000, deposit: 40000, availability: 'Immediate', phoneNumber: '987-654-3215', datePosted: '2024-07-16', source: 'Website', emailOrMessenger: 'landlord6@email.com', pictures: 6, postContent: 'Luxury condo with gym and security. Fully furnished.' },
+  { id: 7, userType: 'Tenant', gender: 'Female', area: 'Downtown', address: '444 Oak St', flatType: 'Apartment', rent: 17000, deposit: 34000, availability: 'Immediate', phoneNumber: '987-654-3216', datePosted: '2024-07-15', source: 'Facebook', emailOrMessenger: 'user7@email.com', pictures: 2, postContent: 'Looking for a pet-friendly apartment near the metro station.' },
+  { id: 8, userType: 'Landlord', gender: 'Male', area: 'Uptown', address: '555 Pine Ave', flatType: 'House', rent: 23000, deposit: 46000, availability: '2024-08-15', phoneNumber: '987-654-3217', datePosted: '2024-07-14', source: 'Zillow', emailOrMessenger: 'landlord8@email.com', pictures: 8, postContent: 'Beautifully renovated house with a modern kitchen and a large garage.' },
+  { id: 9, userType: 'Tenant', gender: 'Male', area: 'Midtown', address: '666 Elm Ln', flatType: 'Condo', rent: 19000, deposit: 38000, availability: 'Immediate', phoneNumber: '987-654-3218', datePosted: '2024-07-13', source: 'Broker', emailOrMessenger: 'user9@email.com', pictures: 0, postContent: 'Urgently need a condo in Midtown for a 1-year lease.' },
 ];

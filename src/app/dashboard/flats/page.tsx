@@ -13,6 +13,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { flatListings, type FlatListing } from '@/lib/mock-data';
+import { Button } from '@/components/ui/button';
 
 export default function FlatsPage() {
   return (
@@ -23,36 +24,56 @@ export default function FlatsPage() {
         </div>
       <Card>
         <CardContent className="p-0">
+          <div className="overflow-x-auto">
             <Table>
                 <TableHeader>
                 <TableRow>
-                    <TableHead>Listing Type</TableHead>
+                    <TableHead className="whitespace-nowrap">User Type</TableHead>
                     <TableHead>Gender</TableHead>
                     <TableHead>Area</TableHead>
                     <TableHead>Address</TableHead>
-                    <TableHead>Flat Type</TableHead>
-                    <TableHead className="text-right">Rent/Budget</TableHead>
-                    <TableHead className="text-right">Deposit</TableHead>
+                    <TableHead className="whitespace-nowrap">Flat Type</TableHead>
+                    <TableHead className="whitespace-nowrap">Rent/Budget</TableHead>
+                    <TableHead>Deposit</TableHead>
+                    <TableHead>Availability</TableHead>
+                    <TableHead className="whitespace-nowrap">Phone Number</TableHead>
+                    <TableHead className="whitespace-nowrap">Date Posted</TableHead>
+                    <TableHead>Source</TableHead>
+                    <TableHead className="whitespace-nowrap">Email/Messenger</TableHead>
+                    <TableHead>Pictures</TableHead>
+                    <TableHead className="whitespace-nowrap">Post Content</TableHead>
                 </TableRow>
                 </TableHeader>
                 <TableBody>
                 {flatListings.map((listing: FlatListing) => (
                     <TableRow key={listing.id}>
-                    <TableCell>{listing.listingType}</TableCell>
+                    <TableCell>{listing.userType}</TableCell>
                     <TableCell>{listing.gender}</TableCell>
                     <TableCell>{listing.area}</TableCell>
-                    <TableCell className="font-medium">{listing.address}</TableCell>
+                    <TableCell className="font-medium whitespace-nowrap">{listing.address}</TableCell>
                     <TableCell>{listing.flatType}</TableCell>
-                    <TableCell className="text-right">
+                    <TableCell>
                         ₹{listing.rent.toLocaleString('en-IN')}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell>
                         ₹{listing.deposit.toLocaleString('en-IN')}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">{listing.availability}</TableCell>
+                    <TableCell className="whitespace-nowrap">{listing.phoneNumber}</TableCell>
+                    <TableCell className="whitespace-nowrap">{listing.datePosted}</TableCell>
+                    <TableCell>{listing.source}</TableCell>
+                    <TableCell>{listing.emailOrMessenger}</TableCell>
+                    <TableCell>{listing.pictures}</TableCell>
+                    <TableCell>
+                        <Button variant="link" className="p-0 h-auto" onClick={() => alert(listing.postContent)}>
+                            View
+                        </Button>
                     </TableCell>
                     </TableRow>
                 ))}
                 </TableBody>
             </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
