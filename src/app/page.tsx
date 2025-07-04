@@ -8,14 +8,14 @@ export default function Home() {
       <header className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-             <div className="h-6 w-6 bg-foreground rounded-sm" />
+             <div className="h-6 w-6 bg-primary rounded-sm" />
             <h1 className="text-2xl font-bold">PropertyPro</h1>
           </div>
           <nav className="flex items-center gap-2 sm:gap-4">
-            <Link href="/dashboard" passHref>
+            <Link href="/login" passHref>
               <Button variant="ghost">Login</Button>
             </Link>
-            <Link href="/dashboard" passHref>
+            <Link href="/register" passHref>
               <Button>
                 Sign Up <ArrowRight className="ml-2 h-4 w-4 hidden sm:block" />
               </Button>
