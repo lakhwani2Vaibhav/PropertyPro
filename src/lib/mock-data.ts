@@ -7,25 +7,39 @@ export const portfolioProperties = [
     { id: 6, address: "Marathahalli Place", type: "Condo", status: "Vacant", rent: 58000, occupancy: "0/1 Unit", imageUrl: "https://placehold.co/600x400.png", imageHint: "condo exterior", description: "A modern condo with great amenities, located in the bustling Marathahalli area.", bedrooms: 2, bathrooms: 2, sqft: 1100 },
 ];
 
-export const properties = [
-  { id: 1, address: "123 Oak Street, Anytown", rent: 1500, tenant: "Sarah Miller", status: "Occupied" },
-  { id: 2, address: "456 Pine Avenue, Anytown", rent: 1200, tenant: "David Lee", status: "Occupied" },
-  { id: 3, address: "789 Maple Drive, Anytown", rent: 1800, tenant: "Vacant", status: "Vacant" },
-  { id: 4, address: "101 Elm Court, Anytown", rent: 1300, tenant: "Pending", status: "Pending" },
-  { id: 5, address: "222 Cedar Lane, Anytown", rent: 1600, tenant: "Emily Chen", status: "Occupied" },
-  { id: 6, address: "333 Birch Place, Anytown", rent: 2100, tenant: "Vacant", status: "Vacant" },
+export type Property = {
+  id: number;
+  address: string;
+  rent: number;
+  tenant: string;
+  status: 'Occupied' | 'Vacant' | 'Pending';
+};
+
+export const properties: Property[] = [
+  { id: 1, address: "123 Oak Street, Anytown", rent: 15000, tenant: "Sarah Miller", status: "Occupied" },
+  { id: 2, address: "456 Pine Avenue, Anytown", rent: 12000, tenant: "David Lee", status: "Occupied" },
+  { id: 3, address: "789 Maple Drive, Anytown", rent: 18000, tenant: "Vacant", status: "Vacant" },
+  { id: 4, address: "101 Elm Court, Anytown", rent: 13000, tenant: "Pending", status: "Pending" },
+  { id: 5, address: "222 Cedar Lane, Anytown", rent: 16000, tenant: "Emily Chen", status: "Occupied" },
+  { id: 6, address: "333 Birch Place, Anytown", rent: 21000, tenant: "Vacant", status: "Vacant" },
 ];
 
 export const leases = [
-  { id: 1, property: "123 Oak Street, Anytown", tenant: "Emily Carter", startDate: new Date("2023-01-01"), endDate: new Date("2023-12-31"), rent: 1500, status: "Active" },
-  { id: 2, property: "456 Maple Avenue, Anytown", tenant: "David Lee", startDate: new Date("2023-02-15"), endDate: new Date("2024-02-14"), rent: 1200, status: "Active" },
-  { id: 3, property: "789 Pine Lane, Anytown", tenant: "Sarah Jones", startDate: new Date("2023-03-01"), endDate: new Date("2024-02-28"), rent: 1800, status: "Expired" },
-  { id: 4, property: "101 Elm Road, Anytown", tenant: "Michael Brown", startDate: new Date("2023-04-01"), endDate: new Date("2024-03-31"), rent: 1300, status: "Pending Signature" },
-  { id: 5, property: "222 Cedar Drive, Anytown", tenant: "Jessica Wilson", startDate: new Date("2023-05-15"), endDate: new Date("2024-05-14"), rent: 1600, status: "Active" },
+  { id: 1, propertyId: 1, property: "123 Oak Street, Anytown", tenant: "Emily Carter", startDate: new Date("2023-01-01"), endDate: new Date("2023-12-31"), rent: 15000, status: "Active" },
+  { id: 2, propertyId: 2, property: "456 Maple Avenue, Anytown", tenant: "David Lee", startDate: new Date("2023-02-15"), endDate: new Date("2024-02-14"), rent: 12000, status: "Active" },
+  { id: 3, propertyId: 3, property: "789 Pine Lane, Anytown", tenant: "Sarah Jones", startDate: new Date("2023-03-01"), endDate: new Date("2024-02-28"), rent: 18000, status: "Expired" },
+  { id: 4, propertyId: 4, property: "101 Elm Road, Anytown", tenant: "Michael Brown", startDate: new Date("2023-04-01"), endDate: new Date("2024-03-31"), rent: 13000, status: "Pending Signature" },
+  { id: 5, propertyId: 5, property: "222 Cedar Drive, Anytown", tenant: "Jessica Wilson", startDate: new Date("2023-05-15"), endDate: new Date("2024-05-14"), rent: 16000, status: "Active" },
 ];
 
+export type Tenant = {
+  id: string;
+  name: string;
+  property: string;
+  status: 'Active' | 'Past' | 'Eviction';
+};
 
-export const tenants = [
+export const tenants: Tenant[] = [
   { id: "1", name: "Sarah Miller", property: "123 Oak Street, Anytown", status: "Active" },
   { id: "2", name: "David Lee", property: "456 Pine Avenue, Anytown", status: "Active" },
   { id: "3", name: "Emily Chen", property: "222 Cedar Lane, Anytown", status: "Active" },
@@ -34,17 +48,17 @@ export const tenants = [
 ];
 
 export const financialSummary = {
-    totalRevenue: 45600,
-    totalExpenses: 12300,
-    netIncome: 33300,
+    totalRevenue: 456000,
+    totalExpenses: 123000,
+    netIncome: 333000,
 };
 
 export const rentPayments = [
-    { id: 'txn_1', tenant: 'Sarah Miller', amount: 1500, date: '2024-07-01', status: 'Paid' },
-    { id: 'txn_2', tenant: 'David Lee', amount: 1200, date: '2024-07-01', status: 'Paid' },
-    { id: 'txn_3', tenant: 'Emily Chen', amount: 1600, date: '2024-07-01', status: 'Paid' },
-    { id: 'txn_4', tenant: 'John Smith', amount: 1800, date: '2024-07-01', status: 'Late' },
-    { id: 'txn_5', tenant: 'Jane Doe', amount: 1300, date: '2024-06-30', status: 'Paid' },
+    { id: 'txn_1', tenant: 'Sarah Miller', amount: 15000, date: '2024-07-01', status: 'Paid' },
+    { id: 'txn_2', tenant: 'David Lee', amount: 12000, date: '2024-07-01', status: 'Paid' },
+    { id: 'txn_3', tenant: 'Emily Chen', amount: 16000, date: '2024-07-01', status: 'Paid' },
+    { id: 'txn_4', tenant: 'John Smith', amount: 18000, date: '2024-07-01', status: 'Late' },
+    { id: 'txn_5', tenant: 'Jane Doe', amount: 13000, date: '2024-06-30', status: 'Paid' },
 ];
 
 export const conversations = [
@@ -99,6 +113,7 @@ export const dialogTenants = [
 export type MaintenanceRequest = {
   id: number;
   property: string;
+  propertyId: number;
   tenant: string;
   issue: string;
   dateReported: string;
@@ -107,11 +122,11 @@ export type MaintenanceRequest = {
 };
 
 export const maintenanceRequests: MaintenanceRequest[] = [
-    { id: 1, property: '123 Oak Street, Anytown', tenant: 'Sarah Miller', issue: 'Leaky faucet in kitchen', dateReported: '2024-07-15', priority: 'High', status: 'Open' },
-    { id: 2, property: '456 Pine Avenue, Anytown', tenant: 'David Lee', issue: 'Broken window in living room', dateReported: '2024-07-12', priority: 'High', status: 'In Progress' },
-    { id: 3, property: '222 Cedar Lane, Anytown', tenant: 'Emily Chen', issue: 'HVAC unit not cooling', dateReported: '2024-07-10', priority: 'Medium', status: 'Completed' },
-    { id: 4, property: '101 Elm Court, Anytown', tenant: 'Pending', issue: 'Paint touch-up needed in hallway', dateReported: '2024-07-05', priority: 'Low', status: 'Open' },
-    { id: 5, property: '789 Maple Drive, Anytown', tenant: 'Vacant', issue: 'General cleaning before new tenant', dateReported: '2024-07-18', priority: 'Low', status: 'Open' },
+    { id: 1, propertyId: 1, property: '123 Oak Street, Anytown', tenant: 'Sarah Miller', issue: 'Leaky faucet in kitchen', dateReported: '2024-07-15', priority: 'High', status: 'Open' },
+    { id: 2, propertyId: 2, property: '456 Pine Avenue, Anytown', tenant: 'David Lee', issue: 'Broken window in living room', dateReported: '2024-07-12', priority: 'High', status: 'In Progress' },
+    { id: 3, propertyId: 5, property: '222 Cedar Lane, Anytown', tenant: 'Emily Chen', issue: 'HVAC unit not cooling', dateReported: '2024-07-10', priority: 'Medium', status: 'Completed' },
+    { id: 4, propertyId: 4, property: '101 Elm Court, Anytown', tenant: 'Pending', issue: 'Paint touch-up needed in hallway', dateReported: '2024-07-05', priority: 'Low', status: 'Open' },
+    { id: 5, propertyId: 3, property: '789 Maple Drive, Anytown', tenant: 'Vacant', issue: 'General cleaning before new tenant', dateReported: '2024-07-18', priority: 'Low', status: 'Open' },
 ];
 
 export const vendors = [
@@ -119,4 +134,11 @@ export const vendors = [
   { id: '2', name: 'ElecTrific Solutions' },
   { id: '3', name: 'The Handy Man' },
   { id: '4', name: 'Clean Sweep Services' },
+];
+
+export const notifications = [
+  { id: 1, title: 'New Maintenance Request', description: 'Leaky faucet reported at 123 Oak Street.', time: '5m ago' },
+  { id: 2, title: 'Rent Paid', description: 'David Lee paid ₹12,000 for 456 Pine Avenue.', time: '1h ago' },
+  { id: 3, title: 'Lease Expiring Soon', description: 'Lease for Emily Carter at 123 Oak Street expires in 30 days.', time: '1d ago' },
+  { id: 4, title: 'AI Insight', description: 'Consider a 5% rent increase for properties in Anytown.', time: '2d ago' },
 ];

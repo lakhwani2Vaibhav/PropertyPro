@@ -140,9 +140,9 @@ export function AddPropertyDialog() {
                 name="rent"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Monthly Rent ($)</FormLabel>
+                    <FormLabel>Monthly Rent (₹)</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="1500" {...field} />
+                      <Input type="number" placeholder="15000" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

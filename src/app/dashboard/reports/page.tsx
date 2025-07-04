@@ -16,17 +16,17 @@ export default function ReportsPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <StatCard 
           title="Total Revenue (YTD)" 
-          value={`$${financialSummary.totalRevenue.toLocaleString()}`} 
+          value={`₹${financialSummary.totalRevenue.toLocaleString('en-IN')}`} 
           icon={<TrendingUp className="h-5 w-5 text-muted-foreground" />} 
         />
         <StatCard 
           title="Total Expenses (YTD)" 
-          value={`$${financialSummary.totalExpenses.toLocaleString()}`} 
+          value={`₹${financialSummary.totalExpenses.toLocaleString('en-IN')}`} 
           icon={<TrendingDown className="h-5 w-5 text-muted-foreground" />} 
         />
         <StatCard 
           title="Net Income (YTD)" 
-          value={`$${financialSummary.netIncome.toLocaleString()}`} 
+          value={`₹${financialSummary.netIncome.toLocaleString('en-IN')}`} 
           icon={<DollarSign className="h-5 w-5 text-muted-foreground" />} 
         />
       </div>
@@ -55,7 +55,7 @@ export default function ReportsPage() {
                       {payment.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right">${payment.amount.toLocaleString()}</TableCell>
+                  <TableCell className="text-right">₹{payment.amount.toLocaleString('en-IN')}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
