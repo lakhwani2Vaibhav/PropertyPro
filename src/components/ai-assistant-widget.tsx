@@ -29,7 +29,7 @@ export function AiAssistantWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,14 +38,13 @@ export function AiAssistantWidget() {
     },
   });
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   useEffect(() => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTo({
-        top: scrollAreaRef.current.scrollHeight,
-        behavior: 'smooth',
-      });
-    }
-  }, [messages]);
+    scrollToBottom();
+  }, [messages, isLoading]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const userMessage: Message = { id: Date.now(), text: values.message, sender: 'user' };
@@ -84,7 +83,7 @@ export function AiAssistantWidget() {
             </Button>
           </CardHeader>
           <CardContent className="flex-grow overflow-hidden">
-            <ScrollArea className="h-full pr-4" ref={scrollAreaRef}>
+            <ScrollArea className="h-full pr-4">
               <div className="space-y-6">
                 {messages.length === 0 && (
                   <div className="text-center text-muted-foreground pt-16 flex flex-col items-center">
@@ -134,6 +133,7 @@ export function AiAssistantWidget() {
                       </div>
                   </div>
                 )}
+                <div ref={messagesEndRef} />
               </div>
             </ScrollArea>
           </CardContent>
