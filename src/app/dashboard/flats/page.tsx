@@ -144,7 +144,7 @@ export default function FlatsPage() {
 
   return (
     <div className="h-full flex flex-col">
-      <Card className="flex-1 flex flex-col overflow-hidden">
+      <Card className="flex-1 flex flex-col">
          <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -162,7 +162,8 @@ export default function FlatsPage() {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="flex-1 p-0 overflow-auto">
+        <CardContent className="flex-1 p-0 relative">
+          <ScrollArea className="absolute inset-0">
             <Table>
                 <TableHeader className="sticky top-0 bg-card z-10">
                 <TableRow>
@@ -227,6 +228,7 @@ export default function FlatsPage() {
                 )}
                 </TableBody>
             </Table>
+          </ScrollArea>
         </CardContent>
       </Card>
 
