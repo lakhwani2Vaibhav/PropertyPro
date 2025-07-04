@@ -30,7 +30,7 @@ const assistantPrompt = ai.definePrompt({
   name: 'assistantPrompt',
   input: { schema: AssistantInputSchema },
   output: { schema: AssistantOutputSchema },
-  prompt: `You are an expert AI rental assistant for a property management platform called KirayaEase Lite. 
+  prompt: `You are an expert AI rental assistant for a property management platform called PropertyPro. 
   Your goal is to provide helpful and concise answers to questions from landlords. 
   Keep your responses friendly and professional.
 
