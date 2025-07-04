@@ -137,7 +137,7 @@ export default function MessagingPage() {
                         <div
                             key={convo.id}
                             className={cn(
-                                "flex items-start gap-3 p-4 cursor-pointer hover:bg-accent/50",
+                                "flex items-start gap-3 p-4 cursor-pointer hover:bg-accent/50 border-b",
                                 selectedConversation?.id === convo.id && "bg-accent/80"
                             )}
                             onClick={() => handleConversationSelect(convo)}
@@ -248,3 +248,4 @@ export default function MessagingPage() {
   )
 
     
+}
