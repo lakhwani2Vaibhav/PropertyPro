@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import OccupancyChart from "@/components/occupancy-chart";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const properties = [
   { address: "123 Oak Street, Anytown", rent: "$1,500", tenant: "Sarah Miller", status: "Occupied" },
@@ -61,8 +62,12 @@ export default function DashboardPage() {
           </Table>
         </Card>
         <div className="flex gap-2">
-            <Button>Add Property</Button>
-            <Button variant="outline">View All Properties</Button>
+            <Link href="/dashboard/properties" passHref>
+              <Button>Add Property</Button>
+            </Link>
+            <Link href="/dashboard/properties" passHref>
+              <Button variant="outline">View All Properties</Button>
+            </Link>
         </div>
       </div>
 
