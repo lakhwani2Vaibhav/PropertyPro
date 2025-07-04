@@ -142,3 +142,26 @@ export const notifications = [
   { id: 3, title: 'Lease Expiring Soon', description: 'Lease for Emily Carter at 123 Oak Street expires in 30 days.', time: '1d ago' },
   { id: 4, title: 'AI Insight', description: 'Consider a 5% rent increase for properties in Anytown.', time: '2d ago' },
 ];
+
+export type FlatListing = {
+  id: number;
+  listingType: 'Tenant' | 'Landlord';
+  gender: 'Male' | 'Female';
+  area: string;
+  address: string;
+  flatType: 'Apartment' | 'House' | 'Condo';
+  rent: number;
+  deposit: number;
+};
+
+export const flatListings: FlatListing[] = [
+  { id: 1, listingType: 'Tenant', gender: 'Female', area: 'Downtown', address: '123 Main St', flatType: 'Apartment', rent: 15000, deposit: 30000 },
+  { id: 2, listingType: 'Landlord', gender: 'Male', area: 'Uptown', address: '456 Oak Ave', flatType: 'House', rent: 20000, deposit: 40000 },
+  { id: 3, listingType: 'Tenant', gender: 'Female', area: 'Midtown', address: '789 Pine Ln', flatType: 'Condo', rent: 18000, deposit: 36000 },
+  { id: 4, listingType: 'Landlord', gender: 'Male', area: 'Downtown', address: '101 Elm St', flatType: 'Apartment', rent: 16000, deposit: 32000 },
+  { id: 5, listingType: 'Tenant', gender: 'Male', area: 'Uptown', address: '222 Maple Ave', flatType: 'House', rent: 22000, deposit: 44000 },
+  { id: 6, listingType: 'Landlord', gender: 'Female', area: 'Midtown', address: '333 Cedar Ln', flatType: 'Condo', rent: 20000, deposit: 40000 },
+  { id: 7, listingType: 'Tenant', gender: 'Female', area: 'Downtown', address: '444 Oak St', flatType: 'Apartment', rent: 17000, deposit: 34000 },
+  { id: 8, listingType: 'Landlord', gender: 'Male', area: 'Uptown', address: '555 Pine Ave', flatType: 'House', rent: 23000, deposit: 46000 },
+  { id: 9, listingType: 'Tenant', gender: 'Male', area: 'Midtown', address: '666 Elm Ln', flatType: 'Condo', rent: 19000, deposit: 38000 },
+];

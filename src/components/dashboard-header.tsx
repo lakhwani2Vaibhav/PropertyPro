@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, FileText, Menu, MessageSquare, PieChart, Users, Building, Wrench, Bot, Wand2 } from 'lucide-react';
+import { Bell, FileText, Menu, MessageSquare, PieChart, Users, Building, Wrench, Building2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -18,6 +18,7 @@ import { ModeToggle } from './mode-toggle';
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard', icon: <PieChart className="h-4 w-4" /> },
   { href: '/dashboard/properties', label: 'Properties', icon: <Building className="h-4 w-4" /> },
+  { href: '/dashboard/flats', label: 'Flats', icon: <Building2 className="h-4 w-4" /> },
   { href: '/dashboard/tenants', label: 'Tenants', icon: <Users className="h-4 w-4" /> },
   { href: '/dashboard/leases', label: 'Leases', icon: <FileText className="h-4 w-4" /> },
   { href: '/dashboard/messaging', label: 'Messaging', icon: <MessageSquare className="h-4 w-4" /> },
@@ -44,7 +45,7 @@ export default function DashboardHeader() {
           </div>
 
           <div className="flex items-center justify-center flex-1">
-             <nav className="hidden lg:flex items-center gap-2 text-sm font-medium bg-muted p-1 rounded-lg">
+             <nav className="hidden xl:flex items-center gap-2 text-sm font-medium bg-muted p-1 rounded-lg">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -103,7 +104,7 @@ export default function DashboardHeader() {
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
 
-            <div className="lg:hidden">
+            <div className="xl:hidden">
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon">
