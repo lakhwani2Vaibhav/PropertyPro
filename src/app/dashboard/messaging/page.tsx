@@ -202,16 +202,16 @@ export default function MessagingPage() {
                                         )}
                                         <div
                                             className={cn(
-                                                'max-w-[75%] rounded-lg p-3 break-words',
+                                                'flex flex-col max-w-[75%] rounded-lg p-3',
                                                 msg.sender === 'You'
                                                     ? 'bg-primary text-primary-foreground'
                                                     : 'bg-muted',
                                                 msg.isSummary && 'border border-primary/50 bg-primary/10'
                                             )}
                                         >
-                                            <p className="font-bold text-sm mb-1">{msg.sender}</p>
-                                            <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
-                                            <p className="text-xs text-right mt-2 opacity-70">{msg.timestamp}</p>
+                                            <p className="font-bold text-sm">{msg.sender}</p>
+                                            <p className="mt-1 text-sm whitespace-pre-wrap break-words">{msg.text}</p>
+                                            <p className="mt-2 self-end text-xs opacity-70">{msg.timestamp}</p>
                                         </div>
                                         {msg.sender === 'You' && (
                                             <Avatar className="h-8 w-8 shrink-0">
