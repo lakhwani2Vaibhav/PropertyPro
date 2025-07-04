@@ -2,21 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { DollarSign, TrendingUp, TrendingDown } from "lucide-react";
+import { financialSummary, rentPayments } from "@/lib/mock-data";
 
-// Mock data
-const financialSummary = {
-    totalRevenue: 45600,
-    totalExpenses: 12300,
-    netIncome: 33300,
-};
-
-const rentPayments = [
-    { id: 'txn_1', tenant: 'Sarah Miller', amount: 1500, date: '2024-07-01', status: 'Paid' },
-    { id: 'txn_2', tenant: 'David Lee', amount: 1200, date: '2024-07-01', status: 'Paid' },
-    { id: 'txn_3', tenant: 'Emily Chen', amount: 1600, date: '2024-07-01', status: 'Paid' },
-    { id: 'txn_4', tenant: 'John Smith', amount: 1800, date: '2024-07-01', status: 'Late' },
-    { id: 'txn_5', tenant: 'Jane Doe', amount: 1300, date: '2024-06-30', status: 'Paid' },
-];
 
 export default function ReportsPage() {
   return (

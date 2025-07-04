@@ -6,14 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { MoreHorizontal } from "lucide-react";
 import { format } from "date-fns";
-
-const leases = [
-  { id: 1, property: "123 Oak Street, Anytown", tenant: "Sarah Miller", startDate: new Date("2023-08-01"), endDate: new Date("2024-07-31"), rent: 1500, status: "Active" },
-  { id: 2, property: "456 Pine Avenue, Anytown", tenant: "David Lee", startDate: new Date("2023-06-15"), endDate: new Date("2024-06-14"), rent: 1200, status: "Active" },
-  { id: 3, property: "222 Cedar Lane, Anytown", tenant: "Emily Chen", startDate: new Date("2024-01-01"), endDate: new Date("2024-12-31"), rent: 1600, status: "Active" },
-  { id: 4, property: "333 Birch Place, Anytown", tenant: "Michael Rodriguez", startDate: new Date("2022-11-01"), endDate: new Date("2023-10-31"), rent: 2100, status: "Expired" },
-  { id: 5, property: "101 Elm Court, Anytown", tenant: "Jessica Williams", startDate: new Date("2024-03-01"), endDate: new Date("2025-02-28"), rent: 1300, status: "Upcoming" },
-];
+import { leases } from "@/lib/mock-data";
 
 export default function LeasesPage() {
   return (

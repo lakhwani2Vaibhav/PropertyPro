@@ -11,40 +11,7 @@ import { Search, Send, Bot, Loader2, MessageSquare } from 'lucide-react';
 import Balancer from 'react-wrap-balancer';
 import { summarizeConversation } from './actions';
 import { toast } from '@/hooks/use-toast';
-
-const conversations = [
-  {
-    id: 1,
-    name: 'Sarah Miller',
-    property: '123 Oak Street',
-    avatar: 'https://placehold.co/100x100.png',
-    avatarHint: 'woman face',
-    messages: [
-      { id: 1, sender: 'Sarah Miller', text: 'Hi, the sink in my kitchen is leaking. Can you send someone to check it?', timestamp: '10:30 AM' },
-      { id: 2, sender: 'You', text: 'Hi Sarah, I am sorry to hear that. I will arrange for a plumber to visit tomorrow. Is morning okay?', timestamp: '10:32 AM' },
-      { id: 3, sender: 'Sarah Miller', text: 'Yes, morning works. Thanks!', timestamp: '10:35 AM' },
-    ],
-  },
-  {
-    id: 2,
-    name: 'David Lee',
-    property: '456 Pine Avenue',
-    avatar: 'https://placehold.co/100x100.png',
-    avatarHint: 'man face',
-    messages: [
-        { id: 1, sender: 'David Lee', text: 'Just confirming I\'ve paid this month\'s rent.', timestamp: 'Yesterday' },
-        { id: 2, sender: 'You', text: 'Got it, David. Thanks for the confirmation!', timestamp: 'Yesterday' },
-    ],
-  },
-  {
-    id: 3,
-    name: 'Emily Chen',
-    property: '222 Cedar Lane',
-    avatar: 'https://placehold.co/100x100.png',
-    avatarHint: 'woman portrait',
-    messages: [],
-  },
-];
+import { conversations } from '@/lib/mock-data';
 
 type Conversation = typeof conversations[0];
 type Message = Conversation['messages'][0] & { isSummary?: boolean };

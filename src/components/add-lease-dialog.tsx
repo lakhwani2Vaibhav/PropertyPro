@@ -31,6 +31,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { CalendarIcon, Loader2, PlusCircle } from 'lucide-react';
+import { dialogProperties as properties, dialogTenants as tenants } from '@/lib/mock-data';
 
 const leaseSchema = z.object({
   propertyId: z.string().min(1, 'Please select a property'),
@@ -45,19 +46,6 @@ const leaseSchema = z.object({
 
 
 type LeaseFormValues = z.infer<typeof leaseSchema>;
-
-// Mock data
-const properties = [
-    { id: '1', address: '123 Oak Street, Anytown' },
-    { id: '2', address: '456 Pine Avenue, Anytown' },
-    { id: '3', address: '789 Maple Drive, Anytown' },
-];
-const tenants = [
-    { id: '1', name: "Sarah Miller" },
-    { id: '2', name: "David Lee" },
-    { id: '3', name: "Emily Chen" },
-]
-
 
 export function AddLeaseDialog() {
   const [open, setOpen] = useState(false);

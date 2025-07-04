@@ -8,15 +8,8 @@ import PropertyOccupancyChart from "@/components/property-occupancy-chart";
 import PortfolioOverviewChart from "@/components/portfolio-overview-chart";
 import Balancer from "react-wrap-balancer";
 import Image from "next/image";
-
-const portfolioProperties = [
-    { id: 1, address: "Whitefield Complex", type: "Apartment", status: "Occupied", rent: 95000, occupancy: "12/12 Units", imageUrl: "https://placehold.co/600x400.png", imageHint: "modern apartment" },
-    { id: 2, address: "JP Nagar Units", type: "House", status: "Occupied", rent: 75000, occupancy: "1/1 Unit", imageUrl: "https://placehold.co/600x400.png", imageHint: "suburban house" },
-    { id: 3, address: "Koramangala Towers", type: "Apartment", status: "Vacant", rent: 82000, occupancy: "8/9 Units", imageUrl: "https://placehold.co/600x400.png", imageHint: "apartment building" },
-    { id: 4, address: "Indiranagar Homes", type: "House", status: "Occupied", rent: 120000, occupancy: "1/1 Unit", imageUrl: "https://placehold.co/600x400.png", imageHint: "luxury home" },
-    { id: 5, address: "HSR Layout Loft", type: "Apartment", status: "Occupied", rent: 65000, occupancy: "4/4 Units", imageUrl: "https://placehold.co/600x400.png", imageHint: "urban loft" },
-    { id: 6, address: "Marathahalli Place", type: "Condo", status: "Vacant", rent: 58000, occupancy: "0/1 Unit", imageUrl: "https://placehold.co/600x400.png", imageHint: "condo exterior" },
-  ];
+import Link from "next/link";
+import { portfolioProperties } from "@/lib/mock-data";
 
 export default function DashboardPage() {
   return (
@@ -165,7 +158,9 @@ export default function DashboardPage() {
                         </div>
                     </CardContent>
                     <CardFooter className="p-4 pt-2">
-                        <Button variant="outline" size="sm" className="w-full">View Details</Button>
+                        <Link href={`/dashboard/properties/${prop.id}`} passHref className="w-full">
+                           <Button variant="outline" size="sm" className="w-full">View Details</Button>
+                        </Link>
                     </CardFooter>
                 </Card>
                 ))}

@@ -27,6 +27,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, PlusCircle } from 'lucide-react';
+import { dialogProperties as properties } from '@/lib/mock-data';
 
 const tenantSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -36,14 +37,6 @@ const tenantSchema = z.object({
 });
 
 type TenantFormValues = z.infer<typeof tenantSchema>;
-
-// Mock properties data
-const properties = [
-    { id: '1', address: '123 Oak Street, Anytown' },
-    { id: '2', address: '456 Pine Avenue, Anytown' },
-    { id: '3', address: '789 Maple Drive, Anytown' },
-];
-
 
 export function AddTenantDialog() {
   const [open, setOpen] = useState(false);

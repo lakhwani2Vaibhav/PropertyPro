@@ -4,15 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { tenants } from "@/lib/mock-data";
 import { MoreHorizontal } from "lucide-react";
-
-const tenants = [
-  { id: 1, name: "Sarah Miller", property: "123 Oak Street, Anytown", status: "Active" },
-  { id: 2, name: "David Lee", property: "456 Pine Avenue, Anytown", status: "Active" },
-  { id: 3, name: "Emily Chen", property: "222 Cedar Lane, Anytown", status: "Active" },
-  { id: 4, name: "Michael Rodriguez", property: "333 Birch Place, Anytown", status: "Past" },
-  { id: 5, name: "Jessica Williams", property: "101 Elm Court, Anytown", status: "Eviction" },
-];
 
 export default function TenantsPage() {
   return (
