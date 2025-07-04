@@ -14,6 +14,7 @@ import { getAssistantResponse } from '@/app/dashboard/assistant/actions';
 import { Bot, Loader2, Send, User, X, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Balancer from 'react-wrap-balancer';
+import { usePathname } from 'next/navigation';
 
 const formSchema = z.object({
   message: z.string().min(1),
@@ -30,6 +31,7 @@ export function AiAssistantWidget() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,6 +65,10 @@ export function AiAssistantWidget() {
     }
 
     setIsLoading(false);
+  }
+
+  if (pathname === '/dashboard/messaging') {
+    return null;
   }
 
   return (
