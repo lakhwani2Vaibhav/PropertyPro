@@ -1,6 +1,7 @@
+
 'use client'
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CardHeader } from "@/components/ui/card";
@@ -8,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { Search, Send, Bot, Loader2, MessageSquare, ArrowLeft } from 'lucide-react';
-import Balancer from 'react-wrap-balancer';
 import { summarizeConversation } from './actions';
 import { toast } from '@/hooks/use-toast';
 import { conversations as initialConversations } from '@/lib/mock-data';
@@ -25,6 +25,16 @@ export default function MessagingPage() {
     const [isSummarizing, setIsSummarizing] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const isMobile = useIsMobile();
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [selectedConversation?.messages]);
+
 
     const filteredConversations = useMemo(() => {
         if (!searchTerm) return conversations;
@@ -171,17 +181,17 @@ export default function MessagingPage() {
                             </Button>
                         </CardHeader>
                         <ScrollArea className="flex-grow p-6">
-                            <div className="space-y-6">
+                            <div className="space-y-4">
                                 {selectedConversation.messages.map((msg: Message) => (
                                     <div
                                         key={msg.id}
                                         className={cn(
-                                            'flex items-start gap-4',
+                                            'flex items-end gap-3',
                                             msg.sender === 'You' ? 'justify-end' : 'justify-start'
                                         )}
                                     >
                                         {msg.sender !== 'You' && (
-                                            <Avatar className="h-8 w-8">
+                                            <Avatar className="h-8 w-8 shrink-0">
                                                 <AvatarImage src={msg.sender === 'AI Assistant' ? undefined : selectedConversation.avatar} data-ai-hint={selectedConversation.avatarHint}/>
                                                 <AvatarFallback>
                                                     {msg.sender === 'AI Assistant' ? <Bot className="h-5 w-5"/> : msg.sender.charAt(0)}
@@ -190,7 +200,7 @@ export default function MessagingPage() {
                                         )}
                                         <div
                                             className={cn(
-                                                'max-w-xs md:max-w-md rounded-lg p-3',
+                                                'max-w-[75%] rounded-lg p-3',
                                                 msg.sender === 'You'
                                                     ? 'bg-primary text-primary-foreground'
                                                     : 'bg-muted',
@@ -198,16 +208,17 @@ export default function MessagingPage() {
                                             )}
                                         >
                                             <p className="font-bold text-sm mb-1">{msg.sender}</p>
-                                            <Balancer>{msg.text}</Balancer>
+                                            <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
                                             <p className="text-xs text-right mt-2 opacity-70">{msg.timestamp}</p>
                                         </div>
                                         {msg.sender === 'You' && (
-                                            <Avatar className="h-8 w-8">
+                                            <Avatar className="h-8 w-8 shrink-0">
                                                 <AvatarFallback>Y</AvatarFallback>
                                             </Avatar>
                                         )}
                                     </div>
                                 ))}
+                                <div ref={messagesEndRef} />
                             </div>
                         </ScrollArea>
                         <div className="p-4 border-t bg-background">
@@ -235,4 +246,5 @@ export default function MessagingPage() {
         </div>
     </div>
   )
-}
+
+    
