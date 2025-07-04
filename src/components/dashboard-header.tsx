@@ -13,6 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { notifications } from '@/lib/mock-data';
+import { ModeToggle } from './mode-toggle';
 
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard', icon: <PieChart className="h-4 w-4" /> },
@@ -95,6 +96,8 @@ export default function DashboardHeader() {
                 </div>
               </PopoverContent>
             </Popover>
+
+            <ModeToggle />
 
             <Avatar className="h-9 w-9">
               <AvatarImage src="https://placehold.co/100x100.png" alt="User avatar" data-ai-hint="woman face" />
