@@ -66,13 +66,16 @@ export function AiAssistantWidget() {
 
     setIsLoading(false);
   }
-
-  if (pathname === '/dashboard/messaging') {
-    return null;
-  }
+  
+  const isTopPositioned = pathname === '/dashboard/messaging' || pathname === '/dashboard/flats';
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2">
+    <div
+      className={cn(
+        'fixed z-50 flex flex-col items-end gap-2',
+        isTopPositioned ? 'top-20 right-4' : 'bottom-4 right-4'
+      )}
+    >
       <div 
         className={cn(
           "w-full max-w-sm transition-all duration-300",
