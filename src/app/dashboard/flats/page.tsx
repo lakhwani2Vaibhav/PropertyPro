@@ -1,11 +1,9 @@
-
 'use client';
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -69,63 +67,23 @@ const headerMapping: { [key: string]: keyof FlatListing } = {
 
 const API_KEY = 'AIzaSyDuGgoYJPAnMT1licNrIcN_pdmTeoDhqfw';
 const SPREADSHEET_ID = '1qeKFSgvI5wVD9bYLjOs58C7EbT-EEGe4xQrx32VkxIo';
-const ROWS_PER_FETCH = 50;
 
 export default function FlatsPage() {
   const [listings, setListings] = useState<FlatListing[]>([]);
   const [headers, setHeaders] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [startRow, setStartRow] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-
+  
   const [selectedPostContent, setSelectedPostContent] = useState<string | null>(null);
   const [isPostContentOpen, setIsPostContentOpen] = useState(false);
-  
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const observer = useRef<IntersectionObserver>();
-  const loaderRef = useCallback((node: HTMLTableRowElement | null) => {
-    if (loading) return;
-    if (observer.current) observer.current.disconnect();
-
-    const options = {
-      root: scrollContainerRef.current,
-      rootMargin: '0px 0px 200px 0px', // load more when 200px from the bottom
-    };
-    
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore && !searchTerm) {
-         setStartRow(prev => prev + ROWS_PER_FETCH);
-      }
-    }, options);
-
-    if (node) observer.current.observe(node);
-  }, [loading, hasMore, searchTerm]);
-
-
-  const parseListings = useCallback((rows: string[][], currentHeaders: string[], baseId: number) => {
-    return rows.map((row, index) => {
-      const listing: any = { id: baseId + index };
-      currentHeaders.forEach((header, i) => {
-          const key = headerMapping[header];
-          if (key) {
-              listing[key] = row[i] || '';
-          }
-      });
-      return listing as FlatListing;
-    });
-  }, []);
 
   useEffect(() => {
-    if (!hasMore) return;
-    
     const fetchListings = async () => {
       setLoading(true);
       setError(null);
-      const isFirstFetch = startRow === 1;
-      const endRow = startRow + ROWS_PER_FETCH - 1;
-      const range = `Sheet1!A${startRow}:N${endRow}`;
+      
+      const range = `Sheet1!A1:N20`; // Fetch first 20 data rows + 1 header row
       const API_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`;
       
       try {
@@ -136,37 +94,33 @@ export default function FlatsPage() {
         const data = await response.json();
         const values: string[][] = data.values;
 
-        if (!values || values.length === 0) {
-          setHasMore(false);
-          setLoading(false);
+        if (!values || values.length < 2) { // Need at least header and one data row
+          setListings([]);
+          setHeaders(values ? values[0] : Object.keys(headerMapping));
+          if (!values) setError("No data returned from API.");
           return;
         }
 
-        let newRows: string[][];
-        let currentHeaders: string[];
+        const fetchedHeaders = values[0];
+        const fetchedRows = values.slice(1);
+        
+        setHeaders(fetchedHeaders);
 
-        if (isFirstFetch) {
-            currentHeaders = values[0];
-            setHeaders(currentHeaders);
-            newRows = values.slice(1);
-        } else {
-            currentHeaders = headers;
-            newRows = values;
-        }
+        const parsedListings = fetchedRows.map((row, index) => {
+          const listing: any = { id: index };
+          fetchedHeaders.forEach((header, i) => {
+            const key = headerMapping[header];
+            if (key) {
+              listing[key] = row[i] || '';
+            }
+          });
+          return listing as FlatListing;
+        });
         
-        const baseId = listings.length;
-        const parsedListings = parseListings(newRows, currentHeaders, baseId);
-        
-        setListings(prev => [...prev, ...parsedListings]);
-        
-        const expectedRows = isFirstFetch ? ROWS_PER_FETCH - 1 : ROWS_PER_FETCH;
-        if (newRows.length < expectedRows) {
-            setHasMore(false);
-        }
+        setListings(parsedListings);
         
       } catch (e: any) {
         setError(e.message);
-        setHasMore(false);
         console.error("Failed to fetch flat listings:", e);
       } finally {
         setLoading(false);
@@ -174,8 +128,7 @@ export default function FlatsPage() {
     };
 
     fetchListings();
-  }, [startRow, hasMore, headers, listings.length, parseListings]);
-
+  }, []);
 
   const filteredListings = useMemo(() => {
     if (!searchTerm) return listings;
@@ -191,7 +144,7 @@ export default function FlatsPage() {
 
   return (
     <div className="h-full flex flex-col">
-      <Card className="flex-1 flex flex-col">
+      <Card className="flex-1 flex flex-col overflow-hidden">
          <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -209,22 +162,30 @@ export default function FlatsPage() {
             </div>
           </div>
         </CardHeader>
-        <CardContent className="p-0 flex-1 overflow-y-auto" ref={scrollContainerRef}>
-          <div className="overflow-x-auto">
+        <CardContent className="flex-1 p-0 overflow-auto">
             <Table>
                 <TableHeader className="sticky top-0 bg-card z-10">
                 <TableRow>
-                    {headers.length > 0 
-                      ? headers.map(header => <TableHead key={header} className="whitespace-nowrap">{header}</TableHead>)
-                      : Array.from({ length: 14 }).map((_, i) => <TableHead key={i}><div className="h-4"></div></TableHead>)
-                    }
+                    {headers.map(header => <TableHead key={header} className="whitespace-nowrap">{header}</TableHead>)}
                 </TableRow>
                 </TableHeader>
                 <TableBody>
-                {filteredListings.map((listing, index) => {
-                    const isLastElement = index === filteredListings.length - 1;
-                    return (
-                      <TableRow key={listing.id} ref={isLastElement ? loaderRef : null}>
+                {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={14} className="h-48 text-center">
+                          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+                          <p className="mt-2 text-muted-foreground">Loading listings...</p>
+                      </TableCell>
+                    </TableRow>
+                ) : error ? (
+                    <TableRow>
+                      <TableCell colSpan={14} className="h-24 text-center text-red-500">
+                          Failed to load listings: {error}
+                      </TableCell>
+                    </TableRow>
+                ) : filteredListings.length > 0 ? (
+                    filteredListings.map((listing) => (
+                      <TableRow key={listing.id}>
                           <TableCell>{listing.userType}</TableCell>
                           <TableCell>{listing.gender}</TableCell>
                           <TableCell className="max-w-[150px] truncate">{listing.area}</TableCell>
@@ -256,16 +217,8 @@ export default function FlatsPage() {
                               </Button>
                           </TableCell>
                       </TableRow>
-                    );
-                })}
-                {listings.length === 0 && loading && (
-                    <TableRow>
-                      <TableCell colSpan={14} className="h-48 text-center">
-                          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
-                      </TableCell>
-                    </TableRow>
-                )}
-                {filteredListings.length === 0 && !loading && (
+                    ))
+                ) : (
                     <TableRow>
                         <TableCell colSpan={14} className="h-24 text-center">
                             {searchTerm ? `No listings found for "${searchTerm}".` : "No listings found."}
@@ -274,13 +227,7 @@ export default function FlatsPage() {
                 )}
                 </TableBody>
             </Table>
-          </div>
         </CardContent>
-         <CardFooter className="flex items-center justify-center py-4 min-h-[4rem]">
-            {loading && listings.length > 0 && <Loader2 className="h-6 w-6 animate-spin text-primary" />}
-            {!loading && !hasMore && listings.length > 0 && searchTerm === '' && <p className="text-muted-foreground">You've reached the end.</p>}
-            {error && <div className="text-red-500">Failed to load more listings: {error}</div>}
-        </CardFooter>
       </Card>
 
        <Dialog open={isPostContentOpen} onOpenChange={setIsPostContentOpen}>
