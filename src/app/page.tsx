@@ -10,7 +10,7 @@ export default function Home() {
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Building2 className="h-8 w-8 text-primary" />
-            <h1 className="text-2xl font-bold">KirayaEase Lite</h1>
+            <h1 className="text-2xl font-bold">PropertyPro</h1>
           </div>
           <nav className="flex items-center gap-4">
             <Link href="/dashboard" passHref>
@@ -30,7 +30,7 @@ export default function Home() {
             Manage Your Properties Like a Pro.
           </h2>
           <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground">
-            KirayaEase Lite provides a comprehensive overview of your properties and performance, all in one place.
+            PropertyPro provides a comprehensive overview of your properties and performance, all in one place.
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <Link href="/dashboard" passHref>
@@ -43,13 +43,13 @@ export default function Home() {
         </section>
         <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
            <div className="bg-background p-4 rounded-lg">
-             <Image src="https://placehold.co/1200x700.png" alt="KirayaEase Lite Dashboard" width={1200} height={700} className="rounded-lg shadow-2xl mx-auto" data-ai-hint="dashboard analytics" />
+             <Image src="https://placehold.co/1200x700.png" alt="PropertyPro Dashboard" width={1200} height={700} className="rounded-lg shadow-2xl mx-auto" data-ai-hint="dashboard analytics" />
            </div>
         </section>
       </main>
       <footer className="bg-muted py-6">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} KirayaEase Lite. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} PropertyPro. All rights reserved.</p>
         </div>
       </footer>
     </div>

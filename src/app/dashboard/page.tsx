@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import OccupancyChart from "@/components/occupancy-chart";
+import { cn } from "@/lib/utils";
 
 const properties = [
   { address: "123 Oak Street, Anytown", rent: "$1,500", tenant: "Sarah Miller", status: "Occupied" },
@@ -16,7 +17,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-4xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="text-muted-foreground">Overview of your properties and performance</p>
       </div>
       
@@ -45,12 +46,14 @@ export default function DashboardPage() {
                 <TableRow key={prop.address}>
                   <TableCell className="font-medium">{prop.address}</TableCell>
                   <TableCell>{prop.rent}</TableCell>
-                  <TableCell className="text-muted-foreground">{prop.tenant}</TableCell>
+                  <TableCell className={cn(prop.status === 'Vacant' || prop.status === 'Pending' ? 'text-muted-foreground' : '')}>
+                    {prop.tenant}
+                  </TableCell>
                   <TableCell>
                     <Badge variant="secondary" className="font-medium">{prop.status}</Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="link" className="text-primary h-auto p-0">View Details</Button>
+                    <Button variant="link" className="text-foreground h-auto p-0 hover:underline">View Details</Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -63,20 +66,19 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="lg:col-span-2 space-y-4">
+      <div className="grid gap-8 md:grid-cols-2">
+        <div className="space-y-4">
             <h2 className="text-2xl font-semibold">Key Performance Indicators</h2>
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
                 <KpiCard title="ROI" value="8.5%" />
                 <KpiCard title="Avg. Rent per Sq Ft" value="$1.25" />
             </div>
         </div>
-        <div className="lg:col-span-2 space-y-4">
+        <div className="space-y-4">
             <h2 className="text-2xl font-semibold">Occupancy Trends</h2>
             <OccupancyChart />
         </div>
       </div>
-
     </div>
   )
 }
@@ -84,7 +86,7 @@ export default function DashboardPage() {
 function StatCard({ title, value }: { title: string, value: string }) {
   return (
     <Card className="bg-muted border-0">
-      <CardContent className="p-4">
+      <CardContent className="p-6">
         <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
         <p className="text-3xl font-bold">{value}</p>
       </CardContent>
@@ -95,7 +97,7 @@ function StatCard({ title, value }: { title: string, value: string }) {
 function KpiCard({ title, value }: { title: string, value: string }) {
     return (
       <Card>
-        <CardContent className="p-4">
+        <CardContent className="p-6">
             <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
             <p className="text-3xl font-bold">{value}</p>
         </CardContent>

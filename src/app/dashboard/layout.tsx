@@ -3,7 +3,7 @@ import DashboardHeader from '@/components/dashboard-header';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'KirayaEase Lite Dashboard',
+  title: 'PropertyPro Dashboard',
   description: 'Manage your properties and performance.',
 };
 
