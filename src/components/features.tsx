@@ -49,6 +49,29 @@ const AmenityItem = ({
   </div>
 );
 
+const carouselImages = [
+  {
+    src: 'https://storage.googleapis.com/mansio-landing-page/Property%20Card%201/room%20photo_card%201.png',
+    alt: 'Bedroom',
+    hint: 'bedroom interior',
+  },
+  {
+    src: 'https://storage.googleapis.com/mansio-landing-page/Property%20Card%201/drawing%20room_card%201.png',
+    alt: 'Living Room',
+    hint: 'living room',
+  },
+  {
+    src: 'https://storage.googleapis.com/mansio-landing-page/Property%20Card%201/Kitchen_card1.png',
+    alt: 'Kitchen',
+    hint: 'modern kitchen',
+  },
+  {
+    src: 'https://storage.googleapis.com/mansio-landing-page/Property%20Card%201/Card1_washroom.png',
+    alt: 'Bathroom',
+    hint: 'clean bathroom',
+  },
+];
+
 export function Features() {
   return (
     <section className="bg-background py-12 sm:py-16 lg:py-24">
@@ -79,15 +102,15 @@ export function Features() {
               <div className="space-y-4">
                 <Carousel className="w-full">
                   <CarouselContent>
-                    {[1, 2, 3, 4].map((_, index) => (
+                    {carouselImages.map((image, index) => (
                       <CarouselItem key={index}>
                         <Image
-                          src="https://storage.googleapis.com/mansio-landing-page/Property%20Card%201/room%20photo_card%201.png"
-                          alt="Bathroom"
+                          src={image.src}
+                          alt={image.alt}
                           width={600}
                           height={400}
                           className="aspect-[4/3] w-full rounded-2xl object-cover"
-                          data-ai-hint="bathroom interior"
+                          data-ai-hint={image.hint}
                         />
                       </CarouselItem>
                     ))}
@@ -127,7 +150,7 @@ export function Features() {
                 <div className="flex gap-4">
                   <div className="relative h-16 w-16 flex-shrink-0">
                     <Image
-                      src="https://storage.googleapis.com/mansio-landing-page/Property%20Card%201/drawing%20room_card%201.png"
+                      src="https://storage.googleapis.com/mansio-landing-page/Property%20Card%201/Map_card%201.png"
                       alt="Map"
                       width={100}
                       height={100}
