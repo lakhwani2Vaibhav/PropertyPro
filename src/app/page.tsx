@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from 'next/link';
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -24,20 +25,32 @@ export default function Home() {
         </div>
       </header>
       <main className="flex-grow">
-        <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 text-center">
-          <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground">
-            Property Management, Simplified.
-          </h2>
-          <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground">
-            PropertyPro provides the tools you need to manage your properties efficiently. From leases to payments, we've got you covered.
-          </p>
-          <div className="mt-8 flex justify-center gap-4">
-            <Link href="/dashboard" passHref>
-              <Button size="lg">
-                Go to Dashboard
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+        <section className="relative py-16 md:py-24">
+          <div className="absolute inset-0">
+            <Image
+              src="https://placehold.co/1920x1080.png"
+              alt="Modern building background"
+              fill
+              className="object-cover"
+              data-ai-hint="building architecture"
+            />
+            <div className="absolute inset-0 bg-black/60" />
+          </div>
+          <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white">
+              Property Management, Simplified.
+            </h2>
+            <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-200">
+              PropertyPro provides the tools you need to manage your properties efficiently. From leases to payments, we've got you covered.
+            </p>
+            <div className="mt-8 flex justify-center gap-4">
+              <Link href="/dashboard" passHref>
+                <Button size="lg" variant="secondary">
+                  Go to Dashboard
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </section>
       </main>
