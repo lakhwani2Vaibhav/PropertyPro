@@ -38,7 +38,7 @@ const FlatListingOutputSchema = z.object({
 export type FlatListingOutput = z.infer<typeof FlatListingOutputSchema>;
 
 const AssistantOutputSchema = z.object({
-  response: z.string().describe('The assistant text response, summarizing the findings.'),
+  response: z.string().describe('A brief, one-sentence introductory response. This text should NOT contain the details of the listings.'),
   listings: z.array(FlatListingOutputSchema).optional().describe('A list of 1-2 most relevant flat listings to display to the user in a structured format.'),
 });
 export type AssistantOutput = z.infer<typeof AssistantOutputSchema>;
@@ -93,11 +93,12 @@ Keep your responses friendly and professional.
 When the user asks about flat listings, you MUST use the 'getFlatListings' tool to find relevant information.
 You can use the 'area' parameter to filter by location if the user provides one.
 
-After you receive data from the tool, you MUST summarize the 1-2 most relevant listings in the 'response' field.
-You MUST also populate the 'listings' array with the structured data for those same 1-2 listings. Do not add more than 2 listings to the array.
-If the tool returns no listings, inform the user kindly in the 'response' field and leave the 'listings' array empty.
+After you receive data from the tool:
+1.  Write a brief, one-sentence summary of your findings in the 'response' field. For example: "I found a couple of great options for you in Indiranagar." or "Here are two listings that match your request:". DO NOT include the detailed listing information in this text response.
+2.  You MUST populate the 'listings' array with the structured data for the 1-2 most relevant listings. Do not add more than 2 listings to the array.
+3.  If the tool returns no listings, inform the user kindly in the 'response' field and leave the 'listings' array empty.
 
-If the user asks for contact details like a phone number for a specific listing, provide it in your text response if you have it.
+If the user asks for contact details like a phone number for a specific listing, you can provide it in your text response if you have the data.
 `;
 
 const assistantFlow = ai.defineFlow(
