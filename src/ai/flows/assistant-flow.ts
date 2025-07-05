@@ -51,9 +51,10 @@ export async function askAssistant(input: AssistantInput): Promise<AssistantOutp
 const getFlatListingsTool = ai.defineTool(
   {
     name: 'getFlatListings',
-    description: 'Get a list of available flat listings. Can be filtered by area.',
+    description: 'Get a list of available flat listings. Can be filtered by area and limited by count.',
     inputSchema: z.object({
       area: z.string().optional().describe('The area to filter listings by (e.g., "Indiranagar", "HSR Layout").'),
+      count: z.number().optional().describe('The number of listings to return. Infer this from the user\'s query if they specify a number (e.g., "five", "10").'),
     }),
     outputSchema: z.array(z.object({
       userType: z.string(),
@@ -67,11 +68,11 @@ const getFlatListingsTool = ai.defineTool(
       phoneNumber: z.string(),
     })),
   },
-  async ({ area }) => {
-    console.log(`Tool called: getFlatListings with area: ${area}`);
+  async ({ area, count }) => {
+    console.log(`Tool called: getFlatListings with area: ${area}, count: ${count}`);
     const listings = await getListings(area);
     // Return a subset of fields to keep the context for the LLM concise but include phone number.
-    return listings.map(l => ({
+    const mappedListings = listings.map(l => ({
         userType: l.userType,
         gender: l.gender,
         area: l.area,
@@ -82,6 +83,10 @@ const getFlatListingsTool = ai.defineTool(
         availability: l.availability,
         phoneNumber: l.phoneNumber,
     }));
+    
+    // If a specific count is requested, return that many. Otherwise, a sane default.
+    const limit = count || 5; // Default to 5 listings.
+    return mappedListings.slice(0, limit);
   }
 );
 
@@ -91,11 +96,12 @@ Your goal is to provide helpful and concise answers to questions from landlords.
 Keep your responses friendly and professional.
 
 When the user asks about flat listings, you MUST use the 'getFlatListings' tool to find relevant information.
-You can use the 'area' parameter to filter by location if the user provides one.
+- Use the 'area' parameter to filter by location if the user provides one.
+- If the user specifies a number of flats (e.g., "5 flats", "show me ten"), you MUST use the 'count' parameter in the tool to retrieve that exact number of listings. If no number is specified, the tool will return a few relevant results by default.
 
 After you receive data from the tool:
-1.  Write a brief, one-sentence summary of your findings in the 'response' field. For example: "I found a few great options for you in Kasavanahalli." or "Here are the listings that match your request:". DO NOT include the detailed listing information in this text response.
-2.  Populate the 'listings' array with the structured data for the most relevant listings that match the user's query. If the user specifies a number of listings to show, you should return that many. Otherwise, return a reasonable number of the best matches.
+1.  Write a brief, one-sentence summary of your findings in the 'response' field. For example: "I found 5 great options for you in Kasavanahalli." or "Here are the listings that match your request:". DO NOT include the detailed listing information in this text response.
+2.  Populate the 'listings' array with ALL of the structured data you received from the tool. You must not filter or reduce the number of listings you get from the tool.
 3.  If the tool returns no listings, inform the user kindly in the 'response' field and leave the 'listings' array empty.
 
 If the user asks for contact details like a phone number for a specific listing, you can provide it in your text response if you have the data.
