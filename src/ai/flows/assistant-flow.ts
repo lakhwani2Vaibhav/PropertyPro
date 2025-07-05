@@ -49,12 +49,13 @@ const getFlatListingsTool = ai.defineTool(
       rentBudget: z.string(),
       deposit: z.string(),
       availability: z.string(),
+      phoneNumber: z.string(),
     })),
   },
   async ({ area }) => {
     console.log(`Tool called: getFlatListings with area: ${area}`);
     const listings = await getListings(area);
-    // Return a subset of fields to keep the context for the LLM concise
+    // Return a subset of fields to keep the context for the LLM concise but include phone number.
     return listings.map(l => ({
         userType: l.userType,
         gender: l.gender,
@@ -64,6 +65,7 @@ const getFlatListingsTool = ai.defineTool(
         rentBudget: l.rentBudget,
         deposit: l.deposit,
         availability: l.availability,
+        phoneNumber: l.phoneNumber,
     }));
   }
 );
@@ -81,6 +83,8 @@ For example, if the tool returns listings, your response should be like this:
 "I found a couple of great options for you in HSR Layout:
 - A 1BHK for ₹18,000.
 - A 2BHK for ₹38,000."
+
+If the user asks for contact details like a phone number for a specific listing, you can provide the phoneNumber from the tool's data. Do not provide contact details unless explicitly asked.
 
 If the tool returns no listings for a specific area, inform the user kindly. For example: "I'm sorry, I couldn't find any available listings in that area."
 `;
