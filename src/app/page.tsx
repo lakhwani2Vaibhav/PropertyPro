@@ -5,7 +5,20 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="relative flex flex-col min-h-screen text-white">
+      {/* Background Image and Overlay */}
+      <div className="absolute inset-0 z-[-1]">
+        <Image
+          src="https://placehold.co/1920x1080.png"
+          alt="Modern building background"
+          fill
+          className="object-cover"
+          data-ai-hint="building cityscape"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/60" />
+      </div>
+
       <header className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -14,7 +27,7 @@ export default function Home() {
           </div>
           <nav className="flex items-center gap-2 sm:gap-4">
             <Link href="/login" passHref>
-              <Button variant="ghost">Login</Button>
+              <Button variant="outline" className="bg-transparent border-white/50 hover:bg-white/10 text-white">Login</Button>
             </Link>
             <Link href="/register" passHref>
               <Button>
@@ -24,20 +37,11 @@ export default function Home() {
           </nav>
         </div>
       </header>
-      <main className="flex-grow">
-        <section className="relative py-16 md:py-24">
-          <div className="absolute inset-0">
-            <Image
-              src="https://placehold.co/1920x1080.png"
-              alt="Modern building background"
-              fill
-              className="object-cover"
-              data-ai-hint="building architecture"
-            />
-            <div className="absolute inset-0 bg-black/60" />
-          </div>
-          <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white">
+      
+      <main className="flex-grow flex items-center justify-center">
+        <section className="py-16 md:py-24">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight">
               Property Management, Simplified.
             </h2>
             <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-200">
@@ -54,8 +58,9 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="bg-muted py-6">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
+
+      <footer className="py-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-300">
           <p>&copy; {new Date().getFullYear()} PropertyPro. All rights reserved.</p>
         </div>
       </footer>
