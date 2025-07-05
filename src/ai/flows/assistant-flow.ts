@@ -108,27 +108,32 @@ const assistantFlow = ai.defineFlow(
     outputSchema: AssistantOutputSchema,
   },
   async ({ query, history }) => {
-    const messageHistory = (history || []).map(msg => ({
+    
+    // 1. Combine the history with the new user query.
+    const fullHistory = [
+      ...(history || []).map(msg => ({
         role: msg.role,
-        content: [{ text: msg.content }]
-    }));
+        content: [{ text: msg.content }],
+      })),
+      { role: 'user' as const, content: [{ text: query }] },
+    ];
 
-    // 1. The history must not have consecutive messages from the same role.
-    const alternatingHistory = messageHistory.reduce((acc, msg) => {
+    // 2. Ensure the history starts with a 'user' role by finding the first user message.
+    const firstUserIndex = fullHistory.findIndex(m => m.role === 'user');
+    const historyStartingWithUser = firstUserIndex > -1 ? fullHistory.slice(firstUserIndex) : [];
+    
+    // 3. Ensure the final history has alternating user/model roles.
+    const messages = historyStartingWithUser.reduce((acc, msg) => {
         if (acc.length === 0 || acc[acc.length - 1].role !== msg.role) {
             acc.push(msg);
         }
         return acc;
-    }, [] as typeof messageHistory);
-    
-    // 2. The final history should end with a model message before we add the new user query.
-    if (alternatingHistory.length > 0 && alternatingHistory[alternatingHistory.length - 1].role === 'user') {
-      // This is an invalid state from the client, but we can recover by dropping the last user message.
-      alternatingHistory.pop();
-    }
+    }, [] as typeof fullHistory);
 
-    const messages = alternatingHistory;
-    messages.push({ role: 'user', content: [{ text: query }] });
+    // 4. If sanitation results in an empty list (which shouldn't happen), handle it.
+    if (messages.length === 0) {
+      return { response: 'Sorry, I could not process your request. Please try again.' };
+    }
 
     const { output } = await ai.generate({
         model: 'googleai/gemini-2.0-flash',
