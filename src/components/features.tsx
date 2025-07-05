@@ -323,10 +323,18 @@ const FlatmateCard = () => (
 
             <div className="border-t pt-4 mt-6">
                 <div className="flex items-center justify-around">
-                    <Linkedin className="h-7 w-7 cursor-pointer text-muted-foreground/60 transition-colors hover:text-primary" />
-                    <Instagram className="h-7 w-7 cursor-pointer text-muted-foreground/60 transition-colors hover:text-primary" />
-                    <Twitter className="h-7 w-7 cursor-pointer text-muted-foreground/60 transition-colors hover:text-primary" />
-                    <Facebook className="h-7 w-7 cursor-pointer text-muted-foreground/60 transition-colors hover:text-primary" />
+                    <a href="https://www.linkedin.com/in/shubham-10-singh/" target="_blank" rel="noopener noreferrer">
+                      <Linkedin className="h-7 w-7 cursor-pointer text-muted-foreground/60 transition-colors hover:text-primary" />
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                      <Instagram className="h-7 w-7 cursor-pointer text-muted-foreground/60 transition-colors hover:text-primary" />
+                    </a>
+                    <a href="https://x.com/Shubh_am_10_" target="_blank" rel="noopener noreferrer">
+                      <Twitter className="h-7 w-7 cursor-pointer text-muted-foreground/60 transition-colors hover:text-primary" />
+                    </a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                      <Facebook className="h-7 w-7 cursor-pointer text-muted-foreground/60 transition-colors hover:text-primary" />
+                    </a>
                 </div>
             </div>
         </div>
