@@ -98,7 +98,7 @@ export function AiAssistantWidget() {
     >
       <div 
         className={cn(
-          "w-full max-w-sm transition-all duration-300 pointer-events-auto",
+          "w-full max-w-sm transition-all duration-300",
           isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         )}
       >
