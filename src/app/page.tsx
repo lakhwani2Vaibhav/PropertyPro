@@ -3,6 +3,7 @@ import { ArrowRight, Sprout } from "lucide-react";
 import Link from 'next/link';
 import Image from "next/image";
 import { Features } from "@/components/features";
+import { Testimonials } from "@/components/testimonials";
 
 export default function Home() {
   return (
@@ -65,6 +66,8 @@ export default function Home() {
       </div>
 
       <Features />
+
+      <Testimonials />
 
       <footer className="py-6 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
