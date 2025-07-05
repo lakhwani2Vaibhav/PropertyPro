@@ -281,27 +281,27 @@ const FlatmateCard = () => (
         <div className="space-y-4">
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
                 <Image
-                    src="https://storage.googleapis.com/mansio-landing-page/flatmate-profile.jpg"
-                    alt="Aditya"
+                    src="https://media.licdn.com/dms/image/v2/C4D03AQE2VsHn5ijFYA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1642323212717?e=1756944000&v=beta&t=TQiFglyU0rI_M9XXPHzGvFJ0R6bWjr1m6U0vwPidke8"
+                    alt="Shubham"
                     width={150}
                     height={150}
                     className="h-36 w-36 flex-shrink-0 rounded-2xl object-cover"
                     data-ai-hint="man portrait"
                 />
                 <div className="w-full flex-1 space-y-4 text-center sm:text-left">
-                    <h3 className="text-2xl font-bold">Aditya, 27 (M)</h3>
+                    <h3 className="text-2xl font-bold">Shubham, 22 (M)</h3>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <p className="text-sm text-muted-foreground">College</p>
-                            <p className="font-semibold text-lg">IIT Kharagpur</p>
+                            <p className="font-semibold text-lg">ABES Engineering College</p>
                         </div>
                         <div>
                             <p className="text-sm text-muted-foreground">Work Place</p>
-                            <p className="font-semibold text-lg">Mansio.ai</p>
+                            <p className="font-semibold text-lg">PropertyPro</p>
                         </div>
                     </div>
                      <div>
-                        <p className="text-sm font-semibold text-muted-foreground mb-2">Aditya is</p>
+                        <p className="text-sm font-semibold text-muted-foreground mb-2">Shubham is</p>
                         <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
                             <Badge variant="outline" className="px-3 py-1.5 text-sm"><Leaf className="mr-1.5 h-4 w-4 text-green-600" /> Vegetarian</Badge>
                             <Badge variant="outline" className="px-3 py-1.5 text-sm"><CigaretteOff className="mr-1.5 h-4 w-4 text-red-600" /> Non-smoker</Badge>
@@ -311,7 +311,7 @@ const FlatmateCard = () => (
             </div>
 
             <div className='pt-2'>
-                <p className="text-sm font-semibold text-muted-foreground mb-2">Aditya's Interest</p>
+                <p className="text-sm font-semibold text-muted-foreground mb-2">Shubham's Interest</p>
                 <div className="flex flex-wrap gap-2">
                     <InterestBadge emoji="🌅">Sunrise Starter</InterestBadge>
                     <InterestBadge emoji="😊">Goes-with-flow</InterestBadge>
