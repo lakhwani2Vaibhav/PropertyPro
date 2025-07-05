@@ -50,11 +50,26 @@ export function AiAssistantWidget() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const userMessage: Message = { id: Date.now(), text: values.message, sender: 'user' };
-    setMessages((prev) => [...prev, userMessage]);
+    
+    const currentMessages = [...messages, userMessage];
+    setMessages(currentMessages);
+    
     form.reset();
     setIsLoading(true);
 
-    const result = await getAssistantResponse({ query: values.message });
+    // Prepare history for the AI, taking last 5 messages
+    const historyForAI = currentMessages
+        .slice(0, -1) // Exclude the current user message which is sent as `query`
+        .slice(-5) // Take the last 5
+        .map(msg => ({
+            role: msg.sender === 'user' ? 'user' as const : 'model' as const,
+            content: msg.text
+        }));
+
+    const result = await getAssistantResponse({ 
+      query: values.message, 
+      history: historyForAI
+    });
     
     if (result.success && result.data) {
       const botMessage: Message = { id: Date.now() + 1, text: result.data.response, sender: 'bot' };
@@ -76,14 +91,15 @@ export function AiAssistantWidget() {
   return (
     <div
       className={cn(
-        'fixed z-50 flex flex-col items-end gap-2 pointer-events-none',
+        'fixed z-50 flex flex-col items-end gap-2',
+        isOpen ? 'pointer-events-auto' : 'pointer-events-none',
         'bottom-4 right-4'
       )}
     >
       <div 
         className={cn(
           "w-full max-w-sm transition-all duration-300",
-          isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-4 pointer-events-none"
+          isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         )}
       >
         <Card className="h-[70vh] flex flex-col shadow-2xl">
@@ -176,8 +192,8 @@ export function AiAssistantWidget() {
        <Button 
           onClick={() => setIsOpen(true)} 
           className={cn(
-            "bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-auto py-3 px-5 shadow-lg flex items-center gap-3 transition-all duration-300",
-            isOpen ? "opacity-0 -translate-y-2 pointer-events-none" : "opacity-100 translate-y-0 pointer-events-auto"
+            "bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-auto py-3 px-5 shadow-lg flex items-center gap-3 transition-all duration-300 pointer-events-auto",
+            isOpen ? "opacity-0 -translate-y-2" : "opacity-100 translate-y-0"
           )}
         >
         <div className="relative">

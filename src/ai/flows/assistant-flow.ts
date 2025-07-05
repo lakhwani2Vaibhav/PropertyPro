@@ -13,8 +13,14 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import { getListings } from '@/services/flat-service';
 
+const HistoryMessageSchema = z.object({
+  role: z.enum(['user', 'model']),
+  content: z.string(),
+});
+
 const AssistantInputSchema = z.object({
   query: z.string().describe('The user query to the assistant.'),
+  history: z.array(HistoryMessageSchema).optional().describe('The previous conversation history.'),
 });
 export type AssistantInput = z.infer<typeof AssistantInputSchema>;
 
@@ -63,11 +69,7 @@ const getFlatListingsTool = ai.defineTool(
 );
 
 
-const assistantPrompt = ai.definePrompt({
-  name: 'assistantPrompt',
-  input: { schema: AssistantInputSchema },
-  tools: [getFlatListingsTool],
-  system: `You are an expert AI rental assistant for a property management platform called PropertyPro. 
+const systemPrompt = `You are an expert AI rental assistant for a property management platform called PropertyPro. 
 Your goal is to provide helpful and concise answers to questions from landlords. 
 Keep your responses friendly and professional.
 
@@ -81,9 +83,7 @@ For example, if the tool returns listings, your response should be like this:
 - A 2BHK for ₹38,000."
 
 If the tool returns no listings for a specific area, inform the user kindly. For example: "I'm sorry, I couldn't find any available listings in that area."
-`,
-  prompt: `User query: {{{query}}}`,
-});
+`;
 
 const assistantFlow = ai.defineFlow(
   {
@@ -91,8 +91,20 @@ const assistantFlow = ai.defineFlow(
     inputSchema: AssistantInputSchema,
     outputSchema: AssistantOutputSchema,
   },
-  async (input) => {
-    const response = await assistantPrompt(input);
+  async ({ query, history }) => {
+    const messages = (history || []).map(msg => ({
+        role: msg.role,
+        content: [{ text: msg.content }]
+    }));
+    messages.push({ role: 'user', content: [{ text: query }] });
+
+    const response = await ai.generate({
+        model: 'googleai/gemini-2.0-flash',
+        tools: [getFlatListingsTool],
+        system: systemPrompt,
+        messages: messages,
+    });
+
     return { response: response.text };
   }
 );
