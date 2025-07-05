@@ -49,14 +49,14 @@ const AmenityItem = ({
   icon: React.ReactNode;
   children: React.ReactNode;
 }) => (
-  <div className="inline-flex items-center gap-2 rounded-md bg-orange-50 px-2 py-1 text-sm text-orange-900">
+  <div className="inline-flex items-center gap-2 rounded-md bg-secondary px-2 py-1 text-sm text-secondary-foreground">
     {icon}
     <span>{children}</span>
   </div>
 );
 
 const InterestBadge = ({ emoji, children }: { emoji: string; children: React.ReactNode }) => (
-    <div className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-orange-100/50 px-4 py-2 text-sm font-medium text-orange-900 transition-colors hover:bg-orange-100">
+    <div className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-accent/50 px-4 py-2 text-sm font-medium text-secondary-foreground transition-colors hover:bg-accent">
       <span>{emoji}</span>
       <span>{children}</span>
     </div>

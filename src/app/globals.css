@@ -59,6 +59,26 @@
     --chart-4: 280 70% 60%;
     --chart-5: 340 80% 70%;
   }
+
+  .theme-landing {
+    --primary: 24.6 95% 53.1%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 24.6 95% 95%;
+    --secondary-foreground: 24.6 95% 25.1%;
+    --accent: 24.6 95% 90%;
+    --accent-foreground: 24.6 95% 20%;
+    --ring: 24.6 95% 53.1%;
+  }
+
+  .dark .theme-landing {
+    --primary: 24.6 95% 53.1%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 24.6 95% 10%;
+    --secondary-foreground: 24.6 95% 90%;
+    --accent: 24.6 95% 15%;
+    --accent-foreground: 24.6 95% 95%;
+    --ring: 24.6 95% 53.1%;
+  }
 }
 
 @layer base {
