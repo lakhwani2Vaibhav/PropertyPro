@@ -66,7 +66,6 @@ const getFlatListingsTool = ai.defineTool(
 const assistantPrompt = ai.definePrompt({
   name: 'assistantPrompt',
   input: { schema: AssistantInputSchema },
-  output: { schema: AssistantOutputSchema },
   tools: [getFlatListingsTool],
   system: `You are an expert AI rental assistant for a property management platform called PropertyPro. 
 Your goal is to provide helpful and concise answers to questions from landlords. 
@@ -75,8 +74,11 @@ Keep your responses friendly and professional.
 When the user asks about flat listings, you MUST use the 'getFlatListings' tool to find relevant information.
 You can use the 'area' parameter to filter by location if the user provides one.
 
-After you receive the data from the tool, you MUST summarize the listings for the user. Do not just present the raw data.
-For example, if the tool returns listings, your response should be like this: "I found 3 listings in HSR Layout: a 1BHK for ₹18,000, a 2BHK for ₹38,000, and another 1BHK for ₹10,000."
+After you receive the data from the tool, you MUST summarize the listings for the user in a friendly, conversational way. Present the information as a short, easy-to-read list. Only include the top 1 or 2 most relevant listings to keep the response concise. Do not just present the raw data.
+For example, if the tool returns listings, your response should be like this:
+"I found a couple of great options for you in HSR Layout:
+- A 1BHK for ₹18,000.
+- A 2BHK for ₹38,000."
 
 If the tool returns no listings for a specific area, inform the user kindly. For example: "I'm sorry, I couldn't find any available listings in that area."
 `,
@@ -90,7 +92,7 @@ const assistantFlow = ai.defineFlow(
     outputSchema: AssistantOutputSchema,
   },
   async (input) => {
-    const { output } = await assistantPrompt(input);
-    return output!;
+    const response = await assistantPrompt(input);
+    return { response: response.text };
   }
 );
