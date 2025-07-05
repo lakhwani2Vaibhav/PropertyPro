@@ -92,10 +92,26 @@ const assistantFlow = ai.defineFlow(
     outputSchema: AssistantOutputSchema,
   },
   async ({ query, history }) => {
-    const messages = (history || []).map(msg => ({
+    const messageHistory = (history || []).map(msg => ({
         role: msg.role,
         content: [{ text: msg.content }]
     }));
+
+    // 1. The history must not have consecutive messages from the same role.
+    const alternatingHistory = messageHistory.reduce((acc, msg) => {
+        if (acc.length === 0 || acc[acc.length - 1].role !== msg.role) {
+            acc.push(msg);
+        }
+        return acc;
+    }, [] as typeof messageHistory);
+    
+    // 2. The final history should end with a model message before we add the new user query.
+    if (alternatingHistory.length > 0 && alternatingHistory[alternatingHistory.length - 1].role === 'user') {
+      // This is an invalid state from the client, but we can recover by dropping the last user message.
+      alternatingHistory.pop();
+    }
+
+    const messages = alternatingHistory;
     messages.push({ role: 'user', content: [{ text: query }] });
 
     const response = await ai.generate({
@@ -105,6 +121,6 @@ const assistantFlow = ai.defineFlow(
         messages: messages,
     });
 
-    return { response: response.text };
+    return { response: response.text || '' };
   }
 );
