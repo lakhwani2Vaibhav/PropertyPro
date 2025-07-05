@@ -88,8 +88,18 @@ export default function Home() {
         </section>
       </div>
 
-      <footer className="py-6 bg-background">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
+      <footer className="relative py-6">
+         <div className="absolute inset-0 z-[-1]">
+            <Image
+                src="https://atrean.s3.ap-south-1.amazonaws.com/image-files/67ada587e6dc894b280be886/67ada45ce6dc894b280be885/67ada587e6dc894b280be886/building.svg"
+                alt="Footer background"
+                fill
+                className="object-cover"
+                data-ai-hint="building cityscape"
+            />
+            <div className="absolute inset-0 bg-black/40" />
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-white/80">
           <p>&copy; {new Date().getFullYear()} PropertyPro. All rights reserved.</p>
         </div>
       </footer>
