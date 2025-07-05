@@ -82,7 +82,7 @@ export function Features() {
                     {[1, 2, 3, 4].map((_, index) => (
                       <CarouselItem key={index}>
                         <Image
-                          src="https://placehold.co/600x400.png"
+                          src="https://storage.googleapis.com/mansio-landing-page/Property%20Card%201/room%20photo_card%201.png"
                           alt="Bathroom"
                           width={600}
                           height={400}
@@ -127,7 +127,7 @@ export function Features() {
                 <div className="flex gap-4">
                   <div className="relative h-16 w-16 flex-shrink-0">
                     <Image
-                      src="https://placehold.co/100x100.png"
+                      src="https://storage.googleapis.com/mansio-landing-page/Property%20Card%201/drawing%20room_card%201.png"
                       alt="Map"
                       width={100}
                       height={100}
