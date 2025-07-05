@@ -38,7 +38,7 @@ const FlatListingOutputSchema = z.object({
 export type FlatListingOutput = z.infer<typeof FlatListingOutputSchema>;
 
 const AssistantOutputSchema = z.object({
-  response: z.string().describe('A brief, one-sentence introductory response. This text should NOT contain the details of the listings.'),
+  response: z.string().describe('The textual response from the assistant. If listings are being returned, this should be a brief, one-sentence introduction. For general questions, this should be the full answer.'),
   listings: z.array(FlatListingOutputSchema).optional().describe('A list of the most relevant flat listings to display to the user in a structured format.'),
 });
 export type AssistantOutput = z.infer<typeof AssistantOutputSchema>;
@@ -105,6 +105,8 @@ After you receive data from the tool:
 3.  If the tool returns no listings, inform the user kindly in the 'response' field and leave the 'listings' array empty.
 
 If the user asks for contact details like a phone number for a specific listing, you can provide it in your text response if you have the data.
+
+For general questions that do not require searching for listings (e.g., "who are you?", "what can you do?"), provide a helpful answer in the 'response' field and leave the 'listings' field empty or undefined.
 `;
 
 const MAX_CONVERSATION_MESSAGES = 6; // Limit to the last 6 messages (3 turns of conversation)
