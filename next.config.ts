@@ -28,6 +28,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'atrean.s3.ap-south-1.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
