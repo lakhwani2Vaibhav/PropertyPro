@@ -147,8 +147,8 @@ export function AiAssistantWidget() {
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2">
       <div 
         className={cn(
-          "w-full max-w-sm transition-all duration-300 pointer-events-none",
-          isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-4"
+          "w-full max-w-sm transition-all duration-300",
+          isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-4 pointer-events-none"
         )}
       >
         <Card className="h-[70vh] flex flex-col shadow-2xl">
@@ -258,8 +258,8 @@ export function AiAssistantWidget() {
        <Button 
           onClick={() => setIsOpen(true)} 
           className={cn(
-            "bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-auto py-3 px-5 shadow-lg flex items-center gap-3 transition-all duration-300 pointer-events-auto",
-            isOpen ? "opacity-0 -translate-y-2" : "opacity-100 translate-y-0"
+            "bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-auto py-3 px-5 shadow-lg flex items-center gap-3 transition-all duration-300",
+            isOpen ? "opacity-0 -translate-y-2 pointer-events-none" : "opacity-100 translate-y-0 pointer-events-auto"
           )}
         >
         <div className="relative">
