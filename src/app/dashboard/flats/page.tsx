@@ -138,7 +138,7 @@ const API_KEY = 'AIzaSyDuGgoYJPAnMT1licNrIcN_pdmTeoDhqfw';
 
 const SPREADSHEET_ID = '1qeKFSgvI5wVD9bYLjOs58C7EbT-EEGe4xQrx32VkxIo';
 
-const ROWS_PER_PAGE = 5;
+const ROWS_PER_PAGE = 50;
 
 
 
