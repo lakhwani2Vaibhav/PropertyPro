@@ -82,7 +82,7 @@ export function AiAssistantWidget() {
     setIsLoading(false);
   }
   
-  const shouldHide = pathname === '/dashboard/messaging' || pathname === '/dashboard/flats';
+  const shouldHide = pathname === '/dashboard/messaging';
 
   if (shouldHide) {
     return null;
@@ -98,7 +98,7 @@ export function AiAssistantWidget() {
     >
       <div 
         className={cn(
-          "w-full max-w-sm transition-all duration-300",
+          "w-full max-w-sm transition-all duration-300 pointer-events-auto",
           isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         )}
       >
