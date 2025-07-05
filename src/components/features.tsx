@@ -303,7 +303,7 @@ const FlatmateCard = () => (
                      <div>
                         <p className="text-sm font-semibold text-muted-foreground mb-2">Shubham is</p>
                         <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-                            <Badge variant="outline" className="px-3 py-1.5 text-sm"><Leaf className="mr-1.5 h-4 w-4 text-green-600" /> Vegetarian</Badge>
+                            <Badge variant="outline" className="px-3 py-1.5 text-sm"><Leaf className="mr-1.5 h-4 w-4 text-green-600" /> Non-Vegetarian</Badge>
                             <Badge variant="outline" className="px-3 py-1.5 text-sm"><CigaretteOff className="mr-1.5 h-4 w-4 text-red-600" /> Non-smoker</Badge>
                         </div>
                     </div>
@@ -326,7 +326,7 @@ const FlatmateCard = () => (
                     <a href="https://www.linkedin.com/in/shubham-10-singh/" target="_blank" rel="noopener noreferrer">
                       <Linkedin className="h-7 w-7 cursor-pointer text-muted-foreground/60 transition-colors hover:text-primary" />
                     </a>
-                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                    <a href="https://instagram.com/shubh_am_10" target="_blank" rel="noopener noreferrer">
                       <Instagram className="h-7 w-7 cursor-pointer text-muted-foreground/60 transition-colors hover:text-primary" />
                     </a>
                     <a href="https://x.com/Shubh_am_10_" target="_blank" rel="noopener noreferrer">
