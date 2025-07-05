@@ -101,6 +101,8 @@ After you receive data from the tool:
 If the user asks for contact details like a phone number for a specific listing, you can provide it in your text response if you have the data.
 `;
 
+const MAX_CONVERSATION_MESSAGES = 6; // Limit to the last 6 messages (3 turns of conversation)
+
 const assistantFlow = ai.defineFlow(
   {
     name: 'assistantFlow',
@@ -110,7 +112,7 @@ const assistantFlow = ai.defineFlow(
   async ({ query, history }) => {
     
     // 1. Combine the history with the new user query.
-    const fullHistory = [
+    const allMessages = [
       ...(history || []).map(msg => ({
         role: msg.role,
         content: [{ text: msg.content }],
@@ -118,20 +120,23 @@ const assistantFlow = ai.defineFlow(
       { role: 'user' as const, content: [{ text: query }] },
     ];
 
-    // 2. Ensure the history starts with a 'user' role by finding the first user message.
-    const firstUserIndex = fullHistory.findIndex(m => m.role === 'user');
-    const historyStartingWithUser = firstUserIndex > -1 ? fullHistory.slice(firstUserIndex) : [];
+    // 2. Limit the conversation history to the last N messages to prevent token overflow.
+    const trimmedHistory = allMessages.slice(-MAX_CONVERSATION_MESSAGES);
     
-    // 3. Ensure the final history has alternating user/model roles.
-    const messages = historyStartingWithUser.reduce((acc, msg) => {
+    // 3. Ensure the history starts with a 'user' role by finding the first user message in the *trimmed* history.
+    const firstUserIndex = trimmedHistory.findIndex(m => m.role === 'user');
+    const historyStartingWithUser = firstUserIndex > -1 ? trimmedHistory.slice(firstUserIndex) : [];
+    
+    // 4. Ensure the final history has alternating user/model roles.
+    const sanitizedMessages = historyStartingWithUser.reduce((acc, msg) => {
         if (acc.length === 0 || acc[acc.length - 1].role !== msg.role) {
             acc.push(msg);
         }
         return acc;
-    }, [] as typeof fullHistory);
+    }, [] as typeof trimmedHistory);
 
-    // 4. If sanitation results in an empty list (which shouldn't happen), handle it.
-    if (messages.length === 0) {
+    // 5. If sanitation results in an empty list, handle it.
+    if (sanitizedMessages.length === 0) {
       return { response: 'Sorry, I could not process your request. Please try again.' };
     }
 
@@ -139,7 +144,7 @@ const assistantFlow = ai.defineFlow(
         model: 'googleai/gemini-2.0-flash',
         tools: [getFlatListingsTool],
         system: systemPrompt,
-        messages: messages,
+        messages: sanitizedMessages,
         output: { schema: AssistantOutputSchema },
     });
 

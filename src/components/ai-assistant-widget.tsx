@@ -107,10 +107,11 @@ export function AiAssistantWidget() {
     form.reset();
     setIsLoading(true);
 
-    // Prepare history for the AI, taking last 5 messages
+    // Prepare history for the AI. Send the last 10 messages from the UI state.
+    // The server will perform the final trimming and sanitation.
     const historyForAI = currentMessages
         .slice(0, -1) // Exclude the current user message which is sent as `query`
-        .slice(-5) // Take the last 5
+        .slice(-10) // Send a buffer of the last 10 messages
         .map(msg => ({
             role: msg.sender === 'user' ? 'user' as const : 'model' as const,
             content: msg.text
