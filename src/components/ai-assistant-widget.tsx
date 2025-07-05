@@ -6,12 +6,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getAssistantResponse } from '@/app/dashboard/assistant/actions';
-import { Bot, Loader2, Send, User, X, Sparkles } from 'lucide-react';
+import type { FlatListingOutput } from '@/ai/flows/assistant-flow';
+import { Bot, Loader2, Send, User, X, Sparkles, Home, Phone, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Balancer from 'react-wrap-balancer';
 import { usePathname } from 'next/navigation';
@@ -24,7 +30,51 @@ type Message = {
   id: number;
   text: string;
   sender: 'user' | 'bot';
+  listings?: FlatListingOutput[];
 };
+
+function FlatListingCard({ listing }: { listing: FlatListingOutput }) {
+  return (
+    <Card className="bg-background/60 text-foreground text-sm border-primary/20">
+      <CardHeader className="p-3">
+        <CardTitle className="text-base flex items-center gap-2">
+            <Home className="h-4 w-4 text-primary" />
+            {listing.flatType} in {listing.area}
+        </CardTitle>
+        <CardDescription className="text-xs !mt-1">{listing.address}</CardDescription>
+      </CardHeader>
+      <CardContent className="p-3 pt-0 space-y-2">
+        <div className="flex justify-between items-center">
+          <span className="text-muted-foreground">Rent</span>
+          <span className="font-semibold flex items-center gap-1">
+            <IndianRupee className="h-3.5 w-3.5" />
+            {listing.rentBudget}
+          </span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="text-muted-foreground">Deposit</span>
+          <span className="font-semibold flex items-center gap-1">
+            <IndianRupee className="h-3.5 w-3.5" />
+            {listing.deposit}
+          </span>
+        </div>
+        {listing.phoneNumber && (
+           <Collapsible>
+                <CollapsibleTrigger asChild>
+                    <Button variant="link" size="sm" className="p-0 h-auto text-xs flex items-center">
+                        <Phone className="mr-1.5 h-3 w-3" />
+                        Show Contact Details
+                    </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-2 text-xs rounded-md bg-muted p-2 text-center font-mono">
+                    {listing.phoneNumber}
+                </CollapsibleContent>
+            </Collapsible>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
 
 export function AiAssistantWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +122,12 @@ export function AiAssistantWidget() {
     });
     
     if (result.success && result.data) {
-      const botMessage: Message = { id: Date.now() + 1, text: result.data.response, sender: 'bot' };
+      const botMessage: Message = { 
+        id: Date.now() + 1, 
+        text: result.data.response, 
+        sender: 'bot',
+        listings: result.data.listings
+      };
       setMessages((prev) => [...prev, botMessage]);
     } else {
       const errorMessage: Message = { id: Date.now() + 1, text: result.error || 'Sorry, something went wrong.', sender: 'bot' };
@@ -89,17 +144,11 @@ export function AiAssistantWidget() {
   }
 
   return (
-    <div
-      className={cn(
-        'fixed z-50 flex flex-col items-end gap-2',
-        isOpen ? 'pointer-events-auto' : 'pointer-events-none',
-        'bottom-4 right-4'
-      )}
-    >
+    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2">
       <div 
         className={cn(
-          "w-full max-w-sm transition-all duration-300",
-          isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          "w-full max-w-sm transition-all duration-300 pointer-events-none",
+          isOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-4"
         )}
       >
         <Card className="h-[70vh] flex flex-col shadow-2xl">
@@ -119,36 +168,53 @@ export function AiAssistantWidget() {
                       <Bot className="mx-auto h-12 w-12 mb-4"/>
                       <h3 className="text-lg font-medium">Welcome to your AI Assistant</h3>
                       <p className="text-sm max-w-md">Ask me anything about property management, market trends, or tenant issues.</p>
-                      <p className="text-sm max-w-md mt-2">For example, try asking: <em className="text-primary not-italic">“What are the best ways to screen tenants?”</em></p>
+                      <p className="text-sm max-w-md mt-2">For example, try asking: <em className="text-primary not-italic">“Show me flats in Indiranagar”</em></p>
                   </div>
                 )}
                 {messages.map((message) => (
-                  <div
+                   <div
                     key={message.id}
                     className={cn(
-                      'flex items-start gap-4',
-                      message.sender === 'user' ? 'justify-end' : 'justify-start'
+                      "w-full flex flex-col",
+                      message.sender === 'user' ? 'items-end' : 'items-start'
                     )}
                   >
-                    {message.sender === 'bot' && (
-                      <Avatar className="h-8 w-8 bg-primary text-primary-foreground flex items-center justify-center">
-                        <Bot className="h-5 w-5"/>
-                      </Avatar>
-                    )}
+                    {/* Text bubble part */}
                     <div
                       className={cn(
-                        'max-w-md rounded-lg p-3',
-                        message.sender === 'user'
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted'
+                        'flex items-start gap-4 w-full',
+                        message.sender === 'user' ? 'justify-end' : 'justify-start'
                       )}
                     >
-                      <Balancer>{message.text}</Balancer>
+                      {message.sender === 'bot' && (
+                        <Avatar className="h-8 w-8 bg-primary text-primary-foreground flex items-center justify-center">
+                          <Bot className="h-5 w-5"/>
+                        </Avatar>
+                      )}
+                      <div
+                        className={cn(
+                          'max-w-[85%] rounded-lg p-3',
+                          message.sender === 'user'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted'
+                        )}
+                      >
+                        <Balancer>{message.text}</Balancer>
+                      </div>
+                      {message.sender === 'user' && (
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback><User/></AvatarFallback>
+                        </Avatar>
+                      )}
                     </div>
-                    {message.sender === 'user' && (
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback><User/></AvatarFallback>
-                      </Avatar>
+
+                    {/* Listing cards part */}
+                    {message.sender === 'bot' && message.listings && message.listings.length > 0 && (
+                      <div className="mt-2 w-full max-w-md self-start pl-12 space-y-3">
+                        {message.listings.map((listing, index) => (
+                          <FlatListingCard key={index} listing={listing} />
+                        ))}
+                      </div>
                     )}
                   </div>
                 ))}

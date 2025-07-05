@@ -24,10 +24,25 @@ const AssistantInputSchema = z.object({
 });
 export type AssistantInput = z.infer<typeof AssistantInputSchema>;
 
+const FlatListingOutputSchema = z.object({
+    userType: z.string(),
+    gender: z.string(),
+    area: z.string(),
+    address: z.string(),
+    flatType: z.string(),
+    rentBudget: z.string(),
+    deposit: z.string(),
+    availability: z.string(),
+    phoneNumber: z.string(),
+});
+export type FlatListingOutput = z.infer<typeof FlatListingOutputSchema>;
+
 const AssistantOutputSchema = z.object({
-  response: z.string().describe('The assistant response.'),
+  response: z.string().describe('The assistant text response, summarizing the findings.'),
+  listings: z.array(FlatListingOutputSchema).optional().describe('A list of 1-2 most relevant flat listings to display to the user in a structured format.'),
 });
 export type AssistantOutput = z.infer<typeof AssistantOutputSchema>;
+
 
 export async function askAssistant(input: AssistantInput): Promise<AssistantOutput> {
   return assistantFlow(input);
@@ -78,15 +93,11 @@ Keep your responses friendly and professional.
 When the user asks about flat listings, you MUST use the 'getFlatListings' tool to find relevant information.
 You can use the 'area' parameter to filter by location if the user provides one.
 
-After you receive the data from the tool, you MUST summarize the listings for the user in a friendly, conversational way. Present the information as a short, easy-to-read list. Only include the top 1 or 2 most relevant listings to keep the response concise. Do not just present the raw data.
-For example, if the tool returns listings, your response should be like this:
-"I found a couple of great options for you in HSR Layout:
-- A 1BHK for ₹18,000.
-- A 2BHK for ₹38,000."
+After you receive data from the tool, you MUST summarize the 1-2 most relevant listings in the 'response' field.
+You MUST also populate the 'listings' array with the structured data for those same 1-2 listings. Do not add more than 2 listings to the array.
+If the tool returns no listings, inform the user kindly in the 'response' field and leave the 'listings' array empty.
 
-If the user asks for contact details like a phone number for a specific listing, you can provide the phoneNumber from the tool's data. Do not provide contact details unless explicitly asked.
-
-If the tool returns no listings for a specific area, inform the user kindly. For example: "I'm sorry, I couldn't find any available listings in that area."
+If the user asks for contact details like a phone number for a specific listing, provide it in your text response if you have it.
 `;
 
 const assistantFlow = ai.defineFlow(
@@ -118,13 +129,18 @@ const assistantFlow = ai.defineFlow(
     const messages = alternatingHistory;
     messages.push({ role: 'user', content: [{ text: query }] });
 
-    const response = await ai.generate({
+    const { output } = await ai.generate({
         model: 'googleai/gemini-2.0-flash',
         tools: [getFlatListingsTool],
         system: systemPrompt,
         messages: messages,
+        output: { schema: AssistantOutputSchema },
     });
 
-    return { response: response.text || '' };
+    if (!output) {
+      return { response: 'Sorry, I could not generate a response. Please try again.' };
+    }
+
+    return output;
   }
 );
