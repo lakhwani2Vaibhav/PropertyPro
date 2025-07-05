@@ -138,7 +138,8 @@ export function AiAssistantWidget() {
     setIsLoading(false);
   }
   
-  const shouldHide = pathname === '/dashboard/messaging';
+  const pagesToHideOn = ['/dashboard/messaging', '/dashboard/flats'];
+  const shouldHide = pagesToHideOn.includes(pathname);
 
   if (shouldHide) {
     return null;
