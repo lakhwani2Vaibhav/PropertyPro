@@ -69,27 +69,8 @@ export default function Home() {
 
       <Testimonials />
 
-      <div className="relative text-white">
+      <footer className="relative text-white">
         <div className="absolute inset-0 z-[-1]">
-          <Image
-            src="https://atrean.s3.ap-south-1.amazonaws.com/image-files/67ada587e6dc894b280be886/67ada45ce6dc894b280be885/67ada587e6dc894b280be886/building.svg"
-            alt="City background"
-            fill
-            className="object-cover"
-            data-ai-hint="building cityscape"
-          />
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
-        <section className="py-24">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold">Lost in the rental jungle?</h2>
-            <p className="mt-4 text-4xl md:text-5xl font-bold">We've got you.</p>
-          </div>
-        </section>
-      </div>
-
-      <footer className="relative py-6">
-         <div className="absolute inset-0 z-[-1]">
             <Image
                 src="https://atrean.s3.ap-south-1.amazonaws.com/image-files/67ada587e6dc894b280be886/67ada45ce6dc894b280be885/67ada587e6dc894b280be886/building.svg"
                 alt="Footer background"
@@ -99,7 +80,15 @@ export default function Home() {
             />
             <div className="absolute inset-0 bg-black/40" />
         </div>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-white/80">
+
+        <section className="py-24">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-4xl md:text-5xl font-bold">Lost in the rental jungle?</h2>
+            <p className="mt-4 text-4xl md:text-5xl font-bold">We've got you.</p>
+          </div>
+        </section>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-white/80 pb-6">
           <p>&copy; {new Date().getFullYear()} PropertyPro. All rights reserved.</p>
         </div>
       </footer>
