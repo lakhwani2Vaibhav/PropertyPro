@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sprout } from "lucide-react";
 import Link from 'next/link';
 import Image from "next/image";
 
@@ -22,7 +22,9 @@ export default function Home() {
       <header className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-             <div className="h-6 w-6 bg-primary rounded-sm" />
+             <div className="h-7 w-7 bg-primary rounded-md flex items-center justify-center">
+                <Sprout className="h-5 w-5 text-primary-foreground" />
+             </div>
             <h1 className="text-2xl font-bold">PropertyPro</h1>
           </div>
           <nav className="flex items-center gap-2 sm:gap-4">

@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sprout } from "lucide-react";
 
 export default function LoginPage() {
   return (
@@ -11,7 +11,9 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
            <div className="flex justify-center items-center gap-2 mb-4">
-             <div className="h-7 w-7 bg-primary rounded-md flex items-center justify-center font-bold text-primary-foreground">P</div>
+             <div className="h-7 w-7 bg-primary rounded-md flex items-center justify-center">
+                <Sprout className="h-5 w-5 text-primary-foreground" />
+             </div>
             <h1 className="text-2xl font-bold">PropertyPro</h1>
           </div>
           <CardTitle>Welcome Back</CardTitle>

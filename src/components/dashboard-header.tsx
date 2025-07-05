@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, FileText, Menu, MessageSquare, PieChart, Users, Building, Wrench, Building2, Wand2 } from 'lucide-react';
+import { Bell, FileText, Menu, MessageSquare, PieChart, Users, Building, Wrench, Building2, Wand2, Sprout } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -39,7 +39,9 @@ export default function DashboardHeader() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-4">
             <Link href="/dashboard" className="flex items-center gap-2">
-               <div className="h-6 w-6 bg-primary rounded-md flex items-center justify-center font-bold text-primary-foreground">P</div>
+               <div className="h-7 w-7 bg-primary rounded-md flex items-center justify-center">
+                  <Sprout className="h-5 w-5 text-primary-foreground" />
+               </div>
               <span className="font-bold text-xl text-foreground hidden sm:block">PropertyPro</span>
             </Link>
           </div>
@@ -114,7 +116,9 @@ export default function DashboardHeader() {
                 </SheetTrigger>
                 <SheetContent side="left" className="p-4 w-72">
                     <Link href="/dashboard" className="flex items-center gap-2 mb-6">
-                        <div className="h-6 w-6 bg-primary rounded-md flex items-center justify-center font-bold text-primary-foreground">P</div>
+                        <div className="h-7 w-7 bg-primary rounded-md flex items-center justify-center">
+                            <Sprout className="h-5 w-5 text-primary-foreground" />
+                        </div>
                         <span className="font-bold text-xl text-foreground">PropertyPro</span>
                     </Link>
                     <nav className="flex flex-col gap-2">
