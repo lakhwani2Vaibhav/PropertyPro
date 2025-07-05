@@ -9,14 +9,14 @@ export default function Home() {
       {/* Background Image and Overlay */}
       <div className="absolute inset-0 z-[-1]">
         <Image
-          src="https://placehold.co/1920x1080.png"
+          src="https://atrean.s3.ap-south-1.amazonaws.com/image-files/67ada587e6dc894b280be886/67ada45ce6dc894b280be885/67ada587e6dc894b280be886/building.svg"
           alt="Modern building background"
           fill
           className="object-cover"
           data-ai-hint="building cityscape"
           priority
         />
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-black/40" />
       </div>
 
       <header className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
