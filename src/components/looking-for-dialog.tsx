@@ -41,7 +41,7 @@ export function LookingForDialog({ open, onOpenChange }: LookingForDialogProps) 
             onClick={() => setSelection('flat')}
           >
             <Image
-              src="https://atrean.s3.ap-south-1.amazonaws.com/image-files/67ada587e6dc894b280be886/67ada45ce6dc894b280be885/67b0728ee6dc894b280c0576/flat.svg"
+              src="https://storage.googleapis.com/mansio-landing-page/flat.png"
               alt="Flat"
               width={120}
               height={120}
@@ -60,7 +60,7 @@ export function LookingForDialog({ open, onOpenChange }: LookingForDialogProps) 
             onClick={() => setSelection('flatmates')}
           >
             <Image
-              src="https://atrean.s3.ap-south-1.amazonaws.com/image-files/67ada587e6dc894b280be886/67ada45ce6dc894b280be885/67b072c1e6dc894b280c0577/flatmates.svg"
+              src="https://storage.googleapis.com/mansio-landing-page/flatmates.png"
               alt="Flatmates"
               width={120}
               height={120}
