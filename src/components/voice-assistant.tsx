@@ -19,7 +19,7 @@ declare global {
 
 export function VoiceAssistant() {
   const [index, setIndex] = useState(0);
-  const [status, setStatus] = useState<'idle' | 'listening' | 'thinking' | 'speaking'>('idle');
+  const [status, setStatus] = useState<'idle' | 'preparing' | 'listening' | 'thinking' | 'speaking'>('idle');
   const [transcript, setTranscript] = useState('');
   const [aiAudioUrl, setAiAudioUrl] = useState<string | null>(null);
 
@@ -116,7 +116,7 @@ export function VoiceAssistant() {
       setStatus('idle');
     } else if (status === 'idle') {
       if (recognitionRef.current) {
-        setStatus('thinking'); // Show we are preparing the greeting
+        setStatus('preparing'); // Show we are preparing the greeting
         try {
           const ttsResult = await textToSpeech({ text: "Welcome to PropertyPro. Are you looking for a flat, or do you want to list a flat?" });
           if (ttsResult.success && ttsResult.data) {
@@ -138,6 +138,7 @@ export function VoiceAssistant() {
 
   const getStatusText = () => {
     switch (status) {
+      case 'preparing': return 'Connecting...';
       case 'listening': return 'Listening...';
       case 'thinking': return 'Thinking...';
       case 'speaking': return 'Speaking...';
@@ -177,7 +178,7 @@ export function VoiceAssistant() {
             </span>
             <button
               onClick={handleMicClick}
-              disabled={status === 'thinking' || status === 'speaking'}
+              disabled={status === 'preparing' || status === 'thinking' || status === 'speaking'}
               className="relative flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground disabled:opacity-70 disabled:cursor-not-allowed"
             >
               <AnimatePresence>
