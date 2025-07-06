@@ -5,20 +5,20 @@
  *
  * This file exports:
  * - `textToSpeechFlow` - An async function that takes text and returns audio data.
- * - `TextToSpeechInputSchema` - The input type for the flow.
- * - `TextToSpeechOutputSchema` - The output type for the flow.
+ * - `TextToSpeechInput` - The input type for the flow.
+ * - `TextToSpeechOutput` - The output type for the flow.
  */
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import wav from 'wav';
 
-export const TextToSpeechInputSchema = z.object({
+const TextToSpeechInputSchema = z.object({
   text: z.string().describe('The text to convert to speech.'),
 });
 export type TextToSpeechInput = z.infer<typeof TextToSpeechInputSchema>;
 
-export const TextToSpeechOutputSchema = z.object({
+const TextToSpeechOutputSchema = z.object({
   audioDataUri: z.string().describe("The generated audio as a data URI. Expected format: 'data:audio/wav;base64,<encoded_data>'."),
 });
 export type TextToSpeechOutput = z.infer<typeof TextToSpeechOutputSchema>;
@@ -51,7 +51,7 @@ async function toWav(
   });
 }
 
-export const textToSpeechFlow = ai.defineFlow(
+const _textToSpeechFlow = ai.defineFlow(
   {
     name: 'textToSpeechFlow',
     inputSchema: TextToSpeechInputSchema,
@@ -87,3 +87,7 @@ export const textToSpeechFlow = ai.defineFlow(
     };
   }
 );
+
+export async function textToSpeechFlow(input: TextToSpeechInput): Promise<TextToSpeechOutput> {
+  return _textToSpeechFlow(input);
+}
