@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { getAssistantResponse } from '@/app/dashboard/assistant/actions';
 import { textToSpeech } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
+import { LookingForDialog } from './looking-for-dialog';
 
 const words = ['Speak.', 'Swipe.', 'Shift.'];
 
@@ -22,6 +23,8 @@ export function VoiceAssistant() {
   const [status, setStatus] = useState<'idle' | 'preparing' | 'listening' | 'thinking' | 'speaking'>('idle');
   const [transcript, setTranscript] = useState('');
   const [aiAudioUrl, setAiAudioUrl] = useState<string | null>(null);
+  const [isLookingForDialogOpen, setIsLookingForDialogOpen] = useState(false);
+
 
   const recognitionRef = useRef<any>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -196,11 +199,15 @@ export function VoiceAssistant() {
           </div>
         </div>
         <p className="mt-4 text-center text-sm">
-          <a href="#" className="text-muted-foreground underline hover:text-primary">
-            not a talker? let's tap & type
-          </a>
+          <button 
+            onClick={() => setIsLookingForDialogOpen(true)}
+            className="text-muted-foreground underline hover:text-primary"
+          >
+            not a talker? let's tap &amp; type
+          </button>
         </p>
         <audio ref={audioRef} className="hidden" />
+        <LookingForDialog open={isLookingForDialogOpen} onOpenChange={setIsLookingForDialogOpen} />
       </div>
     </div>
   );
