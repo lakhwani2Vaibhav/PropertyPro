@@ -41,6 +41,7 @@ import {
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ScrollAnimationWrapper } from './scroll-animation-wrapper';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Helper Components
 const AmenityItem = ({
@@ -386,15 +387,25 @@ export function Features() {
           <div className="relative mt-12">
             {/* Background cards for stacked effect */}
             <div className={cn(
-                "absolute inset-x-0 top-0 mx-auto h-full w-[95%] rounded-3xl bg-gray-200 transform -rotate-2",
+                "absolute inset-x-0 top-0 mx-auto h-full w-[95%] rounded-3xl bg-gray-200 transform -rotate-2 transition-all duration-300 ease-in-out",
                 activeView === 'flats' ? 'max-w-6xl' : 'max-w-lg'
             )} />
             <div className={cn(
-                "absolute inset-x-0 top-0 mx-auto h-full w-[98%] rounded-3xl bg-gray-300/70 transform -rotate-1",
+                "absolute inset-x-0 top-0 mx-auto h-full w-[98%] rounded-3xl bg-gray-300/70 transform -rotate-1 transition-all duration-300 ease-in-out",
                 activeView === 'flats' ? 'max-w-6xl' : 'max-w-lg'
             )} />
             
-            {activeView === 'flats' ? <FlatCard /> : <FlatmateCard />}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeView}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {activeView === 'flats' ? <FlatCard /> : <FlatmateCard />}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </ScrollAnimationWrapper>
 
