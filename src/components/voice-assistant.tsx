@@ -25,6 +25,7 @@ export function VoiceAssistant() {
 
   const recognitionRef = useRef<any>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const isGreetingRef = useRef(false); // Ref to track if the current audio is a greeting
   const { toast } = useToast();
 
   useEffect(() => {
@@ -75,7 +76,7 @@ export function VoiceAssistant() {
         };
 
         recognition.onend = () => {
-          // Check if the status is still 'listening'. If so, it means recognition ended without a result.
+          // If recognition ends and we were in 'listening' state, it means no speech was detected.
           if (status === 'listening') {
              setStatus('idle');
           }
@@ -92,22 +93,43 @@ export function VoiceAssistant() {
         audioRef.current.src = aiAudioUrl;
         audioRef.current.play();
         audioRef.current.onended = () => {
-            setStatus('idle');
             setAiAudioUrl(null);
+            if (isGreetingRef.current) {
+                isGreetingRef.current = false;
+                // After greeting, start listening for user's response
+                if (recognitionRef.current) {
+                    setTranscript('');
+                    setStatus('listening');
+                    recognitionRef.current.start();
+                }
+            } else {
+                // After a normal AI response, go back to idle
+                setStatus('idle');
+            }
         }
     }
   }, [aiAudioUrl]);
 
-  const handleMicClick = () => {
+  const handleMicClick = async () => {
     if (status === 'listening') {
       recognitionRef.current?.stop();
       setStatus('idle');
     } else if (status === 'idle') {
       if (recognitionRef.current) {
-        setTranscript('');
-        setAiAudioUrl(null);
-        recognitionRef.current.start();
-        setStatus('listening');
+        setStatus('thinking'); // Show we are preparing the greeting
+        try {
+          const ttsResult = await textToSpeech({ text: "Welcome to PropertyPro. Are you looking for a flat, or do you want to list a flat?" });
+          if (ttsResult.success && ttsResult.data) {
+            isGreetingRef.current = true;
+            setAiAudioUrl(ttsResult.data);
+          } else {
+            throw new Error(ttsResult.error || 'Failed to generate greeting audio.');
+          }
+        } catch (error: any) {
+            console.error(error);
+            toast({ title: "Error", description: error.message, variant: "destructive" });
+            setStatus('idle');
+        }
       } else {
         toast({ title: "Not Supported", description: "Voice commands are not supported in your browser.", variant: "destructive" });
       }
