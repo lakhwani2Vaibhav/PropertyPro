@@ -7,8 +7,8 @@ import { Testimonials } from "@/components/testimonials";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen theme-landing">
-      <div className="relative text-white">
+    <div className="theme-landing">
+      <div className="relative flex h-screen flex-col text-white">
         {/* Background Image and Overlay */}
         <div className="absolute inset-0 z-[-1]">
           <Image
