@@ -38,7 +38,7 @@ export default function DashboardHeader() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
                <div className="h-7 w-7 bg-primary rounded-md flex items-center justify-center">
                   <Sprout className="h-5 w-5 text-primary-foreground" />
                </div>
@@ -116,7 +116,7 @@ export default function DashboardHeader() {
                 </SheetTrigger>
                 <SheetContent side="left" className="p-4 w-72">
                     <SheetTitle className="sr-only">Navigation</SheetTitle>
-                    <Link href="/dashboard" className="flex items-center gap-2 mb-6">
+                    <Link href="/" className="flex items-center gap-2 mb-6">
                         <div className="h-7 w-7 bg-primary rounded-md flex items-center justify-center">
                             <Sprout className="h-5 w-5 text-primary-foreground" />
                         </div>
