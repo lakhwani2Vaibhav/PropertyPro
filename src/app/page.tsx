@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Features } from "@/components/features";
 import { Testimonials } from "@/components/testimonials";
 import { ScrollAnimationWrapper } from "@/components/scroll-animation-wrapper";
+import { VoiceAssistant } from "@/components/voice-assistant";
 
 export default function Home() {
   return (
@@ -71,6 +72,12 @@ export default function Home() {
           </section>
         </main>
       </div>
+
+      <section className="bg-orange-50 py-16 sm:py-24">
+        <ScrollAnimationWrapper>
+            <VoiceAssistant />
+        </ScrollAnimationWrapper>
+      </section>
 
       <Features />
 
