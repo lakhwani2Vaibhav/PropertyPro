@@ -171,23 +171,42 @@ export function AiAssistantWidget() {
             </CardHeader>
             <CardContent className="flex-grow overflow-hidden">
               <ScrollArea className="h-full pr-4">
-                <div className="space-y-6">
+                <div className="space-y-6 h-full">
                   {messages.length === 0 && (
-                    <div className="text-center text-muted-foreground pt-16 flex flex-col items-center">
+                    <div className="text-center text-muted-foreground flex flex-col items-center h-full justify-center">
                       <Bot className="mx-auto h-12 w-12 mb-4" />
                       <h3 className="text-lg font-medium">
                         Welcome to your AI Assistant
                       </h3>
-                      <p className="text-sm max-w-md">
-                        Ask me anything about property management, market
-                        trends, or tenant issues.
+                      <p className="text-sm max-w-xs">
+                        Ask me anything about property management, or try one of these suggestions to get started.
                       </p>
-                      <p className="text-sm max-w-md mt-2">
-                        For example, try asking:{' '}
-                        <em className="text-primary not-italic">
-                          “Show me flats in Indiranagar”
-                        </em>
-                      </p>
+                      <div className="mt-6 space-y-2 w-full max-w-xs">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full justify-start text-left h-auto py-2 leading-tight"
+                          onClick={() => onSubmit({ message: 'Show me flats in Indiranagar' })}
+                        >
+                          Show me flats in Indiranagar
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full justify-start text-left h-auto py-2 leading-tight"
+                          onClick={() => onSubmit({ message: "What's the rent for a 2BHK in Koramangala?" })}
+                        >
+                          What's the rent for a 2BHK in Koramangala?
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full justify-start text-left h-auto py-2 leading-tight"
+                          onClick={() => onSubmit({ message: 'Find me a furnished apartment near HSR Layout' })}
+                        >
+                          Find me a furnished apartment near HSR Layout
+                        </Button>
+                      </div>
                     </div>
                   )}
                   {messages.map((message) => (
