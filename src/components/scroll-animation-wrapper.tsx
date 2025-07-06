@@ -12,7 +12,7 @@ interface ScrollAnimationWrapperProps {
 
 export function ScrollAnimationWrapper({ children, className, delay = 0 }: ScrollAnimationWrapperProps) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const isInView = useInView(ref, { amount: 0.2 });
 
   const variants = {
     hidden: { opacity: 0, y: -40 },
