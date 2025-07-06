@@ -6,7 +6,7 @@ import { Bell, FileText, Menu, MessageSquare, PieChart, Users, Building, Wrench,
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
 import {
   Popover,
   PopoverContent,
@@ -115,6 +115,7 @@ export default function DashboardHeader() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="p-4 w-72">
+                    <SheetTitle className="sr-only">Navigation</SheetTitle>
                     <Link href="/dashboard" className="flex items-center gap-2 mb-6">
                         <div className="h-7 w-7 bg-primary rounded-md flex items-center justify-center">
                             <Sprout className="h-5 w-5 text-primary-foreground" />
