@@ -3,6 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { Heart, Smile } from 'lucide-react';
+import { ScrollAnimationWrapper } from './scroll-animation-wrapper';
 
 type Testimonial = {
   name: string;
@@ -110,44 +111,48 @@ export function Testimonials() {
   return (
     <section className="bg-muted/30 py-16 sm:py-24">
       <div className="container mx-auto px-4">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
-            <div className="relative inline-block">
-                <Heart className="absolute -top-8 -left-12 h-16 w-16 text-primary/30 fill-primary/10" />
-                <h2 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-                    Flats figured out. <br/> Flatmates found.
-                </h2>
+        <ScrollAnimationWrapper>
+          <div className="mx-auto mb-12 max-w-2xl text-center">
+              <div className="relative inline-block">
+                  <Heart className="absolute -top-8 -left-12 h-16 w-16 text-primary/30 fill-primary/10" />
+                  <h2 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+                      Flats figured out. <br/> Flatmates found.
+                  </h2>
+              </div>
+            <div className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-primary">
+              <Smile className="h-5 w-5" />
+              <p className="font-medium">
+                Here's what our users say after finding their perfect place (and people)
+              </p>
             </div>
-          <div className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-primary">
-            <Smile className="h-5 w-5" />
-            <p className="font-medium">
-              Here's what our users say after finding their perfect place (and people)
-            </p>
           </div>
-        </div>
+        </ScrollAnimationWrapper>
 
-        <div
-          className="relative grid h-[45rem] grid-cols-1 gap-8 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] md:grid-cols-3"
-        >
-          {/* Column 1 */}
-          <div className="animate-marquee-down space-y-8">
-            <TestimonialColumn testimonials={column1} />
-            <TestimonialColumn testimonials={column1} aria-hidden="true" />
-          </div>
+        <ScrollAnimationWrapper delay={0.2}>
+          <div
+            className="relative grid h-[45rem] grid-cols-1 gap-8 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] md:grid-cols-3"
+          >
+            {/* Column 1 */}
+            <div className="animate-marquee-down space-y-8">
+              <TestimonialColumn testimonials={column1} />
+              <TestimonialColumn testimonials={column1} aria-hidden="true" />
+            </div>
 
-          {/* Column 2 */}
-          <div className="hidden animate-marquee-up space-y-8 md:block">
-            <TestimonialColumn testimonials={column2} />
-            <TestimonialColumn testimonials={column2} aria-hidden="true" />
-          </div>
+            {/* Column 2 */}
+            <div className="hidden animate-marquee-up space-y-8 md:block">
+              <TestimonialColumn testimonials={column2} />
+              <TestimonialColumn testimonials={column2} aria-hidden="true" />
+            </div>
 
-          {/* Column 3 */}
-          <div className="hidden animate-marquee-down space-y-8 md:block">
-            <TestimonialColumn testimonials={column3} />
-            <TestimonialColumn testimonials={column3} aria-hidden="true" />
+            {/* Column 3 */}
+            <div className="hidden animate-marquee-down space-y-8 md:block">
+              <TestimonialColumn testimonials={column3} />
+              <TestimonialColumn testimonials={column3} aria-hidden="true" />
+            </div>
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-muted/30 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-muted/30 to-transparent" />
           </div>
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-muted/30 to-transparent" />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-muted/30 to-transparent" />
-        </div>
+        </ScrollAnimationWrapper>
       </div>
     </section>
   );

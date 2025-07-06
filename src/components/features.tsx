@@ -40,6 +40,7 @@ import {
 } from './ui/carousel';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { ScrollAnimationWrapper } from './scroll-animation-wrapper';
 
 // Helper Components
 const AmenityItem = ({
@@ -349,65 +350,73 @@ export function Features() {
   return (
     <section className="bg-background py-12 sm:py-16 lg:py-24">
       <div className="container mx-auto px-4">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            You&apos;ve swiped enough for <span className="text-primary">love</span>.
-            Now, let&apos;s swipe for <span className="text-primary">rent</span>.
-          </h2>
-        </div>
+        <ScrollAnimationWrapper>
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              You&apos;ve swiped enough for <span className="text-primary">love</span>.
+              Now, let&apos;s swipe for <span className="text-primary">rent</span>.
+            </h2>
+          </div>
+        </ScrollAnimationWrapper>
 
-        <div className="mt-8 flex justify-center">
-            <div className="inline-flex rounded-full border bg-muted p-1">
-                <Button 
-                    size="lg" 
-                    variant={activeView === 'flats' ? 'default' : 'ghost'} 
-                    onClick={() => setActiveView('flats')}
-                    className="rounded-full w-32"
-                >
-                    Flats
-                </Button>
-                <Button 
-                    size="lg" 
-                    variant={activeView === 'flatmates' ? 'default' : 'ghost'} 
-                    onClick={() => setActiveView('flatmates')}
-                    className="rounded-full w-32"
-                >
-                    Flatmates
-                </Button>
-            </div>
-        </div>
-
-        <div className="relative mt-12">
-          {/* Background cards for stacked effect */}
-          <div className={cn(
-              "absolute inset-x-0 top-0 mx-auto h-full w-[95%] rounded-3xl bg-gray-200 transform -rotate-2",
-              activeView === 'flats' ? 'max-w-6xl' : 'max-w-lg'
-          )} />
-          <div className={cn(
-              "absolute inset-x-0 top-0 mx-auto h-full w-[98%] rounded-3xl bg-gray-300/70 transform -rotate-1",
-               activeView === 'flats' ? 'max-w-6xl' : 'max-w-lg'
-          )} />
-          
-          {activeView === 'flats' ? <FlatCard /> : <FlatmateCard />}
-        </div>
+        <ScrollAnimationWrapper delay={0.2}>
+          <div className="mt-8 flex justify-center">
+              <div className="inline-flex rounded-full border bg-muted p-1">
+                  <Button 
+                      size="lg" 
+                      variant={activeView === 'flats' ? 'default' : 'ghost'} 
+                      onClick={() => setActiveView('flats')}
+                      className="rounded-full w-32"
+                  >
+                      Flats
+                  </Button>
+                  <Button 
+                      size="lg" 
+                      variant={activeView === 'flatmates' ? 'default' : 'ghost'} 
+                      onClick={() => setActiveView('flatmates')}
+                      className="rounded-full w-32"
+                  >
+                      Flatmates
+                  </Button>
+              </div>
+          </div>
+        </ScrollAnimationWrapper>
+        
+        <ScrollAnimationWrapper delay={0.4}>
+          <div className="relative mt-12">
+            {/* Background cards for stacked effect */}
+            <div className={cn(
+                "absolute inset-x-0 top-0 mx-auto h-full w-[95%] rounded-3xl bg-gray-200 transform -rotate-2",
+                activeView === 'flats' ? 'max-w-6xl' : 'max-w-lg'
+            )} />
+            <div className={cn(
+                "absolute inset-x-0 top-0 mx-auto h-full w-[98%] rounded-3xl bg-gray-300/70 transform -rotate-1",
+                activeView === 'flats' ? 'max-w-6xl' : 'max-w-lg'
+            )} />
+            
+            {activeView === 'flats' ? <FlatCard /> : <FlatmateCard />}
+          </div>
+        </ScrollAnimationWrapper>
 
         {/* Action Buttons */}
-        <div className="mt-8 flex justify-center gap-4">
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-16 w-16 rounded-full border-4 border-gray-300 bg-background shadow-lg hover:bg-destructive/10"
-          >
-            <ThumbsDown className="h-8 w-8 text-destructive" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-16 w-16 rounded-full border-4 border-primary/50 bg-background shadow-lg hover:bg-primary/10"
-          >
-            <ThumbsUp className="h-8 w-8 text-primary" />
-          </Button>
-        </div>
+        <ScrollAnimationWrapper delay={0.2}>
+          <div className="mt-8 flex justify-center gap-4">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-16 w-16 rounded-full border-4 border-gray-300 bg-background shadow-lg hover:bg-destructive/10"
+            >
+              <ThumbsDown className="h-8 w-8 text-destructive" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-16 w-16 rounded-full border-4 border-primary/50 bg-background shadow-lg hover:bg-primary/10"
+            >
+              <ThumbsUp className="h-8 w-8 text-primary" />
+            </Button>
+          </div>
+        </ScrollAnimationWrapper>
       </div>
     </section>
   );

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from "next/image";
 import { Features } from "@/components/features";
 import { Testimonials } from "@/components/testimonials";
+import { ScrollAnimationWrapper } from "@/components/scroll-animation-wrapper";
 
 export default function Home() {
   return (
@@ -46,12 +47,17 @@ export default function Home() {
         <main className="flex-grow flex items-center justify-center">
           <section className="py-16 md:py-24">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-              <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight">
-                Property Management, Simplified.
-              </h2>
+              <ScrollAnimationWrapper>
+                <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight">
+                  Property Management, Simplified.
+                </h2>
+              </ScrollAnimationWrapper>
+              <ScrollAnimationWrapper delay={0.2}>
               <p className="mt-6 max-w-2xl mx-auto text-lg text-gray-200">
                 PropertyPro provides the tools you need to manage your properties efficiently. From leases to payments, we've got you covered.
               </p>
+              </ScrollAnimationWrapper>
+              <ScrollAnimationWrapper delay={0.4}>
               <div className="mt-8 flex justify-center gap-4">
                 <Link href="/dashboard" passHref>
                   <Button size="lg" variant="secondary">
@@ -60,6 +66,7 @@ export default function Home() {
                   </Button>
                 </Link>
               </div>
+              </ScrollAnimationWrapper>
             </div>
           </section>
         </main>
@@ -82,15 +89,19 @@ export default function Home() {
         </div>
 
         <section className="py-24">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold">Lost in the rental jungle?</h2>
-            <p className="mt-4 text-4xl md:text-5xl font-bold">We've got you.</p>
-          </div>
+          <ScrollAnimationWrapper>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <h2 className="text-4xl md:text-5xl font-bold">Lost in the rental jungle?</h2>
+              <p className="mt-4 text-4xl md:text-5xl font-bold">We've got you.</p>
+            </div>
+          </ScrollAnimationWrapper>
         </section>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-white/80 pb-6">
-          <p>&copy; {new Date().getFullYear()} PropertyPro. All rights reserved.</p>
-        </div>
+        <ScrollAnimationWrapper delay={0.2}>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-white/80 pb-6">
+            <p>&copy; {new Date().getFullYear()} PropertyPro. All rights reserved.</p>
+          </div>
+        </ScrollAnimationWrapper>
       </footer>
     </div>
   );
