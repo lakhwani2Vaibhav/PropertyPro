@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -69,26 +70,26 @@ export function InteractiveSearch() {
           </motion.div>
 
           {/* Floating UI Elements */}
-          <InfoCard className="top-[5%] left-[5%] !p-2 !bg-slate-900 !text-white !dark:bg-slate-800" delay={0.4}>
+          <InfoCard className="top-[8%] left-[5%] md:left-[10%] !p-2 !bg-slate-900 !text-white !dark:bg-slate-800" delay={0.4}>
             <div className="flex items-center gap-2">
               <Sparkles className="text-purple-400 h-5 w-5"/>
               <span className="font-semibold text-sm">Reimagine with AI</span>
             </div>
           </InfoCard>
 
-          <InfoCard className="top-[20%] left-[-5%] sm:left-0" delay={0.5}>
+          <InfoCard className="top-[20%] -left-4 sm:left-4 md:top-[28%] md:left-8" delay={0.5}>
             <div className="flex items-center gap-3">
               <div className="bg-primary/10 p-2 rounded-full">
                 <Home className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Accommodation Type</p>
+                <p className="text-xs text-muted-foreground">Accommodation</p>
                 <p className="font-bold text-base">3 BHK</p>
               </div>
             </div>
           </InfoCard>
 
-          <InfoCard className="bottom-[5%] left-[5%]" delay={0.6}>
+          <InfoCard className="bottom-[8%] left-[5%] md:left-[10%]" delay={0.6}>
             <div className="flex items-center gap-2 mb-2">
                 <p className="font-bold text-sm">Rent</p>
                 <div className="ml-auto bg-primary/10 p-1.5 rounded-full">
@@ -111,19 +112,19 @@ export function InteractiveSearch() {
             </div>
           </InfoCard>
 
-          <InfoCard className="top-[5%] right-[15%] md:right-[25%]" delay={0.7}>
+          <InfoCard className="top-[8%] right-[5%] md:top-[10%] md:right-[12%]" delay={0.7}>
               <div className="flex items-center gap-3">
               <div className="bg-primary/10 p-2 rounded-full">
                 <Users className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">What're you looking for?</p>
-                <p className="font-bold text-base">Looking for flatmate</p>
+                <p className="text-xs text-muted-foreground">Looking for?</p>
+                <p className="font-bold text-base">Flatmate</p>
               </div>
             </div>
           </InfoCard>
 
-            <InfoCard className="top-[20%] right-[-5%] sm:right-0 max-w-xs w-full" delay={0.8}>
+            <InfoCard className="top-[25%] -right-4 sm:right-4 md:top-[28%] md:right-8 w-64 sm:w-auto" delay={0.8}>
               <div className="flex justify-between items-center mb-3">
                   <p className="font-semibold text-sm">What's more important?</p>
                   <Clock className="h-4 w-4 text-muted-foreground" />
@@ -143,13 +144,13 @@ export function InteractiveSearch() {
                     <Button variant="secondary" className="w-full justify-start h-auto py-2">
                       <div className="text-left">
                           <p className="font-semibold text-sm">Function</p>
-                          <p className="text-xs text-muted-foreground font-normal">good Wi-Fi, power backup, space to work</p>
+                          <p className="text-xs text-muted-foreground font-normal">good Wi-Fi, power backup</p>
                       </div>
                   </Button>
               </div>
           </InfoCard>
           
-          <InfoCard className="bottom-[15%] right-[20%]" delay={0.9}>
+          <InfoCard className="bottom-[22%] right-[15%] md:bottom-[30%] md:right-[15%]" delay={0.9}>
             <div className="flex items-center gap-2">
                 <div className="bg-primary/10 p-2 rounded-full">
                   <BedDouble className="h-5 w-5 text-primary" />
@@ -161,7 +162,7 @@ export function InteractiveSearch() {
             </div>
           </InfoCard>
           
-          <InfoCard className="bottom-[5%] right-[2%]" delay={1.0}>
+          <InfoCard className="bottom-[8%] right-[5%] md:right-[10%]" delay={1.0}>
             <div className="flex items-center gap-2">
                 <div className="bg-primary/10 p-2 rounded-full">
                   <CalendarDays className="h-5 w-5 text-primary" />
