@@ -22,7 +22,7 @@ const InfoCard = ({ children, className, delay = 0, ...props }: InfoCardProps) =
     transition={{ duration: 0.5, delay, ease: 'easeOut' }}
     viewport={{ once: true, amount: 0.5 }}
     whileHover={{ scale: 1.05, boxShadow: "0px 10px_20px_rgba(0,0,0,0.1)" }}
-    className={cn("absolute bg-card p-3 rounded-2xl shadow-lg border backdrop-blur-sm bg-opacity-80", className)}
+    className={cn("absolute bg-slate-900/90 text-white p-3 rounded-2xl shadow-lg border border-slate-700 backdrop-blur-sm", className)}
     {...props}
   >
     {children}
@@ -70,7 +70,7 @@ export function InteractiveSearch() {
           </motion.div>
 
           {/* Floating UI Elements */}
-          <InfoCard className="top-[8%] left-[5%] md:left-[10%] !p-2 !bg-slate-900 !text-white !dark:bg-slate-800" delay={0.4}>
+          <InfoCard className="top-[8%] left-[5%] md:left-[10%] !p-2" delay={0.4}>
             <div className="flex items-center gap-2">
               <Sparkles className="text-purple-400 h-5 w-5"/>
               <span className="font-semibold text-sm">Reimagine with AI</span>
@@ -83,7 +83,7 @@ export function InteractiveSearch() {
                 <Home className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-xs text-card-foreground/80">Accommodation</p>
+                <p className="text-xs text-white/80">Accommodation</p>
                 <p className="font-bold text-base">3 BHK</p>
               </div>
             </div>
@@ -98,15 +98,15 @@ export function InteractiveSearch() {
             </div>
             <div className="space-y-1 text-xs">
                 <div className="flex justify-between gap-4">
-                    <span className="text-card-foreground/80">Rent</span>
+                    <span className="text-white/80">Rent</span>
                     <span className="font-semibold">25K</span>
                 </div>
                   <div className="flex justify-between">
-                    <span className="text-card-foreground/80">Security Deposit</span>
+                    <span className="text-white/80">Security Deposit</span>
                     <span className="font-semibold">50K</span>
                 </div>
                   <div className="flex justify-between">
-                    <span className="text-card-foreground/80">Others</span>
+                    <span className="text-white/80">Others</span>
                     <span className="font-semibold">2.5K</span>
                 </div>
             </div>
@@ -118,7 +118,7 @@ export function InteractiveSearch() {
                 <Users className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-xs text-card-foreground/80">Looking for?</p>
+                <p className="text-xs text-white/80">Looking for?</p>
                 <p className="font-bold text-base">Flatmate</p>
               </div>
             </div>
@@ -127,7 +127,7 @@ export function InteractiveSearch() {
             <InfoCard className="top-[25%] right-4 md:top-[28%] md:right-8 w-64 sm:w-auto" delay={0.8}>
               <div className="flex justify-between items-center mb-3">
                   <p className="font-semibold text-sm">What's more important?</p>
-                  <Clock className="h-4 w-4 text-card-foreground/80" />
+                  <Clock className="h-4 w-4 text-white/80" />
               </div>
               <div className="flex gap-1 mb-4">
                   <div className="w-1/2 h-1.5 bg-primary rounded-full" />
@@ -135,16 +135,16 @@ export function InteractiveSearch() {
                   <div className="w-auto flex-grow h-1.5 bg-muted rounded-full" />
               </div>
               <div className="space-y-2">
-                  <Button variant="secondary" className="w-full justify-start h-auto py-2">
+                  <Button variant="outline" className="w-full justify-start h-auto py-2 bg-white/5 hover:bg-white/10 text-white border-white/10">
                       <div className="text-left">
                           <p className="font-semibold text-sm">Vibe</p>
-                          <p className="text-xs text-secondary-foreground/80 font-normal">sunlight, plants, aesthetics</p>
+                          <p className="text-xs text-white/80 font-normal">sunlight, plants, aesthetics</p>
                       </div>
                   </Button>
-                    <Button variant="secondary" className="w-full justify-start h-auto py-2">
+                    <Button variant="outline" className="w-full justify-start h-auto py-2 bg-white/5 hover:bg-white/10 text-white border-white/10">
                       <div className="text-left">
                           <p className="font-semibold text-sm">Function</p>
-                          <p className="text-xs text-secondary-foreground/80 font-normal">good Wi-Fi, power backup</p>
+                          <p className="text-xs text-white/80 font-normal">good Wi-Fi, power backup</p>
                       </div>
                   </Button>
               </div>
@@ -156,7 +156,7 @@ export function InteractiveSearch() {
                   <BedDouble className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-xs text-card-foreground/80">Room Type</p>
+                  <p className="text-xs text-white/80">Room Type</p>
                   <p className="font-bold text-sm">Private</p>
                 </div>
             </div>
@@ -168,7 +168,7 @@ export function InteractiveSearch() {
                   <CalendarDays className="h-5 w-5 text-primary" />
                 </div>
                   <div>
-                  <p className="text-xs text-card-foreground/80">Availability</p>
+                  <p className="text-xs text-white/80">Availability</p>
                   <p className="font-bold text-sm">24 Feb</p>
                 </div>
             </div>
