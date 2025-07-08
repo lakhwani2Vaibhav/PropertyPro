@@ -6,11 +6,12 @@ import { Features } from "@/components/features";
 import { Testimonials } from "@/components/testimonials";
 import { ScrollAnimationWrapper } from "@/components/scroll-animation-wrapper";
 import { VoiceAssistant } from "@/components/voice-assistant";
+import { InteractiveSearch } from "@/components/interactive-search";
 
 export default function Home() {
   return (
     <div className="theme-landing">
-      <div className="relative flex h-screen flex-col text-white">
+      <div className="relative flex min-h-screen flex-col text-white">
         {/* Background Image and Overlay */}
         <div className="absolute inset-0 z-[-1]">
           <Image
@@ -26,12 +27,12 @@ export default function Home() {
 
         <header className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <div className="h-7 w-7 bg-primary rounded-md flex items-center justify-center">
                   <Sprout className="h-5 w-5 text-primary-foreground" />
               </div>
               <h1 className="text-2xl font-bold">PropertyPro</h1>
-            </div>
+            </Link>
             <nav className="flex items-center gap-2 sm:gap-4">
               <Link href="/login" passHref>
                 <Button variant="outline" className="bg-transparent border-white/50 hover:bg-white/10 text-white">Login</Button>
@@ -78,6 +79,8 @@ export default function Home() {
             <VoiceAssistant />
         </ScrollAnimationWrapper>
       </section>
+
+      <InteractiveSearch />
 
       <Features />
 
