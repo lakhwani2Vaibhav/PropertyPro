@@ -2,32 +2,51 @@
 'use client';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, type MotionProps } from 'framer-motion';
 import { Sparkles, Home, IndianRupee, BedDouble, CalendarDays, Clock, Users } from 'lucide-react';
 import { ScrollAnimationWrapper } from './scroll-animation-wrapper';
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
-import type { MotionProps } from 'framer-motion';
+import React from 'react';
 
 interface InfoCardProps extends MotionProps {
   children: React.ReactNode;
   className?: string;
+  contentClassName?: string;
   delay?: number;
 }
 
-const InfoCard = ({ children, className, delay = 0, ...props }: InfoCardProps) => (
+const InfoCard = ({ children, className, contentClassName, delay = 0, ...props }: InfoCardProps) => (
   <motion.div
-    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+    // This is the outer wrapper for positioning and entrance animation
+    initial={{ opacity: 0, y: 20, scale: 0.9 }}
     whileInView={{ opacity: 1, y: 0, scale: 1 }}
     transition={{ duration: 0.5, delay, ease: 'easeOut' }}
     viewport={{ once: true, amount: 0.5 }}
-    whileHover={{ scale: 1.05, boxShadow: "0px 10px_20px_rgba(0,0,0,0.1)" }}
-    className={cn("absolute bg-slate-900/90 text-white p-3 rounded-2xl shadow-lg border border-slate-700", className)}
+    className={cn("absolute", className)}
     {...props}
   >
-    {children}
+    <motion.div
+      // This is the inner card for styling, continuous floating, and hover effect
+      animate={{ y: [0, -6, 0] }}
+      transition={{
+        duration: 3,
+        repeat: Infinity,
+        repeatType: 'reverse',
+        ease: 'easeInOut',
+        delay: delay + Math.random(),
+      }}
+      whileHover={{ y: 0, scale: 1.05, boxShadow: "0px 10px 20px rgba(0,0,0,0.1)" }}
+      className={cn(
+        "bg-slate-900/90 text-white p-3 rounded-2xl shadow-lg border border-slate-700",
+        contentClassName
+      )}
+    >
+      {children}
+    </motion.div>
   </motion.div>
 );
+
 
 export function InteractiveSearch() {
   return (
@@ -70,7 +89,7 @@ export function InteractiveSearch() {
           </motion.div>
 
           {/* Floating UI Elements */}
-          <InfoCard className="top-[8%] left-[5%] md:left-[10%] !p-2" delay={0.4}>
+          <InfoCard className="top-[8%] left-[5%] md:left-[10%]" contentClassName="!p-2" delay={0.4}>
             <div className="flex items-center gap-2">
               <Sparkles className="text-purple-400 h-5 w-5"/>
               <span className="font-semibold text-sm">Reimagine with AI</span>
