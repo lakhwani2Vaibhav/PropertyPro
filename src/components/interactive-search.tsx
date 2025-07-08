@@ -22,7 +22,7 @@ const InfoCard = ({ children, className, delay = 0, ...props }: InfoCardProps) =
     transition={{ duration: 0.5, delay, ease: 'easeOut' }}
     viewport={{ once: true, amount: 0.5 }}
     whileHover={{ scale: 1.05, boxShadow: "0px 10px_20px_rgba(0,0,0,0.1)" }}
-    className={cn("absolute bg-slate-900/90 text-white p-3 rounded-2xl shadow-lg border border-slate-700 backdrop-blur-sm", className)}
+    className={cn("absolute bg-slate-900/90 text-white p-3 rounded-2xl shadow-lg border border-slate-700", className)}
     {...props}
   >
     {children}
@@ -43,7 +43,7 @@ export function InteractiveSearch() {
         </ScrollAnimationWrapper>
         
         <div className="relative mx-auto max-w-sm md:max-w-5xl aspect-[9/16] md:aspect-video">
-          {/* Base Image */}
+          {/* Base Image Container */}
           <motion.div 
             className="w-full h-full"
             initial={{ opacity: 0, scale: 0.9 }}
