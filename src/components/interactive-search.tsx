@@ -45,6 +45,7 @@ export function InteractiveSearch() {
         <div className="relative aspect-[1200/628] max-w-5xl mx-auto">
           {/* Base Image */}
           <motion.div 
+            className="w-full h-full"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
@@ -54,7 +55,7 @@ export function InteractiveSearch() {
               src="https://storage.googleapis.com/mansio-landing-page/landing_mobile.png"
               alt="Interactive property search"
               fill
-              className="object-contain"
+              className="object-cover rounded-2xl"
               data-ai-hint="man searching apartment"
             />
           </motion.div>
