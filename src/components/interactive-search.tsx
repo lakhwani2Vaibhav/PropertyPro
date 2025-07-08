@@ -76,7 +76,7 @@ export function InteractiveSearch() {
                     src="https://storage.googleapis.com/mansio-landing-page/landing_mobile.png"
                     alt="Interactive property search on mobile"
                     fill
-                    className="block md:hidden object-contain"
+                    className="block md:hidden object-cover rounded-[1.8rem]"
                     data-ai-hint="man searching apartment"
                     />
                     {/* Desktop Image */}
@@ -91,8 +91,24 @@ export function InteractiveSearch() {
 
                 {/* Floating UI Elements */}
 
+                 {/* Map Pin Image - Mobile only */}
+                 <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 0.6, ease: 'easeOut' }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    className="absolute bottom-[30%] -left-12 h-48 w-48 md:hidden"
+                >
+                    <motion.div
+                        animate={{ y: [0, -8, 0], x: [0, 4, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+                    >
+                        <Image src="https://demo.mansio.ai/assets/location-BCXULW7-.svg" alt="Map Pin" layout="fill" className="object-contain" />
+                    </motion.div>
+                </motion.div>
+
                 {/* Top-left card */}
-                <InfoCard className="-top-2 left-4 md:top-8 md:-left-8" contentClassName="!p-2" delay={0.4}>
+                <InfoCard className="top-12 -left-4 md:top-8 md:-left-8" contentClassName="!p-2" delay={0.4}>
                     <div className="flex items-center gap-2">
                         <Sparkles className="text-purple-400 h-5 w-5"/>
                         <span className="font-semibold text-sm">Reimagine with AI</span>
@@ -100,7 +116,7 @@ export function InteractiveSearch() {
                 </InfoCard>
 
                 {/* Left card */}
-                <InfoCard className="top-1/4 left-0 md:top-1/3 md:-left-16" delay={0.5}>
+                <InfoCard className="top-40 -left-6 md:top-1/3 md:-left-16" delay={0.5}>
                     <div className="flex items-center gap-3">
                         <div className="bg-primary/10 p-2 rounded-full">
                             <Home className="h-5 w-5 text-primary" />
@@ -113,8 +129,8 @@ export function InteractiveSearch() {
                 </InfoCard>
 
                 {/* Bottom-left card */}
-                <InfoCard className="bottom-8 -left-4 md:bottom-2 md:-left-10" delay={0.6} contentClassName="p-4">
-                    <div className="flex items-center gap-2 mb-2">
+                <InfoCard className="bottom-12 -left-4 md:bottom-2 md:-left-10 z-10" delay={0.6} contentClassName="p-4">
+                     <div className="flex items-center gap-2 mb-2">
                         <p className="font-bold text-lg">Rent</p>
                         <div className="ml-auto bg-primary/20 p-2 rounded-full">
                             <IndianRupee className="h-4 w-4 text-primary" />
@@ -137,7 +153,7 @@ export function InteractiveSearch() {
                 </InfoCard>
 
                 {/* Top-Center card */}
-                 <InfoCard className="top-0 md:-top-5 left-1/2 -translate-x-1/2 w-56" delay={0.7}>
+                 <InfoCard className="top-4 left-1/4 md:left-1/2 md:-translate-x-1/2 w-56 md:-top-5" delay={0.7}>
                     <div className="flex items-center gap-3">
                         <div className="bg-primary/10 p-2 rounded-full">
                             <Users className="h-5 w-5 text-primary" />
@@ -150,7 +166,7 @@ export function InteractiveSearch() {
                 </InfoCard>
                 
                 {/* Top-right card */}
-                <InfoCard className="top-1/4 -right-4 md:top-1/4 md:-right-24 w-64" delay={0.8}>
+                <InfoCard className="top-24 -right-8 w-60 md:top-1/4 md:-right-24 md:w-64" delay={0.8}>
                     <div className="flex justify-between items-center mb-3">
                         <p className="font-semibold text-sm">What's more important?</p>
                         <Clock className="h-4 w-4 text-white/80" />
@@ -177,7 +193,7 @@ export function InteractiveSearch() {
                 </InfoCard>
                 
                 {/* Bottom-right card */}
-                <InfoCard className="bottom-1/4 right-0 md:bottom-[15%] md:-right-12" delay={0.9}>
+                <InfoCard className="bottom-24 -right-2 md:bottom-[15%] md:-right-12" delay={0.9}>
                     <div className="flex items-center gap-2">
                         <div className="bg-primary/10 p-2 rounded-full">
                             <BedDouble className="h-5 w-5 text-primary" />
@@ -190,7 +206,7 @@ export function InteractiveSearch() {
                 </InfoCard>
                 
                 {/* Bottom-far-right card */}
-                <InfoCard className="bottom-2 right-4 md:bottom-4 md:-right-4" delay={1.0}>
+                <InfoCard className="bottom-12 -right-4 md:bottom-4 md:-right-4" delay={1.0}>
                     <div className="flex items-center gap-2">
                         <div className="bg-primary/10 p-2 rounded-full">
                             <CalendarDays className="h-5 w-5 text-primary" />
