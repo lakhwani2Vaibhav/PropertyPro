@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -42,7 +41,7 @@ export function InteractiveSearch() {
           </div>
         </ScrollAnimationWrapper>
         
-        <div className="relative aspect-[1200/628] max-w-5xl mx-auto">
+        <div className="relative mx-auto max-w-sm md:max-w-5xl aspect-[9/16] md:aspect-video">
           {/* Base Image */}
           <motion.div 
             className="w-full h-full"
@@ -51,12 +50,21 @@ export function InteractiveSearch() {
             transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
             viewport={{ once: true, amount: 0.3 }}
           >
+            {/* Mobile Image */}
             <Image
               src="https://storage.googleapis.com/mansio-landing-page/landing_mobile.png"
-              alt="Interactive property search"
+              alt="Interactive property search on mobile"
               fill
-              className="object-cover rounded-2xl"
+              className="block md:hidden object-contain"
               data-ai-hint="man searching apartment"
+            />
+            {/* Desktop Image */}
+            <Image
+              src="https://storage.googleapis.com/mansio-landing-page/landing_desktop.png"
+              alt="Interactive property search on desktop"
+              fill
+              className="hidden md:block object-cover rounded-2xl"
+              data-ai-hint="man using laptop"
             />
           </motion.div>
 
