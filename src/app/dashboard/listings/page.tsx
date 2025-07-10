@@ -74,26 +74,31 @@ export default function ListingsPage() {
   };
 
   const onDragEnd = (e: MouseEvent | TouchEvent | PointerEvent, { offset, velocity }: PanInfo) => {
-    e.preventDefault(); // Prevents touch scroll conflicts
     const horizontalSwipe = swipePower(offset.x, velocity.x);
     const verticalSwipe = swipePower(offset.y, velocity.y);
 
     if (Math.abs(offset.y) > Math.abs(offset.x)) {
       // Vertical swipe gesture
-      if (verticalSwipe > SWIPE_CONFIDENCE_THRESHOLD || offset.y < -SWIPE_OFFSET_THRESHOLD) {
-        if (offset.y < 0) { // Swipe Up
+      if (verticalSwipe < -SWIPE_CONFIDENCE_THRESHOLD || offset.y < -SWIPE_OFFSET_THRESHOLD) {
           handleAction('save');
-        }
       }
     } else {
       // Horizontal swipe gesture
-      if (horizontalSwipe > SWIPE_CONFIDENCE_THRESHOLD || Math.abs(offset.x) > SWIPE_OFFSET_THRESHOLD) {
-        if (offset.x > 0) { // Swipe Right
-          handleAction('interested'); 
-        } else { // Swipe Left
-          handleAction('pass');
-        }
+      if (horizontalSwipe < -SWIPE_CONFIDENCE_THRESHOLD || offset.x < -SWIPE_OFFSET_THRESHOLD) {
+        handleAction('pass');
+      } else if (horizontalSwipe > SWIPE_CONFIDENCE_THRESHOLD || offset.x > SWIPE_OFFSET_THRESHOLD) {
+        handleAction('interested'); 
       }
+    }
+  };
+
+  const animationVariants = {
+    initial: { scale: 0.95, y: 20, opacity: 0 },
+    animate: { scale: 1, y: 0, opacity: 1, transition: { duration: 0.3 } },
+    exit: { 
+      opacity: 0,
+      scale: 0.8,
+      transition: { duration: 0.4, ease: "easeOut" }
     }
   };
 
@@ -111,14 +116,10 @@ export default function ListingsPage() {
                                 drag
                                 dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                                 onDragEnd={onDragEnd}
-                                initial={{ scale: 0.95, y: 20, opacity: 0 }}
-                                animate={{ scale: 1, y: 0, opacity: 1, transition: { duration: 0.3 } }}
-                                exit={{
-                                    x: (Math.random() - 0.5) * 500, // Random exit direction
-                                    opacity: 0,
-                                    scale: 0.8,
-                                    transition: { duration: 0.4 }
-                                }}
+                                variants={animationVariants}
+                                initial="initial"
+                                animate="animate"
+                                exit="exit"
                                 className="absolute w-full h-full cursor-grab active:cursor-grabbing"
                             >
                                 <ListingCard property={property} />
