@@ -8,9 +8,10 @@ import { Button } from '@/components/ui/button';
 import { Undo2, Heart, X, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { AnimatePresence, motion, PanInfo } from 'framer-motion';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const SWIPE_CONFIDENCE_THRESHOLD = 10000;
-const SWIPE_OFFSET_THRESHOLD = 80;
+const SWIPE_OFFSET_THRESHOLD = 100;
 
 const swipePower = (offset: number, velocity: number) => {
     return Math.abs(offset) * velocity;
@@ -21,6 +22,12 @@ export default function ListingsPage() {
   const [properties, setProperties] = useState<SwipeableProperty[]>(swipeableProperties);
   const [history, setHistory] = useState<number[]>([]);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const activeIndex = useMemo(() => properties.length - 1, [properties]);
   const currentProperty = useMemo(() => properties[activeIndex], [properties, activeIndex]);
@@ -67,20 +74,25 @@ export default function ListingsPage() {
   };
 
   const onDragEnd = (e: MouseEvent | TouchEvent | PointerEvent, { offset, velocity }: PanInfo) => {
+    e.preventDefault(); // Prevents touch scroll conflicts
     const horizontalSwipe = swipePower(offset.x, velocity.x);
     const verticalSwipe = swipePower(offset.y, velocity.y);
 
-    if (horizontalSwipe > SWIPE_CONFIDENCE_THRESHOLD || Math.abs(offset.x) > SWIPE_OFFSET_THRESHOLD) {
-      // Horizontal swipe
-      if (offset.x > 0) {
-        handleAction('interested'); // Swipe right
-      } else {
-        handleAction('pass'); // Swipe left
+    if (Math.abs(offset.y) > Math.abs(offset.x)) {
+      // Vertical swipe gesture
+      if (verticalSwipe > SWIPE_CONFIDENCE_THRESHOLD || offset.y < -SWIPE_OFFSET_THRESHOLD) {
+        if (offset.y < 0) { // Swipe Up
+          handleAction('save');
+        }
       }
-    } else if (verticalSwipe > SWIPE_CONFIDENCE_THRESHOLD || offset.y < -SWIPE_OFFSET_THRESHOLD) {
-      // Vertical swipe up for save
-      if (offset.y < 0) {
-        handleAction('save');
+    } else {
+      // Horizontal swipe gesture
+      if (horizontalSwipe > SWIPE_CONFIDENCE_THRESHOLD || Math.abs(offset.x) > SWIPE_OFFSET_THRESHOLD) {
+        if (offset.x > 0) { // Swipe Right
+          handleAction('interested'); 
+        } else { // Swipe Left
+          handleAction('pass');
+        }
       }
     }
   };
@@ -140,39 +152,49 @@ export default function ListingsPage() {
             )}
         </AnimatePresence>
       </div>
-      <div className="flex items-center justify-center gap-4">
-        <Button 
-            variant="outline" 
-            size="icon" 
-            className="h-16 w-16 rounded-full border-4 border-gray-300 bg-background shadow-lg hover:bg-destructive/10 text-destructive"
-            onClick={() => handleAction('pass')}
-            disabled={!currentProperty}
-        >
-          <X className="h-8 w-8" />
-        </Button>
-        <Button 
-            variant="outline" 
-            size="icon" 
-            className="h-20 w-20 rounded-full border-4 border-blue-400 bg-background shadow-lg hover:bg-blue-500/10 text-blue-500"
-            onClick={() => handleAction('save')}
-            disabled={!currentProperty}
-        >
-          <Heart className="h-10 w-10" />
-        </Button>
-        <Button 
-            variant="outline" 
-            size="icon" 
-            className="h-16 w-16 rounded-full border-4 border-primary/50 bg-background shadow-lg hover:bg-primary/10 text-primary"
-            onClick={() => handleAction('interested')}
-            disabled={!currentProperty}
-        >
-          <Check className="h-8 w-8" />
-        </Button>
-      </div>
-       <Button onClick={goBack} variant="ghost" disabled={history.length === 0}>
+      {isClient && !isMobile && (
+        <>
+            <div className="flex items-center justify-center gap-4">
+                <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-16 w-16 rounded-full border-4 border-gray-300 bg-background shadow-lg hover:bg-destructive/10 text-destructive"
+                    onClick={() => handleAction('pass')}
+                    disabled={!currentProperty}
+                >
+                <X className="h-8 w-8" />
+                </Button>
+                <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-20 w-20 rounded-full border-4 border-blue-400 bg-background shadow-lg hover:bg-blue-500/10 text-blue-500"
+                    onClick={() => handleAction('save')}
+                    disabled={!currentProperty}
+                >
+                <Heart className="h-10 w-10" />
+                </Button>
+                <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="h-16 w-16 rounded-full border-4 border-primary/50 bg-background shadow-lg hover:bg-primary/10 text-primary"
+                    onClick={() => handleAction('interested')}
+                    disabled={!currentProperty}
+                >
+                <Check className="h-8 w-8" />
+                </Button>
+            </div>
+            <Button onClick={goBack} variant="ghost" disabled={history.length === 0}>
+                <Undo2 className="mr-2 h-4 w-4"/>
+                Undo Last Action
+            </Button>
+        </>
+      )}
+       {isClient && isMobile && (
+         <Button onClick={goBack} variant="ghost" disabled={history.length === 0}>
             <Undo2 className="mr-2 h-4 w-4"/>
             Undo Last Swipe
         </Button>
+       )}
     </div>
   );
 }
