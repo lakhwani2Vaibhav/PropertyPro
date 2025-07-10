@@ -1,12 +1,19 @@
+
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, FileText, Menu, MessageSquare, PieChart, Users, Building, Wrench, Building2, Wand2, Sprout, Heart, LayoutList } from 'lucide-react';
+import { Bell, FileText, Menu, MessageSquare, PieChart, Users, Building, Wrench, Building2, Wand2, Sprout, Heart, LayoutList, ChevronDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Popover,
   PopoverContent,
@@ -26,11 +33,6 @@ const navLinks = [
   { href: '/dashboard/messaging', label: 'Messaging', icon: <MessageSquare className="h-4 w-4" /> },
   { href: '/dashboard/maintenance', label: 'Maintenance', icon: <Wrench className="h-4 w-4" /> },
 ];
-
-const aiLinks = [
-    { href: '/dashboard/reports', label: 'Reports', icon: <PieChart className="h-4 w-4" /> },
-    { href: '/dashboard/rent-suggestion', label: 'Rent Suggestion', icon: <Wand2 className="h-4 w-4" /> },
-]
 
 export default function DashboardHeader() {
   const pathname = usePathname();
@@ -62,6 +64,30 @@ export default function DashboardHeader() {
                   {link.icon} {link.label}
                 </Link>
               ))}
+               <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant={pathname.startsWith('/dashboard/reports') || pathname.startsWith('/dashboard/rent-suggestion') ? 'default' : 'ghost'}
+                    className={cn('text-muted-foreground transition-colors hover:text-foreground px-3 py-1.5 rounded-md flex items-center gap-2 whitespace-nowrap',
+                     pathname.startsWith('/dashboard/reports') || pathname.startsWith('/dashboard/rent-suggestion') ? 'text-foreground font-semibold bg-background shadow-sm' : 'data-[state=open]:bg-accent'
+                    )}
+                  >
+                    AI Tools <ChevronDown className="h-4 w-4 ml-1" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/reports" className="flex items-center gap-2">
+                       <PieChart className="h-4 w-4" /> Reports
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                     <Link href="/dashboard/rent-suggestion" className="flex items-center gap-2">
+                        <Wand2 className="h-4 w-4" /> Rent Suggestion
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </nav>
           </div>
           
@@ -139,6 +165,19 @@ export default function DashboardHeader() {
                           </Link>
                           </SheetClose>
                       ))}
+                      {/* Mobile AI Tools Links */}
+                      <div className="border-t pt-2 mt-2">
+                         <SheetClose asChild>
+                           <Link href="/dashboard/reports" className={cn('flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary', pathname === '/dashboard/reports' ? 'bg-muted text-primary font-semibold' : '')}>
+                              <PieChart className="h-4 w-4" /> Reports
+                           </Link>
+                         </SheetClose>
+                         <SheetClose asChild>
+                           <Link href="/dashboard/rent-suggestion" className={cn('flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary', pathname === '/dashboard/rent-suggestion' ? 'bg-muted text-primary font-semibold' : '')}>
+                              <Wand2 className="h-4 w-4" /> Rent Suggestion
+                           </Link>
+                         </SheetClose>
+                      </div>
                     </nav>
                 </SheetContent>
               </Sheet>
