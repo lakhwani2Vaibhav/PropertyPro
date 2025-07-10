@@ -56,7 +56,7 @@ export default function ListingsPage() {
   }, [properties, currentIndex]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8.5rem)] items-center justify-center p-4 gap-8">
+    <div className="flex flex-col h-full items-center justify-center p-4 gap-8">
       <div className="relative w-full max-w-sm h-[70vh] flex items-center justify-center">
         <AnimatePresence>
             {currentProperty ? (
