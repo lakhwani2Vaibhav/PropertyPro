@@ -31,7 +31,13 @@ export function ListingCard({ property }: ListingCardProps) {
   return (
     <Card className="w-full h-full rounded-2xl shadow-2xl overflow-hidden flex flex-col">
       <div className="relative flex-shrink-0">
-        <Carousel className="w-full">
+        <Carousel 
+          className="w-full"
+          // Disable carousel drag to allow page swipe gestures
+          opts={{
+            watchDrag: false,
+          }}
+        >
           <CarouselContent>
             {property.images.map((img, index) => (
               <CarouselItem key={index}>
@@ -40,8 +46,9 @@ export function ListingCard({ property }: ListingCardProps) {
                   alt={`${property.title} image ${index + 1}`}
                   width={400}
                   height={300}
-                  className="w-full h-64 md:h-56 object-cover"
+                  className="w-full h-64 md:h-56 object-cover pointer-events-none"
                   data-ai-hint="apartment interior"
+                  draggable={false}
                 />
               </CarouselItem>
             ))}
