@@ -142,3 +142,38 @@ export const notifications = [
   { id: 3, title: 'Lease Expiring Soon', description: 'Lease for Emily Carter at 123 Oak Street expires in 30 days.', time: '1d ago' },
   { id: 4, title: 'AI Insight', description: 'Consider a 5% rent increase for properties in Anytown.', time: '2d ago' },
 ];
+
+
+// Data for the swipeable listing cards
+export type SwipeableProperty = {
+  id: number;
+  title: string;
+  location: string;
+  rent: number;
+  deposit: number;
+  bedrooms: number;
+  bathrooms: number;
+  sqft: number;
+  availability: 'available' | 'unavailable';
+  amenities: string[];
+  images: string[];
+};
+
+export const swipeableProperties: SwipeableProperty[] = Array.from({ length: 20 }, (_, i) => ({
+  id: i + 1,
+  title: `Modern ${i % 3 + 1}BHK in ${['Koramangala', 'Indiranagar', 'HSR Layout', 'Whitefield'][i % 4]}`,
+  location: `Near ${['Tech Park', 'Metro Station', 'Shopping Mall', 'City Center'][i % 4]}, Bangalore`,
+  rent: 25000 + (i * 1500),
+  deposit: 75000 + (i * 5000),
+  bedrooms: i % 3 + 1,
+  bathrooms: i % 2 + 1,
+  sqft: 800 + (i * 100),
+  availability: i % 5 === 0 ? 'unavailable' : 'available',
+  amenities: ['Wi-Fi', 'Refrigerator', 'Washing Machine'].slice(0, i % 3 + 1),
+  images: [
+    `https://placehold.co/400x300.png?text=Property+${i+1}`,
+    `https://placehold.co/400x300.png?text=Living+Room`,
+    `https://placehold.co/400x300.png?text=Bedroom`,
+    `https://placehold.co/400x300.png?text=Kitchen`,
+  ],
+}));

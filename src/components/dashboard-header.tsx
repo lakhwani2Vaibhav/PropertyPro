@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, FileText, Menu, MessageSquare, PieChart, Users, Building, Wrench, Building2, Wand2, Sprout } from 'lucide-react';
+import { Bell, FileText, Menu, MessageSquare, PieChart, Users, Building, Wrench, Building2, Wand2, Sprout, Heart, LayoutList } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -19,6 +19,8 @@ const navLinks = [
   { href: '/dashboard', label: 'Dashboard', icon: <PieChart className="h-4 w-4" /> },
   { href: '/dashboard/properties', label: 'Properties', icon: <Building className="h-4 w-4" /> },
   { href: '/dashboard/flats', label: 'Flats', icon: <Building2 className="h-4 w-4" /> },
+  { href: '/dashboard/listings', label: 'Listings', icon: <LayoutList className="h-4 w-4" /> },
+  { href: '/dashboard/interests', label: 'Interests', icon: <Heart className="h-4 w-4" /> },
   { href: '/dashboard/tenants', label: 'Tenants', icon: <Users className="h-4 w-4" /> },
   { href: '/dashboard/leases', label: 'Leases', icon: <FileText className="h-4 w-4" /> },
   { href: '/dashboard/messaging', label: 'Messaging', icon: <MessageSquare className="h-4 w-4" /> },
@@ -47,13 +49,13 @@ export default function DashboardHeader() {
           </div>
 
           <div className="flex items-center justify-center flex-1">
-             <nav className="hidden xl:flex items-center gap-2 text-sm font-medium bg-muted p-1 rounded-lg">
+             <nav className="hidden xl:flex items-center gap-1 text-sm font-medium bg-muted p-1 rounded-lg overflow-x-auto">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    'text-muted-foreground transition-colors hover:text-foreground px-3 py-1.5 rounded-md flex items-center gap-2',
+                    'text-muted-foreground transition-colors hover:text-foreground px-3 py-1.5 rounded-md flex items-center gap-2 whitespace-nowrap',
                      pathname === link.href ? 'text-foreground font-semibold bg-background shadow-sm' : ''
                   )}
                 >
