@@ -33,9 +33,8 @@ export function ListingCard({ property }: ListingCardProps) {
       <div className="relative flex-shrink-0">
         <Carousel 
           className="w-full"
-          // Disable carousel drag to allow page swipe gestures
           opts={{
-            watchDrag: false,
+            watchDrag: false, // Keep this disabled to let the parent handle swipes
           }}
         >
           <CarouselContent>
@@ -53,10 +52,12 @@ export function ListingCard({ property }: ListingCardProps) {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="left-4" />
-          <CarouselNext className="right-4" />
+          {/* This overlay captures swipe gestures over the image area */}
+          <div className="absolute inset-0 z-10" />
+          <CarouselPrevious className="left-4 z-20" />
+          <CarouselNext className="right-4 z-20" />
         </Carousel>
-        <Badge className="absolute bottom-3 left-3 capitalize" variant={property.availability === 'available' ? 'default' : 'secondary'}>
+        <Badge className="absolute bottom-3 left-3 capitalize z-20" variant={property.availability === 'available' ? 'default' : 'secondary'}>
           {property.availability}
         </Badge>
       </div>
