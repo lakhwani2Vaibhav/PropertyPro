@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -39,7 +40,7 @@ export function ListingCard({ property }: ListingCardProps) {
                   alt={`${property.title} image ${index + 1}`}
                   width={400}
                   height={300}
-                  className="w-full h-64 object-cover"
+                  className="w-full h-64 md:h-56 object-cover"
                   data-ai-hint="apartment interior"
                 />
               </CarouselItem>
