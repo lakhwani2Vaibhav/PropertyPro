@@ -95,10 +95,17 @@ export default function ListingsPage() {
   const animationVariants = {
     initial: { scale: 0.95, y: 20, opacity: 0 },
     animate: { scale: 1, y: 0, opacity: 1, transition: { duration: 0.3 } },
-    exit: { 
+    exit: (direction: number) => ({
+      x: direction < 0 ? -300 : 300,
       opacity: 0,
       scale: 0.8,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.3 }
+    }),
+    exitUp: {
+      y: -300,
+      opacity: 0,
+      scale: 0.8,
+      transition: { duration: 0.3 }
     }
   };
 
@@ -108,39 +115,35 @@ export default function ListingsPage() {
       <div className="relative w-full max-w-sm h-[65vh] md:h-[70vh] flex items-center justify-center">
         <AnimatePresence>
             {properties.length > 0 ? (
-                properties.map((property, index) => {
-                    if (index === activeIndex) {
-                        return (
-                            <motion.div
-                                key={property.id}
-                                drag
-                                dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-                                onDragEnd={onDragEnd}
-                                variants={animationVariants}
-                                initial="initial"
-                                animate="animate"
-                                exit="exit"
-                                className="absolute w-full h-full cursor-grab active:cursor-grabbing"
-                            >
-                                <ListingCard property={property} />
-                            </motion.div>
-                        );
-                    }
-                    // Render the card underneath for a stack effect, but don't make it interactive
-                    else if (index === activeIndex - 1) {
-                         return (
-                            <motion.div
-                                key={property.id}
-                                className="absolute w-full h-full"
-                                initial={{ scale: 0.8, y: 40, opacity: 0 }}
-                                animate={{ scale: 0.95, y: 20, opacity: 1, transition: { duration: 0.3 } }}
-                            >
-                                <ListingCard property={property} />
-                            </motion.div>
-                         )
-                    }
-                    return null;
-                })
+                <>
+                 {/* Underneath card for stack effect - not interactive */}
+                {properties.length > 1 && (
+                    <motion.div
+                        key={properties[activeIndex - 1].id}
+                        className="absolute w-full h-full"
+                        style={{
+                            transform: 'scale(0.95) translateY(20px)',
+                            zIndex: -1,
+                        }}
+                    >
+                        <ListingCard property={properties[activeIndex - 1]} />
+                    </motion.div>
+                )}
+                <motion.div
+                    key={currentProperty.id}
+                    drag
+                    dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+                    onDragEnd={onDragEnd}
+                    variants={animationVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    className="absolute w-full h-full cursor-grab active:cursor-grabbing"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                >
+                    <ListingCard property={currentProperty} />
+                </motion.div>
+              </>
             ) : (
                 <div className="text-center p-8 border-2 border-dashed rounded-lg">
                     <h2 className="text-2xl font-semibold">All Done!</h2>

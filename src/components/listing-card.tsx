@@ -12,7 +12,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { type SwipeableProperty } from '@/lib/mock-data';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
-import { IndianRupee, MapPin, Building, BedDouble, Bath, Square, Wifi, Refrigerator, WashingMachine } from 'lucide-react';
+import { IndianRupee, MapPin, BedDouble, Bath, Square, Wifi, Refrigerator, WashingMachine } from 'lucide-react';
 
 interface ListingCardProps {
   property: SwipeableProperty;
@@ -31,12 +31,7 @@ export function ListingCard({ property }: ListingCardProps) {
   return (
     <Card className="w-full h-full rounded-2xl shadow-2xl overflow-hidden flex flex-col">
       <div className="relative flex-shrink-0">
-        <Carousel 
-          className="w-full"
-          opts={{
-            watchDrag: false, // Keep this disabled to let the parent handle swipes
-          }}
-        >
+        <Carousel className="w-full">
           <CarouselContent>
             {property.images.map((img, index) => (
               <CarouselItem key={index}>
@@ -45,15 +40,14 @@ export function ListingCard({ property }: ListingCardProps) {
                   alt={`${property.title} image ${index + 1}`}
                   width={400}
                   height={300}
-                  className="w-full h-64 md:h-56 object-cover pointer-events-none"
+                  className="w-full h-64 md:h-56 object-cover"
                   data-ai-hint="apartment interior"
+                  priority={index === 0} // Prioritize loading the first image
                   draggable={false}
                 />
               </CarouselItem>
             ))}
           </CarouselContent>
-          {/* This overlay captures swipe gestures over the image area */}
-          <div className="absolute inset-0 z-10" />
           <CarouselPrevious className="left-4 z-20" />
           <CarouselNext className="right-4 z-20" />
         </Carousel>
