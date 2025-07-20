@@ -95,12 +95,21 @@ export default {
           '0%': { transform: 'translateY(-100%)' },
           '100%': { transform: 'translateY(0)' },
         },
+        orbit: {
+          '0%': {
+            transform: 'rotate(0deg) translateX(36px) rotate(0deg)',
+          },
+          '100%': {
+            transform: 'rotate(360deg) translateX(36px) rotate(-360deg)',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'marquee-up': 'marquee-up 60s linear infinite',
         'marquee-down': 'marquee-down 60s linear infinite',
+        orbit: 'orbit 2s linear infinite',
       },
     },
   },

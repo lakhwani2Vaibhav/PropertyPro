@@ -197,6 +197,22 @@ export function VoiceAssistant({ onNotTalkerClick }: VoiceAssistantProps) {
               </AnimatePresence>
               <div className="absolute inset-0 rounded-full" style={{background: 'radial-gradient(circle, rgba(255,116,97,0.8) 0%, rgba(255,116,97,0) 70%)'}}></div>
               <Mic className="h-7 w-7 z-10" />
+               {/* Flame/Particle Animation */}
+               <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.1s'}}>
+                  <div className="absolute top-0 left-1/2 w-1.5 h-1.5 bg-orange-400 rounded-full" />
+              </div>
+               <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.2s'}}>
+                  <div className="absolute top-0 left-1/2 w-1.5 h-1.5 bg-amber-400 rounded-full" />
+              </div>
+               <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.3s'}}>
+                  <div className="absolute top-0 left-1/2 w-2 h-2 bg-rose-500 rounded-full" />
+              </div>
+               <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.4s'}}>
+                  <div className="absolute top-0 left-1/2 w-1 h-1 bg-violet-400 rounded-full" />
+              </div>
+               <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.5s'}}>
+                  <div className="absolute top-0 left-1/2 w-1.5 h-1.5 bg-orange-500 rounded-full" />
+              </div>
             </button>
           </div>
         </div>
