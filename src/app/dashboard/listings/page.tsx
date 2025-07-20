@@ -85,7 +85,7 @@ export default function ListingsPage() {
     } else {
       // Horizontal swipe gesture
       if (horizontalSwipe < -SWIPE_CONFIDENCE_THRESHOLD || offset.x < -SWIPE_OFFSET_THRESHOLD) {
-        handleAction('pass');
+        goBack();
       } else if (horizontalSwipe > SWIPE_CONFIDENCE_THRESHOLD || offset.x > SWIPE_OFFSET_THRESHOLD) {
         handleAction('interested'); 
       }
@@ -161,15 +161,15 @@ export default function ListingsPage() {
                 <Button 
                     variant="outline" 
                     size="icon" 
-                    className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
-                    onClick={() => handleAction('pass')}
+                    className="absolute left-0 top-1/2 -translate-x-[150%] -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
+                    onClick={() => goBack()}
                 >
                     <ArrowLeft className="h-6 w-6" />
                 </Button>
                  <Button 
                     variant="outline" 
                     size="icon" 
-                    className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
+                    className="absolute right-0 top-1/2 translate-x-[150%] -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
                     onClick={() => handleAction('interested')}
                 >
                     <ArrowRight className="h-6 w-6" />
@@ -184,7 +184,7 @@ export default function ListingsPage() {
                     variant="outline" 
                     size="icon" 
                     className="h-16 w-16 rounded-full border-4 border-gray-300 bg-background shadow-lg hover:bg-destructive/10 text-destructive"
-                    onClick={() => handleAction('pass')}
+                    onClick={() => goBack()}
                     disabled={!currentProperty}
                 >
                 <X className="h-8 w-8" />
