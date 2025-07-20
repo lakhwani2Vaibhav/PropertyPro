@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -315,7 +316,7 @@ export function AiAssistantWidget() {
         <Button
           onClick={() => setIsOpen(true)}
           className={cn(
-            'bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-auto py-3 px-5 shadow-lg flex items-center gap-3 transition-all duration-300',
+            'bg-primary hover:bg-primary/90 text-primary-foreground rounded-full h-16 w-16 md:h-auto md:w-auto md:py-3 md:px-5 shadow-lg flex items-center gap-3 transition-all duration-300',
             isOpen
               ? 'opacity-0 -translate-y-2 pointer-events-none'
               : 'opacity-100 translate-y-0 pointer-events-auto'
@@ -328,11 +329,11 @@ export function AiAssistantWidget() {
               <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
             </span>
           </div>
-          <div className="text-left">
+          <div className="text-left hidden md:block">
             <p className="font-bold">AI Rental Assistant</p>
             <p className="text-xs opacity-80">Online now</p>
           </div>
-          <Sparkles className="h-5 w-5 opacity-90" />
+          <Sparkles className="h-5 w-5 opacity-90 hidden md:block" />
         </Button>
       </div>
     </div>
