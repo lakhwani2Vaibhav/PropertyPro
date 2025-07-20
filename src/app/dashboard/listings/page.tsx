@@ -111,7 +111,7 @@ export default function ListingsPage() {
 
 
   return (
-    <div className="flex flex-col h-full items-center justify-center p-4 gap-8">
+    <div className="flex flex-col h-full items-center justify-center p-4 gap-4 md:gap-8">
       <div className="relative w-full max-w-sm h-[65vh] md:h-[70vh] flex items-center justify-center">
         <AnimatePresence>
             {properties.length > 0 ? (
@@ -156,12 +156,12 @@ export default function ListingsPage() {
             )}
         </AnimatePresence>
 
-        {isClient && !isMobile && currentProperty && (
+        {isClient && currentProperty && (
             <>
                 <Button 
                     variant="outline" 
                     size="icon" 
-                    className="absolute left-0 top-1/2 -translate-x-[150%] -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
+                    className="absolute left-0 top-1/2 -translate-x-[50%] md:-translate-x-[150%] -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
                     onClick={() => goBack()}
                 >
                     <ArrowLeft className="h-6 w-6" />
@@ -169,7 +169,7 @@ export default function ListingsPage() {
                  <Button 
                     variant="outline" 
                     size="icon" 
-                    className="absolute right-0 top-1/2 translate-x-[150%] -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
+                    className="absolute right-0 top-1/2 translate-x-[50%] md:translate-x-[150%] -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
                     onClick={() => handleAction('interested')}
                 >
                     <ArrowRight className="h-6 w-6" />
@@ -177,7 +177,7 @@ export default function ListingsPage() {
             </>
         )}
       </div>
-      {isClient && !isMobile && (
+      {isClient && (
         <>
             <div className="flex items-center justify-center gap-4">
                 <Button 
@@ -214,12 +214,6 @@ export default function ListingsPage() {
             </Button>
         </>
       )}
-       {isClient && isMobile && (
-         <Button onClick={goBack} variant="ghost" disabled={history.length === 0}>
-            <Undo2 className="mr-2 h-4 w-4"/>
-            Undo Last Swipe
-        </Button>
-       )}
     </div>
   );
 }
