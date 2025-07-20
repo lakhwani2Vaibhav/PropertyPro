@@ -5,7 +5,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { swipeableProperties, type SwipeableProperty } from '@/lib/mock-data';
 import { ListingCard } from '@/components/listing-card';
 import { Button } from '@/components/ui/button';
-import { Undo2, Heart, X, Check, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Undo2, Heart, X, Check, ArrowLeft, ArrowRight, ArrowUp, MoveLeft, MoveRight, MoveUp } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { AnimatePresence, motion, PanInfo } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -87,7 +87,7 @@ export default function ListingsPage() {
       if (horizontalSwipe < -SWIPE_CONFIDENCE_THRESHOLD || offset.x < -SWIPE_OFFSET_THRESHOLD) {
         goBack();
       } else if (horizontalSwipe > SWIPE_CONFIDENCE_THRESHOLD || offset.x > SWIPE_OFFSET_THRESHOLD) {
-        handleAction('interested'); 
+        handleAction('pass'); 
       }
     }
   };
@@ -178,7 +178,7 @@ export default function ListingsPage() {
         )}
       </div>
       {isClient && (
-        <>
+        <div className="flex flex-col items-center gap-4">
             <div className="flex items-center justify-center gap-4">
                 <Button 
                     variant="outline" 
@@ -208,11 +208,27 @@ export default function ListingsPage() {
                 <Check className="h-8 w-8" />
                 </Button>
             </div>
-            <Button onClick={goBack} variant="ghost" disabled={history.length === 0}>
+
+            <Button onClick={goBack} variant="ghost" disabled={history.length === 0} className="mt-2">
                 <Undo2 className="mr-2 h-4 w-4"/>
                 Undo Last Action
             </Button>
-        </>
+            
+            <div className="hidden md:flex items-center justify-center gap-6 text-muted-foreground text-sm mt-4 border-t pt-4 w-full max-w-md">
+              <div className="flex items-center gap-2">
+                <MoveLeft className="h-5 w-5" />
+                <span>Back</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MoveUp className="h-5 w-5" />
+                <span>Save</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MoveRight className="h-5 w-5" />
+                <span>Next</span>
+              </div>
+            </div>
+        </div>
       )}
     </div>
   );
