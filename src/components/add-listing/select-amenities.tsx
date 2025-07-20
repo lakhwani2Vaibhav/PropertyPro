@@ -7,17 +7,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
-import { AirVent, Car, Dumbbell, ParkingSquare, Refrigerator, Tv, WashingMachine, Wifi } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const amenities = [
-  { name: 'Wi-Fi', icon: <Wifi /> },
-  { name: 'TV', icon: <Tv /> },
-  { name: 'Refrigerator', icon: <Refrigerator /> },
-  { name: 'Washing Machine', icon: <WashingMachine /> },
-  { name: 'Air Conditioner', icon: <AirVent /> },
-  { name: 'Gym', icon: <Dumbbell /> },
-  { name: 'Parking', icon: <Car /> },
+const roomAmenities = [
+  'Cot', 'Mattress', 'Wardrobe', 'Working desk', 'Air Conditioner', 'Dedicated Bathroom'
 ];
+
+const flatAmenities = [
+  'Washing Machine', 'Microwave', 'Refrigerator', 'Wi-Fi', 'TV', 'Sofa'
+];
+
+const societyAmenities = [
+  'Covered Parking', 'Clubhouse', 'Gym', 'Lift', 'Swimming Pool', 'Security'
+];
+
 
 export function SelectAmenities() {
   const router = useRouter();
@@ -34,6 +37,25 @@ export function SelectAmenities() {
   const handleContinue = () => {
     router.push('/dashboard/add-listing/photos');
   };
+  
+  const renderAmenityButtons = (amenities: string[]) => (
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+      {amenities.map((amenity) => (
+        <button
+          key={amenity}
+          className={cn(
+            'p-3 border rounded-lg transition-all text-center font-medium',
+            selectedAmenities.includes(amenity)
+              ? 'border-primary bg-primary/10 text-primary'
+              : 'border-border hover:border-foreground/50'
+          )}
+          onClick={() => toggleAmenity(amenity)}
+        >
+          {amenity}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <Card className="w-full max-w-2xl">
@@ -43,23 +65,24 @@ export function SelectAmenities() {
         <CardDescription>You can add more amenities after you publish.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {amenities.map((amenity) => (
-            <button
-              key={amenity.name}
-              className={cn(
-                'p-4 border-2 rounded-lg flex flex-col items-start gap-2 transition-all h-28',
-                selectedAmenities.includes(amenity.name)
-                  ? 'border-primary bg-primary/10'
-                  : 'border-border hover:border-primary/50'
-              )}
-              onClick={() => toggleAmenity(amenity.name)}
-            >
-              <div className="h-8 w-8">{amenity.icon}</div>
-              <span className="font-semibold">{amenity.name}</span>
-            </button>
-          ))}
-        </div>
+        
+        <Tabs defaultValue="room" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="room">Room</TabsTrigger>
+            <TabsTrigger value="flat">Flat</TabsTrigger>
+            <TabsTrigger value="society">Society</TabsTrigger>
+          </TabsList>
+          <TabsContent value="room" className="mt-6">
+            {renderAmenityButtons(roomAmenities)}
+          </TabsContent>
+          <TabsContent value="flat" className="mt-6">
+            {renderAmenityButtons(flatAmenities)}
+          </TabsContent>
+          <TabsContent value="society" className="mt-6">
+            {renderAmenityButtons(societyAmenities)}
+          </TabsContent>
+        </Tabs>
+
         <div className="flex justify-between items-center pt-4">
           <Button variant="ghost" onClick={() => router.back()}>Back</Button>
           <Button onClick={handleContinue}>Continue</Button>
