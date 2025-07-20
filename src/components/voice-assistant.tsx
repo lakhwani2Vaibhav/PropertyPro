@@ -172,8 +172,8 @@ export function VoiceAssistant({ onNotTalkerClick }: VoiceAssistantProps) {
           Find a room in a flat, vibe with flatmates, and experience AI-powered renting.
         </p>
 
-        <div className="mt-8 relative max-w-md mx-auto p-1.5 rounded-full bg-background/80 backdrop-blur-sm border-2 border-transparent"
-             style={{ background: 'linear-gradient(white, white) padding-box, linear-gradient(90deg, rgba(167, 139, 250, 1) 0%, rgba(236, 72, 153, 1) 50%, rgba(249, 158, 11, 1) 100%) border-box' }}>
+        <div className="mt-8 relative max-w-md mx-auto p-1.5 rounded-full bg-background/80 backdrop-blur-sm border-2 border-transparent transition-all hover:border-primary/20"
+             style={{ background: 'linear-gradient(white, white) padding-box, linear-gradient(90deg, rgba(167, 139, 250, 0.5) 0%, rgba(236, 72, 153, 0.5) 50%, rgba(249, 158, 11, 0.5) 100%) border-box' }}>
           <div className="flex items-center justify-between bg-white dark:bg-slate-900 rounded-full">
             <span className={cn(
                 "ml-6 font-semibold tracking-wider transition-colors",
@@ -199,19 +199,19 @@ export function VoiceAssistant({ onNotTalkerClick }: VoiceAssistantProps) {
               <Mic className="h-7 w-7 z-10" />
                {/* Flame/Particle Animation */}
                <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.1s'}}>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[28px] w-1.5 h-1.5 bg-yellow-300 rounded-full" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-yellow-300 rounded-full" style={{ transform: 'translateY(-28px)' }} />
               </div>
                <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.2s'}}>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[28px] w-1.5 h-1.5 bg-amber-300 rounded-full" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-amber-300 rounded-full" style={{ transform: 'translateY(-28px)' }} />
               </div>
                <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.3s'}}>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[28px] w-2 h-2 bg-yellow-400 rounded-full" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-yellow-400 rounded-full" style={{ transform: 'translateY(-28px)' }} />
               </div>
                <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.4s'}}>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[28px] w-1 h-1 bg-orange-300 rounded-full" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-orange-300 rounded-full" style={{ transform: 'translateY(-28px)' }} />
               </div>
                <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.5s'}}>
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[28px] w-1.5 h-1.5 bg-amber-200 rounded-full" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-amber-200 rounded-full" style={{ transform: 'translateY(-28px)' }} />
               </div>
             </button>
           </div>
