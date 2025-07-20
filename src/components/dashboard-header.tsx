@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, FileText, Menu, MessageSquare, PieChart, Users, Building, Wrench, Building2, Wand2, Sprout, Heart, LayoutList, ChevronDown } from 'lucide-react';
+import { Bell, FileText, Menu, MessageSquare, PieChart, Users, Building, Wrench, Building2, Wand2, Sprout, Heart, LayoutList, ChevronDown, Settings } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -22,20 +22,32 @@ import {
 import { notifications } from '@/lib/mock-data';
 import { ModeToggle } from './mode-toggle';
 
-const navLinks = [
+const mainNavLinks = [
   { href: '/dashboard', label: 'Dashboard', icon: <PieChart className="h-4 w-4" /> },
   { href: '/dashboard/properties', label: 'Properties', icon: <Building className="h-4 w-4" /> },
   { href: '/dashboard/flats', label: 'Flats', icon: <Building2 className="h-4 w-4" /> },
   { href: '/dashboard/listings', label: 'Listings', icon: <LayoutList className="h-4 w-4" /> },
   { href: '/dashboard/interests', label: 'Interests', icon: <Heart className="h-4 w-4" /> },
-  { href: '/dashboard/tenants', label: 'Tenants', icon: <Users className="h-4 w-4" /> },
-  { href: '/dashboard/leases', label: 'Leases', icon: <FileText className="h-4 w-4" /> },
-  { href: '/dashboard/messaging', label: 'Messaging', icon: <MessageSquare className="h-4 w-4" /> },
   { href: '/dashboard/maintenance', label: 'Maintenance', icon: <Wrench className="h-4 w-4" /> },
+];
+
+const managementLinks = [
+    { href: '/dashboard/tenants', label: 'Tenants', icon: <Users className="h-4 w-4" /> },
+    { href: '/dashboard/leases', label: 'Leases', icon: <FileText className="h-4 w-4" /> },
+    { href: '/dashboard/messaging', label: 'Messaging', icon: <MessageSquare className="h-4 w-4" /> },
+];
+
+const aiLinks = [
+    { href: '/dashboard/reports', label: 'Reports', icon: <PieChart className="h-4 w-4" /> },
+    { href: '/dashboard/rent-suggestion', label: 'Rent Suggestion', icon: <Wand2 className="h-4 w-4" /> },
 ];
 
 export default function DashboardHeader() {
   const pathname = usePathname();
+
+  const isManagementActive = managementLinks.some(link => pathname.startsWith(link.href));
+  const isAiActive = aiLinks.some(link => pathname.startsWith(link.href));
+
 
   return (
     <header className="bg-card/60 backdrop-blur-lg sticky top-0 z-40 border-b">
@@ -52,7 +64,7 @@ export default function DashboardHeader() {
 
           <div className="flex items-center justify-center flex-1">
              <nav className="hidden xl:flex items-center gap-1 text-sm font-medium bg-muted p-1 rounded-lg overflow-x-auto">
-              {navLinks.map((link) => (
+              {mainNavLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -67,25 +79,48 @@ export default function DashboardHeader() {
                <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant={pathname.startsWith('/dashboard/reports') || pathname.startsWith('/dashboard/rent-suggestion') ? 'default' : 'ghost'}
-                    className={cn('text-muted-foreground transition-colors hover:text-foreground px-3 py-1.5 rounded-md flex items-center gap-2 whitespace-nowrap',
-                     pathname.startsWith('/dashboard/reports') || pathname.startsWith('/dashboard/rent-suggestion') ? 'text-foreground font-semibold bg-background shadow-sm' : 'data-[state=open]:bg-accent'
+                    variant="ghost"
+                    className={cn(
+                        'text-muted-foreground transition-colors hover:text-foreground px-3 py-1.5 rounded-md flex items-center gap-2 whitespace-nowrap data-[state=open]:bg-accent',
+                        isManagementActive && 'text-foreground font-semibold bg-background shadow-sm'
                     )}
                   >
+                    <Settings className="h-4 w-4" />
+                    Management <ChevronDown className="h-4 w-4 ml-1" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {managementLinks.map((link) => (
+                     <DropdownMenuItem asChild key={link.href}>
+                        <Link href={link.href} className="flex items-center gap-2">
+                           {link.icon} {link.label}
+                        </Link>
+                     </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+               <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant={'ghost'}
+                    className={cn(
+                        'text-muted-foreground transition-colors hover:text-foreground px-3 py-1.5 rounded-md flex items-center gap-2 whitespace-nowrap data-[state=open]:bg-accent',
+                        isAiActive && 'text-foreground font-semibold bg-background shadow-sm'
+                    )}
+                  >
+                    <Wand2 className="h-4 w-4" />
                     AI Tools <ChevronDown className="h-4 w-4 ml-1" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard/reports" className="flex items-center gap-2">
-                       <PieChart className="h-4 w-4" /> Reports
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                     <Link href="/dashboard/rent-suggestion" className="flex items-center gap-2">
-                        <Wand2 className="h-4 w-4" /> Rent Suggestion
-                    </Link>
-                  </DropdownMenuItem>
+                  {aiLinks.map((link) => (
+                     <DropdownMenuItem asChild key={link.href}>
+                        <Link href={link.href} className="flex items-center gap-2">
+                           {link.icon} {link.label}
+                        </Link>
+                     </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </nav>
@@ -151,7 +186,7 @@ export default function DashboardHeader() {
                         <span className="font-bold text-xl text-foreground">PropertyPro</span>
                     </Link>
                     <nav className="flex flex-col gap-2">
-                      {navLinks.map((link) => (
+                      {[...mainNavLinks, ...managementLinks].map((link) => (
                           <SheetClose asChild key={link.href}>
                           <Link
                               href={link.href}
@@ -167,16 +202,13 @@ export default function DashboardHeader() {
                       ))}
                       {/* Mobile AI Tools Links */}
                       <div className="border-t pt-2 mt-2">
-                         <SheetClose asChild>
-                           <Link href="/dashboard/reports" className={cn('flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary', pathname === '/dashboard/reports' ? 'bg-muted text-primary font-semibold' : '')}>
-                              <PieChart className="h-4 w-4" /> Reports
-                           </Link>
-                         </SheetClose>
-                         <SheetClose asChild>
-                           <Link href="/dashboard/rent-suggestion" className={cn('flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary', pathname === '/dashboard/rent-suggestion' ? 'bg-muted text-primary font-semibold' : '')}>
-                              <Wand2 className="h-4 w-4" /> Rent Suggestion
-                           </Link>
-                         </SheetClose>
+                        {aiLinks.map((link) => (
+                            <SheetClose asChild key={link.href}>
+                               <Link href={link.href} className={cn('flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary', pathname === link.href ? 'bg-muted text-primary font-semibold' : '')}>
+                                  {link.icon} {link.label}
+                               </Link>
+                             </SheetClose>
+                        ))}
                       </div>
                     </nav>
                 </SheetContent>
