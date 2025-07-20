@@ -13,9 +13,8 @@ export function AddLocationForm() {
 
   const handleContinue = () => {
     // In a real app, you would save the location and then navigate.
-    // For now, we'll navigate to the next step (which we'll create later).
-    // Let's assume the next page is for property type.
-    router.push('/dashboard/add-listing/property-type'); 
+    // For now, we'll navigate to the listings page as a placeholder for the next step.
+    router.push('/dashboard/listings'); 
   };
 
   return (
