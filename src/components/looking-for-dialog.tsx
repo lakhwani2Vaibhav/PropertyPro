@@ -29,7 +29,7 @@ export function LookingForDialog({ open, onOpenChange }: LookingForDialogProps) 
     if (selection === 'flat') {
       router.push('/dashboard/listings');
     } else if (selection === 'flatmates') {
-      router.push('/dashboard/properties');
+      router.push('/dashboard/properties/add');
     }
   };
 
