@@ -31,7 +31,7 @@ export function ListingCard({ property }: ListingCardProps) {
   return (
     <Card className="w-full h-full rounded-2xl shadow-2xl overflow-hidden flex flex-col">
       <div className="relative flex-shrink-0">
-        <Carousel className="w-full">
+        <Carousel className="w-full" opts={{ loop: true }}>
           <CarouselContent>
             {property.images.map((img, index) => (
               <CarouselItem key={index}>
@@ -48,10 +48,10 @@ export function ListingCard({ property }: ListingCardProps) {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="left-4 z-20" />
-          <CarouselNext className="right-4 z-20" />
+          <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/30 text-white border-none hover:bg-black/50 hover:text-white" />
+          <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/30 text-white border-none hover:bg-black/50 hover:text-white" />
         </Carousel>
-        <Badge className="absolute bottom-3 left-3 capitalize z-20" variant={property.availability === 'available' ? 'default' : 'secondary'}>
+        <Badge className="absolute bottom-3 left-3 capitalize z-10" variant={property.availability === 'available' ? 'default' : 'secondary'}>
           {property.availability}
         </Badge>
       </div>
