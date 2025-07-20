@@ -6,15 +6,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { Progress } from '@/components/ui/progress';
 
-export function AddLocationForm() {
-  const router = useRouter();
+interface AddLocationFormProps {
+  onContinue: () => void;
+}
 
+export function AddLocationForm({ onContinue }: AddLocationFormProps) {
   const handleContinue = () => {
     // In a real app, you would save the location and then navigate.
-    router.push('/dashboard/add-listing/property-type'); 
+    onContinue(); 
   };
 
   return (

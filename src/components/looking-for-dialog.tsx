@@ -13,23 +13,22 @@ import {
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+
+type Selection = 'flat' | 'flatmates';
 
 interface LookingForDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onContinue: (selection: Selection) => void;
 }
 
-export function LookingForDialog({ open, onOpenChange }: LookingForDialogProps) {
-  const [selection, setSelection] = useState<'flat' | 'flatmates' | null>(null);
-  const router = useRouter();
+export function LookingForDialog({ open, onOpenChange, onContinue }: LookingForDialogProps) {
+  const [selection, setSelection] = useState<Selection | null>(null);
 
   const handleContinue = () => {
-    if (selection === 'flat') {
-      router.push('/dashboard/add-listing/location');
-    } else if (selection === 'flatmates') {
-      router.push('/dashboard/properties/add');
+    if (selection) {
+      onContinue(selection);
+      onOpenChange(false); // Close the dialog
     }
   };
 

@@ -4,7 +4,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { BedDouble, Users, DoorClosed } from 'lucide-react';
@@ -15,13 +14,17 @@ const roomTypes = [
   { name: 'Shared room', description: 'Tenants sleep in a room or common area that may be shared with you or others', icon: <Users className="h-6 w-6" /> },
 ];
 
-export function SelectRoomType() {
-  const router = useRouter();
+interface SelectRoomTypeProps {
+  onContinue: () => void;
+  onBack: () => void;
+}
+
+export function SelectRoomType({ onContinue, onBack }: SelectRoomTypeProps) {
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
   const handleContinue = () => {
     if (selectedType) {
-      router.push('/dashboard/add-listing/amenities');
+      onContinue();
     }
   };
 
@@ -55,7 +58,7 @@ export function SelectRoomType() {
           ))}
         </div>
         <div className="flex justify-between items-center pt-4">
-            <Button variant="ghost" onClick={() => router.back()}>Back</Button>
+            <Button variant="ghost" onClick={onBack}>Back</Button>
             <Button onClick={handleContinue} disabled={!selectedType}>
             Continue
             </Button>

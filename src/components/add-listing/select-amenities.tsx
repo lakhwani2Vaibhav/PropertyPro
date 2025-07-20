@@ -4,7 +4,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -21,9 +20,12 @@ const societyAmenities = [
   'Covered Parking', 'Clubhouse', 'Gym', 'Lift', 'Swimming Pool', 'Security'
 ];
 
+interface SelectAmenitiesProps {
+  onContinue: () => void;
+  onBack: () => void;
+}
 
-export function SelectAmenities() {
-  const router = useRouter();
+export function SelectAmenities({ onContinue, onBack }: SelectAmenitiesProps) {
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
 
   const toggleAmenity = (amenityName: string) => {
@@ -32,10 +34,6 @@ export function SelectAmenities() {
         ? prev.filter((a) => a !== amenityName)
         : [...prev, amenityName]
     );
-  };
-
-  const handleContinue = () => {
-    router.push('/dashboard/add-listing/photos');
   };
   
   const renderAmenityButtons = (amenities: string[]) => (
@@ -84,8 +82,8 @@ export function SelectAmenities() {
         </Tabs>
 
         <div className="flex justify-between items-center pt-4">
-          <Button variant="ghost" onClick={() => router.back()}>Back</Button>
-          <Button onClick={handleContinue}>Continue</Button>
+          <Button variant="ghost" onClick={onBack}>Back</Button>
+          <Button onClick={onContinue}>Continue</Button>
         </div>
       </CardContent>
     </Card>

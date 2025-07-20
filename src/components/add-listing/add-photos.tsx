@@ -6,13 +6,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useRouter } from 'next/navigation';
 import { Progress } from '@/components/ui/progress';
-import { UploadCloud, Plus } from 'lucide-react';
+import { UploadCloud } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-export function AddPhotos() {
-  const router = useRouter();
+interface AddPhotosProps {
+  onFinish: () => void;
+  onBack: () => void;
+}
+
+export function AddPhotos({ onFinish, onBack }: AddPhotosProps) {
   const { toast } = useToast();
 
   const handleFinish = () => {
@@ -20,7 +23,7 @@ export function AddPhotos() {
         title: "Listing Created!",
         description: "Your property is now ready for tenants to view."
     })
-    router.push('/dashboard/listings');
+    onFinish();
   };
 
   return (
@@ -65,7 +68,7 @@ export function AddPhotos() {
         </div>
         
         <div className="flex justify-between items-center pt-4">
-          <Button variant="ghost" onClick={() => router.back()}>Back</Button>
+          <Button variant="ghost" onClick={onBack}>Back</Button>
           <Button onClick={handleFinish}>Finish</Button>
         </div>
       </CardContent>

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -85,9 +86,9 @@ export default function ListingsPage() {
     } else {
       // Horizontal swipe gesture
       if (horizontalSwipe < -SWIPE_CONFIDENCE_THRESHOLD || offset.x < -SWIPE_OFFSET_THRESHOLD) {
-        goBack();
+        handleAction('pass');
       } else if (horizontalSwipe > SWIPE_CONFIDENCE_THRESHOLD || offset.x > SWIPE_OFFSET_THRESHOLD) {
-        handleAction('pass'); 
+        handleAction('interested'); 
       }
     }
   };
@@ -111,7 +112,7 @@ export default function ListingsPage() {
 
 
   return (
-    <div className="flex flex-col h-full items-center justify-center p-4 gap-4 md:gap-8">
+    <div className="flex flex-col h-full items-center justify-center p-4 gap-4 md:gap-8 min-h-screen">
       <div className="relative w-full max-w-sm h-[65vh] md:h-[70vh] flex items-center justify-center">
         <AnimatePresence>
             {properties.length > 0 ? (
@@ -145,7 +146,7 @@ export default function ListingsPage() {
                     );
                 })
             ) : (
-                <div className="text-center p-8 border-2 border-dashed rounded-lg">
+                <div className="text-center p-8 border-2 border-dashed rounded-lg bg-card text-card-foreground">
                     <h2 className="text-2xl font-semibold">All Done!</h2>
                     <p className="text-muted-foreground mt-2">You've seen all the available listings.</p>
                     <Button onClick={goBack} disabled={history.length === 0} className="mt-4">
@@ -162,7 +163,7 @@ export default function ListingsPage() {
                     variant="outline" 
                     size="icon" 
                     className="absolute left-0 top-1/2 -translate-x-[50%] md:-translate-x-[150%] -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
-                    onClick={() => goBack()}
+                    onClick={() => handleAction('pass')}
                 >
                     <ArrowLeft className="h-6 w-6" />
                 </Button>
@@ -170,7 +171,7 @@ export default function ListingsPage() {
                     variant="outline" 
                     size="icon" 
                     className="absolute right-0 top-1/2 translate-x-[50%] md:translate-x-[150%] -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
-                    onClick={() => handleAction('pass')}
+                    onClick={() => handleAction('interested')}
                 >
                     <ArrowRight className="h-6 w-6" />
                 </Button>
@@ -178,12 +179,12 @@ export default function ListingsPage() {
         )}
       </div>
       {isClient && (
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-4 text-card-foreground">
             <div className="flex items-center justify-center gap-4">
                 <Button 
                     variant="outline" 
                     size="icon" 
-                    className="h-16 w-16 rounded-full border-4 border-gray-300 bg-background shadow-lg hover:bg-destructive/10 text-destructive"
+                    className="h-16 w-16 rounded-full border-4 border-gray-300 bg-card shadow-lg hover:bg-destructive/10 text-destructive"
                     onClick={() => handleAction('pass')}
                     disabled={!currentProperty}
                 >
@@ -192,7 +193,7 @@ export default function ListingsPage() {
                 <Button 
                     variant="outline" 
                     size="icon" 
-                    className="h-20 w-20 rounded-full border-4 border-blue-400 bg-background shadow-lg hover:bg-blue-500/10 text-blue-500"
+                    className="h-20 w-20 rounded-full border-4 border-blue-400 bg-card shadow-lg hover:bg-blue-500/10 text-blue-500"
                     onClick={() => handleAction('save')}
                     disabled={!currentProperty}
                 >
@@ -201,7 +202,7 @@ export default function ListingsPage() {
                 <Button 
                     variant="outline" 
                     size="icon" 
-                    className="h-16 w-16 rounded-full border-4 border-primary/50 bg-background shadow-lg hover:bg-primary/10 text-primary"
+                    className="h-16 w-16 rounded-full border-4 border-primary/50 bg-card shadow-lg hover:bg-primary/10 text-primary"
                     onClick={() => handleAction('interested')}
                     disabled={!currentProperty}
                 >
@@ -209,15 +210,15 @@ export default function ListingsPage() {
                 </Button>
             </div>
 
-            <Button onClick={goBack} variant="ghost" disabled={history.length === 0} className="mt-2">
+            <Button onClick={goBack} variant="ghost" disabled={history.length === 0} className="mt-2 text-card-foreground hover:bg-accent hover:text-accent-foreground">
                 <Undo2 className="mr-2 h-4 w-4"/>
                 Undo Last Action
             </Button>
             
-            <div className="hidden md:flex items-center justify-center gap-6 text-muted-foreground text-sm mt-4 border-t pt-4 w-full max-w-md">
+            <div className="flex items-center justify-center gap-6 text-muted-foreground text-sm mt-4 border-t pt-4 w-full max-w-md">
               <div className="flex items-center gap-2">
                 <MoveLeft className="h-5 w-5" />
-                <span>Back</span>
+                <span>Pass</span>
               </div>
               <div className="flex items-center gap-2">
                 <MoveUp className="h-5 w-5" />
@@ -225,7 +226,7 @@ export default function ListingsPage() {
               </div>
               <div className="flex items-center gap-2">
                 <MoveRight className="h-5 w-5" />
-                <span>Next</span>
+                <span>Interested</span>
               </div>
             </div>
         </div>

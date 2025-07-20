@@ -4,7 +4,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { Building, Home } from 'lucide-react';
@@ -14,13 +13,17 @@ const propertyTypes = [
   { name: 'Independent House/Villa', icon: <Home className="h-8 w-8" /> },
 ];
 
-export function SelectPropertyType() {
-  const router = useRouter();
+interface SelectPropertyTypeProps {
+  onContinue: () => void;
+  onBack: () => void;
+}
+
+export function SelectPropertyType({ onContinue, onBack }: SelectPropertyTypeProps) {
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
   const handleContinue = () => {
     if (selectedType) {
-      router.push('/dashboard/add-listing/room-type');
+      onContinue();
     }
   };
 
@@ -50,7 +53,7 @@ export function SelectPropertyType() {
           ))}
         </div>
         <div className="flex justify-between items-center">
-            <Button variant="ghost" onClick={() => router.back()}>Back</Button>
+            <Button variant="ghost" onClick={onBack}>Back</Button>
             <Button onClick={handleContinue} disabled={!selectedType}>
             Continue
             </Button>
