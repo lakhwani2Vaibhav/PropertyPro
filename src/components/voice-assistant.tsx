@@ -184,7 +184,7 @@ export function VoiceAssistant({ onNotTalkerClick }: VoiceAssistantProps) {
             <button
               onClick={handleMicClick}
               disabled={status === 'preparing' || status === 'thinking' || status === 'speaking'}
-              className="relative flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground disabled:opacity-70 disabled:cursor-not-allowed animate-[float_4s_ease-in-out_infinite]"
+              className="relative flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground disabled:opacity-70 disabled:cursor-not-allowed animate-float"
             >
               <AnimatePresence>
                 {status === 'listening' && (
@@ -199,19 +199,19 @@ export function VoiceAssistant({ onNotTalkerClick }: VoiceAssistantProps) {
               <Mic className="h-7 w-7 z-10" />
                {/* Flame/Particle Animation */}
                <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.1s'}}>
-                  <div className="absolute top-1/2 left-1/2 -translate-y-8 w-1.5 h-1.5 bg-orange-400 rounded-full" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[28px] w-1.5 h-1.5 bg-yellow-300 rounded-full" />
               </div>
                <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.2s'}}>
-                  <div className="absolute top-1/2 left-1/2 -translate-y-8 w-1.5 h-1.5 bg-amber-400 rounded-full" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[28px] w-1.5 h-1.5 bg-amber-300 rounded-full" />
               </div>
                <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.3s'}}>
-                  <div className="absolute top-1/2 left-1/2 -translate-y-8 w-2 h-2 bg-rose-500 rounded-full" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[28px] w-2 h-2 bg-yellow-400 rounded-full" />
               </div>
                <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.4s'}}>
-                  <div className="absolute top-1/2 left-1/2 -translate-y-8 w-1 h-1 bg-violet-400 rounded-full" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[28px] w-1 h-1 bg-orange-300 rounded-full" />
               </div>
                <div className="absolute inset-0 animate-orbit" style={{animationDelay: '-0.5s'}}>
-                  <div className="absolute top-1/2 left-1/2 -translate-y-8 w-1.5 h-1.5 bg-orange-500 rounded-full" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[28px] w-1.5 h-1.5 bg-amber-200 rounded-full" />
               </div>
             </button>
           </div>
