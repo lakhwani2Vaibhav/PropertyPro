@@ -29,6 +29,7 @@ export function LookingForDialog({ open, onOpenChange, onContinue }: LookingForD
     if (selection) {
       onContinue(selection);
       onOpenChange(false); // Close the dialog
+      setSelection(null); // Reset selection for next time
     }
   };
 
@@ -83,7 +84,7 @@ export function LookingForDialog({ open, onOpenChange, onContinue }: LookingForD
         </div>
         <DialogFooter className="flex-col-reverse sm:flex-row sm:justify-center gap-4 w-full">
           <DialogClose asChild>
-            <Button type="button" variant="outline" className="w-full sm:w-auto">
+            <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={() => setSelection(null)}>
               Close
             </Button>
           </DialogClose>
