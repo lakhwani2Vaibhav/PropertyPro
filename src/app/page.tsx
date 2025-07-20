@@ -39,6 +39,7 @@ export default function Home() {
       case 'add-listing-amenities':
         return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><SelectAmenities onContinue={() => setCurrentStep('add-listing-photos')} onBack={() => setCurrentStep('add-listing-room-type')} /></div>;
       case 'add-listing-photos':
+        // The "Finish" button should eventually prompt login/signup to save the listing.
         return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><AddPhotos onFinish={resetFlow} onBack={() => setCurrentStep('add-listing-amenities')} /></div>;
       case 'view-listings':
         return <div className="bg-muted"><ListingsPage /></div>;
@@ -158,8 +159,10 @@ export default function Home() {
         onOpenChange={setIsLookingForDialogOpen}
         onContinue={(selection) => {
           if (selection === 'flat') {
-            setCurrentStep('view-listings');
+             // For seekers, start the requirement gathering flow.
+            setCurrentStep('add-listing-location');
           } else if (selection === 'flatmates') {
+            // For listers, start the property listing flow.
             setCurrentStep('add-listing-location');
           }
         }}
