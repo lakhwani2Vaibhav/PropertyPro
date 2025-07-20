@@ -184,7 +184,7 @@ export function VoiceAssistant({ onNotTalkerClick }: VoiceAssistantProps) {
             <button
               onClick={handleMicClick}
               disabled={status === 'preparing' || status === 'thinking' || status === 'speaking'}
-              className="relative flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground disabled:opacity-70 disabled:cursor-not-allowed"
+              className="relative flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground disabled:opacity-70 disabled:cursor-not-allowed animate-[float_4s_ease-in-out_infinite]"
             >
               <AnimatePresence>
                 {status === 'listening' && (

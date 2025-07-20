@@ -97,11 +97,16 @@ export default {
         },
         orbit: {
           '0%': {
-            transform: 'rotate(0deg) translateX(36px) rotate(0deg)',
+            transform: 'rotate(0deg) translateX(28px) rotate(0deg)',
           },
           '100%': {
-            transform: 'rotate(360deg) translateX(36px) rotate(-360deg)',
+            transform: 'rotate(360deg) translateX(28px) rotate(-360deg)',
           },
+        },
+        float: {
+          '0%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-8px)' },
+          '100%': { transform: 'translateY(0px)' },
         },
       },
       animation: {
@@ -110,6 +115,7 @@ export default {
         'marquee-up': 'marquee-up 60s linear infinite',
         'marquee-down': 'marquee-down 60s linear infinite',
         orbit: 'orbit 2s linear infinite',
+        float: 'float 4s ease-in-out infinite',
       },
     },
   },
