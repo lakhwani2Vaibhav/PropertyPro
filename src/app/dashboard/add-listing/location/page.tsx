@@ -1,5 +1,5 @@
 
-import { AddLocationForm } from '@/components/add-location-form';
+import { AddLocationForm } from '@/components/add-listing/add-location-form';
 
 export default function AddLocationPage() {
   return (
