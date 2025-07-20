@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState } from 'react';
@@ -19,8 +20,9 @@ import { SelectAmenities } from '@/components/add-listing/select-amenities';
 import { AddPhotos } from '@/components/add-listing/add-photos';
 import ListingsPage from '@/app/dashboard/listings/page';
 import { LookingForDialog } from '@/components/looking-for-dialog';
+import { SelectListingType } from '@/components/add-listing/select-listing-type';
 
-type FlowStep = 'initial' | 'add-listing-location' | 'add-listing-property-type' | 'add-listing-room-type' | 'add-listing-amenities' | 'add-listing-photos' | 'view-listings';
+type FlowStep = 'initial' | 'add-listing-type' | 'add-listing-location' | 'add-listing-property-type' | 'add-listing-room-type' | 'add-listing-amenities' | 'add-listing-photos' | 'view-listings';
 
 export default function Home() {
   const [isLookingForDialogOpen, setIsLookingForDialogOpen] = useState(false);
@@ -30,6 +32,8 @@ export default function Home() {
 
   const renderCurrentStep = () => {
     switch (currentStep) {
+      case 'add-listing-type':
+        return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><SelectListingType onContinue={() => setCurrentStep('add-listing-location')} /></div>;
       case 'add-listing-location':
         return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><AddLocationForm onContinue={() => setCurrentStep('add-listing-property-type')} /></div>;
       case 'add-listing-property-type':
@@ -163,7 +167,7 @@ export default function Home() {
             setCurrentStep('add-listing-location');
           } else if (selection === 'flatmates') {
             // For listers, start the property listing flow.
-            setCurrentStep('add-listing-location');
+            setCurrentStep('add-listing-type');
           }
         }}
       />
