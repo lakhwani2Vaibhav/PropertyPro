@@ -7,6 +7,7 @@ import { Testimonials } from "@/components/testimonials";
 import { ScrollAnimationWrapper } from "@/components/scroll-animation-wrapper";
 import { VoiceAssistant } from "@/components/voice-assistant";
 import { InteractiveSearch } from "@/components/interactive-search";
+import { Faq } from "@/components/faq";
 
 export default function Home() {
   return (
@@ -85,6 +86,8 @@ export default function Home() {
       <Features />
 
       <Testimonials />
+
+      <Faq />
 
       <footer className="relative text-white">
         <div className="absolute inset-0 z-[-1]">
