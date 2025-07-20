@@ -22,7 +22,10 @@ import ListingsPage from '@/app/dashboard/listings/page';
 import { LookingForDialog } from '@/components/looking-for-dialog';
 import { SelectListingType } from '@/components/add-listing/select-listing-type';
 
-type FlowStep = 'initial' | 'add-listing-type' | 'add-listing-location' | 'add-listing-property-type' | 'add-listing-room-type' | 'add-listing-amenities' | 'add-listing-photos' | 'view-listings';
+type ListerFlowStep = 'add-listing-type' | 'add-listing-location' | 'add-listing-property-type' | 'add-listing-room-type' | 'add-listing-amenities' | 'add-listing-photos';
+type SeekerFlowStep = 'find-listing-location' | 'find-listing-property-type' | 'find-listing-room-type' | 'find-listing-amenities' | 'view-listings';
+type FlowStep = 'initial' | ListerFlowStep | SeekerFlowStep;
+
 
 export default function Home() {
   const [isLookingForDialogOpen, setIsLookingForDialogOpen] = useState(false);
@@ -32,6 +35,7 @@ export default function Home() {
 
   const renderCurrentStep = () => {
     switch (currentStep) {
+      // Lister Flow (Add a property)
       case 'add-listing-type':
         return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><SelectListingType onContinue={() => setCurrentStep('add-listing-location')} /></div>;
       case 'add-listing-location':
@@ -45,8 +49,19 @@ export default function Home() {
       case 'add-listing-photos':
         // The "Finish" button should eventually prompt login/signup to save the listing.
         return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><AddPhotos onFinish={resetFlow} onBack={() => setCurrentStep('add-listing-amenities')} /></div>;
+      
+      // Seeker Flow (Find a property)
+      case 'find-listing-location':
+        return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><AddLocationForm onContinue={() => setCurrentStep('find-listing-property-type')} onBack={resetFlow} /></div>;
+      case 'find-listing-property-type':
+        return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><SelectPropertyType onContinue={() => setCurrentStep('find-listing-room-type')} onBack={() => setCurrentStep('find-listing-location')} /></div>;
+      case 'find-listing-room-type':
+        return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><SelectRoomType onContinue={() => setCurrentStep('find-listing-amenities')} onBack={() => setCurrentStep('find-listing-property-type')} /></div>;
+      case 'find-listing-amenities':
+        return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><SelectAmenities onContinue={() => setCurrentStep('view-listings')} onBack={() => setCurrentStep('find-listing-room-type')} /></div>;
       case 'view-listings':
         return <div className="bg-muted"><ListingsPage /></div>;
+
       case 'initial':
       default:
         return (
@@ -163,9 +178,10 @@ export default function Home() {
         onOpenChange={setIsLookingForDialogOpen}
         onContinue={(selection) => {
           if (selection === 'flat') {
-            setCurrentStep('view-listings');
+            // Start the Seeker Flow
+            setCurrentStep('find-listing-location');
           } else if (selection === 'flatmates') {
-            // For listers, start the property listing flow.
+            // Start the Lister Flow
             setCurrentStep('add-listing-type');
           }
         }}
