@@ -10,9 +10,10 @@ import { Progress } from '@/components/ui/progress';
 
 interface AddLocationFormProps {
   onContinue: () => void;
+  onBack: () => void;
 }
 
-export function AddLocationForm({ onContinue }: AddLocationFormProps) {
+export function AddLocationForm({ onContinue, onBack }: AddLocationFormProps) {
   const handleContinue = () => {
     // In a real app, you would save the location and then navigate.
     onContinue(); 
@@ -40,9 +41,12 @@ export function AddLocationForm({ onContinue }: AddLocationFormProps) {
             data-ai-hint="city map"
           />
         </div>
-        <Button onClick={handleContinue} className="w-full" size="lg">
-          Continue
-        </Button>
+        <div className="flex justify-between items-center pt-4">
+            <Button variant="ghost" onClick={onBack}>Back</Button>
+            <Button onClick={handleContinue} size="lg">
+              Continue
+            </Button>
+        </div>
       </CardContent>
     </Card>
   );

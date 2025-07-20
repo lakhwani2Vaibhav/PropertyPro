@@ -35,7 +35,7 @@ export default function Home() {
       case 'add-listing-type':
         return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><SelectListingType onContinue={() => setCurrentStep('add-listing-location')} /></div>;
       case 'add-listing-location':
-        return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><AddLocationForm onContinue={() => setCurrentStep('add-listing-property-type')} /></div>;
+        return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><AddLocationForm onContinue={() => setCurrentStep('add-listing-property-type')} onBack={() => setCurrentStep('add-listing-type')} /></div>;
       case 'add-listing-property-type':
         return <div className="bg-muted py-20 flex items-center justify-center min-h-screen"><SelectPropertyType onContinue={() => setCurrentStep('add-listing-room-type')} onBack={() => setCurrentStep('add-listing-location')} /></div>;
       case 'add-listing-room-type':
@@ -163,8 +163,7 @@ export default function Home() {
         onOpenChange={setIsLookingForDialogOpen}
         onContinue={(selection) => {
           if (selection === 'flat') {
-             // For seekers, start the requirement gathering flow.
-            setCurrentStep('add-listing-location');
+            setCurrentStep('view-listings');
           } else if (selection === 'flatmates') {
             // For listers, start the property listing flow.
             setCurrentStep('add-listing-type');
