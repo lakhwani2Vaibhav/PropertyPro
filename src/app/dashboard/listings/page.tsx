@@ -5,7 +5,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { swipeableProperties, type SwipeableProperty } from '@/lib/mock-data';
 import { ListingCard } from '@/components/listing-card';
 import { Button } from '@/components/ui/button';
-import { Undo2, Heart, X, Check } from 'lucide-react';
+import { Undo2, Heart, X, Check, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { AnimatePresence, motion, PanInfo } from 'framer-motion';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -155,6 +155,27 @@ export default function ListingsPage() {
                 </div>
             )}
         </AnimatePresence>
+
+        {isClient && !isMobile && currentProperty && (
+            <>
+                <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
+                    onClick={() => handleAction('pass')}
+                >
+                    <ArrowLeft className="h-6 w-6" />
+                </Button>
+                 <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white text-foreground z-20"
+                    onClick={() => handleAction('interested')}
+                >
+                    <ArrowRight className="h-6 w-6" />
+                </Button>
+            </>
+        )}
       </div>
       {isClient && !isMobile && (
         <>
