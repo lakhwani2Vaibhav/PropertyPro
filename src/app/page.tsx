@@ -116,9 +116,11 @@ export default function Home() {
                     </ScrollAnimationWrapper>
                     <ScrollAnimationWrapper delay={0.4}>
                     <div className="mt-8 flex justify-center gap-4">
-                      <Button size="lg" variant="secondary" onClick={() => setIsLookingForDialogOpen(true)}>
-                        Get Started
-                        <ArrowRight className="ml-2 h-5 w-5" />
+                      <Button size="lg" variant="secondary" asChild>
+                        <Link href="/dashboard">
+                          Get Started
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </Link>
                       </Button>
                     </div>
                     </ScrollAnimationWrapper>
