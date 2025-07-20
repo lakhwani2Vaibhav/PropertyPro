@@ -28,13 +28,13 @@ const mainNavLinks = [
   { href: '/dashboard/flats', label: 'Flats', icon: <Building2 className="h-4 w-4" /> },
   { href: '/dashboard/listings', label: 'Listings', icon: <LayoutList className="h-4 w-4" /> },
   { href: '/dashboard/interests', label: 'Interests', icon: <Heart className="h-4 w-4" /> },
-  { href: '/dashboard/maintenance', label: 'Maintenance', icon: <Wrench className="h-4 w-4" /> },
 ];
 
 const managementLinks = [
     { href: '/dashboard/tenants', label: 'Tenants', icon: <Users className="h-4 w-4" /> },
     { href: '/dashboard/leases', label: 'Leases', icon: <FileText className="h-4 w-4" /> },
     { href: '/dashboard/messaging', label: 'Messaging', icon: <MessageSquare className="h-4 w-4" /> },
+    { href: '/dashboard/maintenance', label: 'Maintenance', icon: <Wrench className="h-4 w-4" /> },
 ];
 
 const aiLinks = [
