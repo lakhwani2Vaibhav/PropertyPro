@@ -27,9 +27,9 @@ export function LookingForDialog({ open, onOpenChange }: LookingForDialogProps) 
 
   const handleContinue = () => {
     if (selection === 'flat') {
-      router.push('/login?redirect=/dashboard/listings');
+      router.push('/dashboard/listings');
     } else if (selection === 'flatmates') {
-      router.push('/login?redirect=/dashboard/properties');
+      router.push('/dashboard/properties');
     }
   };
 
