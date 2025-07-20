@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -13,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface LookingForDialogProps {
   open: boolean;
@@ -21,6 +23,16 @@ interface LookingForDialogProps {
 
 export function LookingForDialog({ open, onOpenChange }: LookingForDialogProps) {
   const [selection, setSelection] = useState<'flat' | 'flatmates' | null>(null);
+  const router = useRouter();
+
+  const handleContinue = () => {
+    if (selection === 'flat') {
+      router.push('/login?redirect=/dashboard/listings');
+    } else if (selection === 'flatmates') {
+      router.push('/login?redirect=/dashboard/properties');
+    }
+  };
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -48,7 +60,7 @@ export function LookingForDialog({ open, onOpenChange }: LookingForDialogProps) 
               className="h-28 w-28 object-contain"
               data-ai-hint="house illustration"
             />
-            <span className="text-lg font-semibold">Flat</span>
+            <span className="text-lg font-semibold">Room/Flat</span>
           </div>
           <div
             className={cn(
@@ -67,7 +79,7 @@ export function LookingForDialog({ open, onOpenChange }: LookingForDialogProps) 
               className="h-28 w-28 object-contain"
               data-ai-hint="friends high-five"
             />
-            <span className="text-lg font-semibold">Flatmates</span>
+            <span className="text-lg font-semibold">Flatmates/Tenants</span>
           </div>
         </div>
         <DialogFooter className="flex-col-reverse sm:flex-row sm:justify-center gap-4 w-full">
@@ -76,15 +88,14 @@ export function LookingForDialog({ open, onOpenChange }: LookingForDialogProps) 
               Close
             </Button>
           </DialogClose>
-           <Link href="/login" className="w-full sm:w-auto">
-                <Button 
-                    type="button" 
-                    disabled={!selection}
-                    className="w-full"
-                >
-                    Continue
-                </Button>
-            </Link>
+            <Button 
+                type="button" 
+                disabled={!selection}
+                className="w-full sm:w-auto"
+                onClick={handleContinue}
+            >
+                Continue
+            </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
